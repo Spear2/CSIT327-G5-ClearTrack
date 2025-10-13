@@ -1,0 +1,155 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'faculty_dashboard.css' %}">
+    <script src="{% static 'dropdownHomePage.js' %}"></script>
+</head>
+<body>
+
+  <!-- Top Navbar -->
+    <header>
+        <div class="logo">
+            <img src="{% static 'images/gradeFlow_logo.png' %}" class="logo-icon" />
+            <div class="h2andp">
+            <h2>GradeFlow</h2>
+            <p>Faculty Portal</p>
+            </div>
+        </div>
+
+        <div class="user-menu">
+            <button class="user-circle" id="userBtn">
+            <h4>{{ initials }}</h4>
+            </button>
+
+            <div class="dropdown-menu" id="dropdownMenu">
+                <div class="user-info">
+                    <strong>{{ faculty.first_name }} {{ faculty.last_name }}</strong><br>
+                    <small>{{ faculty.email }}</small>
+                </div>
+                 <hr>
+                <div class="menuOptions">
+                 
+                  <a href="#">Profile Settings</a>
+                  <a href="#">Preferences</a>
+                  <a href="#">FAQ & Help</a>
+                  
+                </div>
+                <hr>
+                <div class="menuOptions">
+                  <a href="{% url 'faculty_logout'%}">Sign Out</a>
+                </div>
+                
+               
+            </div>
+        </div>
+    </header>
+
+  <!-- Main Content -->
+  <main class="container">
+
+    <h2>Faculty Dashboard 🧾</h2>
+    <p class="subtitle">Review and manage student clearance submissions</p>
+
+    <!-- Summary Cards -->
+    <section class="summary">
+      <div class="card total">
+        <p class="icons">📄</p>
+        <div class="numberOf">
+            {% comment %} <h3>{{ total_submissions }}</h3> {% endcomment %}
+            <h3>0</h3>
+            <p>Total Submissions</p>
+        </div>
+      </div>
+
+      <div class="card pending">
+        <p class="icons">⏰</p>
+        <div class="numberOf">
+            {% comment %} <h3>{{ pending_review }}</h3> {% endcomment %}
+            <h3>0</h3>
+            <p>Pending Review</p>
+        </div>
+      </div>
+
+      <div class="card approved">
+        <p class="icons">✅</p>
+        <div class="numberOf">
+            {% comment %} <h3>{{ approved }}</h3> {% endcomment %}
+            <h3>0</h3>
+            <p>Approved</p>
+        </div>
+      </div>
+
+      <div class="card rejected">
+        <p class="icons">❌</p>
+        <div class="numberOf">
+            {% comment %} <h3>{{ rejected }}</h3> {% endcomment %}
+            <h3>0</h3>
+            <p>Rejected</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="active">Student Submissions</button>
+      <button>Analytics</button>
+      <button>Department Settings</button>
+    </div>
+
+    <!-- Filter Section -->
+    <section class="filters">
+      <h3>🔍 Filter Submissions</h3>
+      <div class="filter-grid">
+        <input type="text" placeholder="Search by name or ID...">
+        <select>
+          <option>All statuses</option>
+          <option>Pending</option>
+          <option>Approved</option>
+          <option>Rejected</option>
+        </select>
+        <select>
+          <option>All Departments</option>
+          <option>Library</option>
+          <option>Registrar</option>
+          <option>Accounting</option>
+        </select>
+        <select>
+          <option>Last 7 days</option>
+          <option>Last 30 days</option>
+          <option>This Semester</option>
+        </select>
+      </div>
+    </section>
+
+    <!-- Student Submissions -->
+    <section class="submissions">
+      <h3>📚 Student Submissions</h3>
+      <p>Review and approve student clearance submissions.</p>
+
+      {% if submissions %}
+        {% for submission in submissions %}
+          <div class="submission-card">
+            <div class="card-header">
+              <h4>{{ submission.student_name }}</h4>
+              <span class="status {{ submission.status|lower }}">{{ submission.status }}</span>
+            </div>
+            <p><strong>ID:</strong> {{ submission.student_id }}</p>
+            <p><strong>Email:</strong> {{ submission.email }}</p>
+            <p><strong>Department:</strong> {{ submission.department }}</p>
+            <p><strong>Document Type:</strong> {{ submission.document_type }}</p>
+            <p><strong>Submitted:</strong> {{ submission.submitted_at }}</p>
+          </div>
+        {% endfor %}
+      {% else %}
+        <p class="no-submissions">No student submissions yet.</p>
+      {% endif %}
+    </section>
+
+  </main>
+
+</body>
+</html>
