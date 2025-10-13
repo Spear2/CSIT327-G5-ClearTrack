@@ -1,0 +1,101 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GradeFlow - Clearance Tracker System</title>
+  <link rel="stylesheet" href="{% static 'landingpage.css' %}">
+  
+</head>
+<body>
+
+
+  <header>
+  <div class="logo">
+    <img src={%static "images/gradeFlow_logo.png" %} class="logo-icon"/>
+    
+    <div class="h2andp">
+      <h2>GradeFlow</h2>
+      <p>Clearance Tracker System</p>
+    </div>
+  </div>
+  <button>About Us</button>
+</header>
+
+
+
+  <section class="hero">
+    <h1>Streamline Your Clearance Process</h1>
+    <p>A modern, efficient system for students and faculty to manage clearance documents, 
+      track progress, and ensure seamless graduation processes.</p>
+
+
+    <div class="features">
+      <div class="feature">
+        <div class="feature-icon icon-green">📂</div>
+        <h3>Digital Submissions</h3>
+        <p>Upload and manage clearance documents online</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon icon-yellow">⏱️</div>
+        <h3>Real-time Tracking</h3>
+        <p>Monitor your clearance progress in real-time</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon icon-blue">✅</div>
+        <h3>Seamless Approval</h3>
+        <p>Faculty can review and approve submissions efficiently</p>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="portals">
+    <h2>Choose Your Portal</h2>
+    <p>Select your role to access the appropriate dashboard and features</p>
+
+    <div class="portal-container">
+      <!-- Student Portal -->
+      <div class="portal">
+        <div class="backgroundIcon">
+            <div>🎓</div>
+        </div>
+        <h3>Student Portal</h3>
+        <p>Submit clearance documents and track your progress</p>
+        <ul class="studentPortal">
+          <li> Submit documents to departments</li>
+          <li> Track clearance progress</li>
+          <li> Preview uploaded files</li>
+          <li> Receive instant notifications</li>
+        </ul>
+        <button onClick="window.location.href='{% url 'signin' %}'">Access Student Portal →</button>
+      </div>
+
+      <!-- Faculty Portal -->
+      <div class="portal">
+        <div class="backgroundIcon">
+            <div>
+                👨‍🏫
+            </div>
+        </div>
+        <h3>Faculty Portal</h3>
+        <p>Review and approve student clearance submissions</p>
+        <ul class="facultyPortal">
+          <li> Review student submissions</li>
+          <li> Approve or reject documents</li>
+          <li> Add comments and feedback</li>
+          <li> Manage department workflows</li>
+        </ul>
+        <button onClick="window.location.href='{% url 'faculty_signin' %}'">Access Faculty Portal →</button>
+      </div>
+    </div>
+  </section>
+
+
+  <footer>
+    Need help? Check our FAQ section or contact support.
+  </footer>
+
+</body>
+</html>

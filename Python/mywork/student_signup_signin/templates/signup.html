@@ -1,0 +1,109 @@
+{% load static tailwind_tags %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GradeFlow - Sign Up</title>
+  {% tailwind_css %}
+</head>
+<body class="bg-purple-50 flex items-center justify-center min-h-screen">
+
+  <div class="w-full max-w-md px-6">
+    <!-- Back to Home -->
+    <div class="mb-6 text-gray-500 hover:text-white w-1/2 mx-auto">
+      <a href="{% url 'GradeFlow' %}" class="flex items-center justify-center hover:bg-blue-600 p-2 rounded-lg">
+        <svg xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5 mr-1 "
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+        Back to Home
+      </a>
+    </div>
+
+    <!-- Logo and App Name -->
+    <div class="flex flex-col items-center mb-6">
+      <img src="{% static 'images/logo.png' %}" alt="GradeFlow Logo" class="w-20 h-16 mb-2 rounded-xl" />
+      <h1 class="text-2xl font-bold text-blue-600">GradeFlow</h1>
+      <p class="text-gray-500 text-sm">Student Portal</p>
+    </div>
+
+    <!-- Sign Up Form -->
+    <div class="bg-white shadow-md rounded-lg p-6 text-gray-500">
+      <h2 class="text-lg font-bold mb-4 text-center">Student Sign Up</h2>
+      <p class="text-gray-500 text-sm mb-6 text-center">Create your student account to get started.</p>
+
+      <!-- Tabs -->
+    <div class="flex mb-6">
+      <a href="{% url 'signin' %}" class="flex-1 py-2 text-center hover:text-blue-600">
+       Sign In
+      </a>
+      <a href="{% url 'signup' %}" class="flex-1 py-2 text-center font-semibold text-blue-600 border-b-2 border-blue-600">
+       Sign Up
+      </a>
+      </div>
+
+
+      <form method="POST" action="{% url 'signup' %}">
+        {% csrf_token %}
+        <div class="grid grid-cols-2 gap-4 mb-4">
+          <div>
+            <label class="block text-gray-700 mb-1">First Name</label>
+            <input type="text" name="first_name"
+              placeholder="Eric"
+              class="w-full px-3 py-2 rounded border border-gray-300 bg-purple-50 focus:ring-2 focus:ring-blue-500"/>
+          </div>
+          <div>
+            <label class="block text-gray-700 mb-1">Last Name</label>
+            <input type="text" name="last_name"
+              placeholder="Santos"
+              class="w-full px-3 py-2 rounded border border-gray-300 bg-purple-50 focus:ring-2 focus:ring-blue-500"/>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <label class="block text-gray-700 mb-1">Email Address</label>
+          <input type="email" name="email_address"
+            placeholder="johndoe@cit.edu"
+            class="w-full px-3 py-2 rounded border border-gray-300 bg-purple-50 focus:ring-2 focus:ring-blue-500"/>
+        </div>
+
+        <div class="mb-4">
+          <label class="block text-gray-700 mb-1">Student ID</label>
+          <input type="text" name="student_id"
+            placeholder="21-4312-321"
+            class="w-full px-3 py-2 rounded border border-gray-300 bg-purple-50 focus:ring-2 focus:ring-blue-500"/>
+        </div>
+
+        <div class="mb-4">
+          <label class="block text-gray-700 mb-1">Password</label>
+          <input type="password" name="password"
+            placeholder="Create a strong password"
+            class="w-full px-3 py-2 rounded border border-gray-300 bg-purple-50 focus:ring-2 focus:ring-blue-500"/>
+        </div>
+
+        <div class="mb-6">
+          <label class="block text-gray-700 mb-1">Confirm Password</label>
+          <input type="password" name="confirm_password"
+            placeholder="Confirm your password"
+            class="w-full px-3 py-2 rounded border border-gray-300 bg-purple-50 focus:ring-2 focus:ring-blue-500"/>
+        </div>
+
+        <button type="submit"
+          class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition cursor-pointer">
+          Create Student Account
+        </button>
+      </form>
+    </div>
+
+    <p class="text-center text-gray-400 text-sm mt-4">
+      Need help? Contact <a href="mailto:support@gradeflow.edu" class="text-blue-600 hover:text-blue-800">IT Support</a>
+    </p>
+  </div>
+
+</body>
+</html>

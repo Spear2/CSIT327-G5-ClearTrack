@@ -1,0 +1,73 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Faculty Sign In</title>
+  <link rel="stylesheet" href="{% static 'signin_signup.css' %}">
+    <script src="{% static 'signin_signup_js.js' %}"></script>
+    <script>
+        const visibleIcon = "{% static 'images/visible.png' %}";
+        const hiddenIcon = "{% static 'images/hidden.png' %}";
+    </script>
+</head>
+<body>
+  <div class="back">
+    <button onClick="window.location.href='{% url 'GradeFlow' %}'">
+      <img src="{% static "/images/arrow.png" %}" alt="Back to home" />
+      Back to home
+    </button>
+  </div>
+
+  <div class="gradeFlow">
+    <img src={%static "images/gradeFlow_logo.png" %} alt="Grade Flow Logo" />
+    <div class="gradeFlow_faculty">
+      <h3>Grade Flow</h3>
+      <p>Faculty Portal</p>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="formHeader">
+      <h3 class="faculty_margin">Faculty Sign In</h3>
+      <p>Welcome back! Sign in to your faculty account.</p>
+    </div>
+
+    <div class="button_style">
+      <button type="button" class="active" onclick="window.location.href='{% url 'faculty_signin'%}'">Sign In</button>
+      <button type="button" onclick="window.location.href='{% url 'faculty_signup'%}'">Sign Up</button>
+    </div>
+
+    <div id="formSignin" class="form active">
+      <form method="POST" class="text">
+        {% csrf_token %}
+        <p>Email Address</p>
+        <div class="input-wrapper">
+          <img src="{% static 'images/email.png' %}" alt="email_icon" class="input-icon left" />
+          <input type="text" name="username" placeholder="your.email@university.edu" required />
+        </div>
+
+        <p>Password</p>
+        <div class="input-wrapper">
+          <img src="{% static 'images/padlock.png' %}" alt="padlock_icon" class="input-icon left" />
+          <input type="password" name="password" placeholder="Enter your password" id="signin_password" required />
+          <img src="{% static 'images/visible.png' %}" onclick="togglePassword()" alt="visible_icon" class="input-icon right" id="toggle_icon"/>
+        </div>
+
+        <p class="forgotPassword">Forgot Password?</p>
+        <button type="submit" class="buttonSignIn">Sign in to faculty portal</button>
+        {% for message in messages %}
+            <p style="color:red">{{ message }}</p>
+        {% endfor %}
+      </form>
+
+      <div class="contact">
+        <p>Need help? Contact</p>
+        <p class="support">IT Support</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

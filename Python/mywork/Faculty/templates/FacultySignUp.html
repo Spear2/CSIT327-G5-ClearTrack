@@ -1,0 +1,110 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Faculty Sign Up</title>
+  <link rel="stylesheet" href="{% static 'signin_signup.css' %}">
+  <script src="{% static 'signin_signup_js.js' %}"></script>
+  <script>
+    const visibleIcon = "{% static 'images/visible.png' %}";
+    const hiddenIcon = "{% static 'images/hidden.png' %}";
+  </script>
+</head>
+<body>
+  <div class="back">
+    <button onclick="window.location.href='{% url 'GradeFlow' %}'">
+      <img src="{% static 'images/arrow.png' %}" alt="Back to home" />
+      Back to home
+    </button>
+  </div>
+
+  <div class="gradeFlow">
+    <img src="{% static 'images/gradeFlow_logo.png' %}" alt="Grade Flow Logo" />
+    <div class="gradeFlow_faculty">
+      <h3>Grade Flow</h3>
+      <p>Faculty Portal</p>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="formHeader">
+      <h3 class="faculty_margin">Faculty Sign Up</h3>
+      <p>Create your faculty account.</p>
+    </div>
+
+    <div class="button_style">
+      <button type="button"
+        onclick="window.location.href='{% url 'faculty_signin' %}'">Sign In</button>
+      <button type="button" class="active"
+        onclick="window.location.href='{% url 'faculty_signup' %}'">Sign Up</button>
+    </div>
+
+    <div id="formSignup" class="form active">
+      <form method="POST" class="text">
+        {% csrf_token %}
+        <div class="registerName">
+          <div>
+            <p>First Name</p>
+            <div class="input_name_wrapper">
+              <img src="{% static 'images/profile.png' %}" alt="" class="input-icon left" />
+              <input type="text" name="first_name" placeholder="John" required />
+            </div>
+          </div>
+          <div>
+            <p>Last Name</p>
+            <input type="text" name="last_name" placeholder="Doe" required />
+          </div>
+        </div>
+
+        <p>Email Address</p>
+        <div class="input-wrapper">
+          <img src="{% static 'images/email.png' %}" alt="email_icon" class="input-icon left" id="signup_email"/>
+          <input type="email" name="email" placeholder="your.email@university.edu" required />
+        </div>
+
+        <div class="optionDepartment">
+          <label for="department">Department</label>
+          <select id="department" name="department" required>
+            <option value="" disabled selected hidden>Select your department</option>
+            <option value="library">Library</option>
+            <option value="accounting">Accounting</option>
+            <option value="acadaffairs">Academic Affairs</option>
+            <option value="studaffairs">Student Affairs</option>
+            <option value="itDepartment">IT Department</option>
+            <option value="plant">Physical Plant</option>
+          </select>
+        </div>
+
+        <p>Password</p>
+        <div class="input-wrapper">
+          <img src="{% static 'images/padlock.png' %}" alt="padlock_icon" class="input-icon left" />
+          <input type="password" name="password" placeholder="Create a strong password" id="signup_password" required />
+          <img src="{% static 'images/visible.png' %}" onclick="toggleSignupPassword()" id="signup_toggle_icon"
+               alt="visible_icon" class="input-icon right" />
+        </div>
+
+        <p>Confirm Password</p>
+        <div class="input-wrapper">
+          <img src="{% static 'images/padlock.png' %}" alt="padlock_icon" class="input-icon left" />
+          <input type="password" name="confirm_password" placeholder="Confirm your password" id="confirm_password" required />
+          <img src="{% static 'images/visible.png' %}" onclick="toggle_Confirm_Password()" id="confirm_toggle_icon"
+               alt="visible_icon" class="input-icon right" />
+        </div>
+
+        <button type="submit" class="buttonSignUp">Create faculty Account</button>
+        {% for message in messages %}
+            <p style="color:red">{{ message }}</p>
+        {% endfor %}
+      </form>
+
+      <div class="contact">
+        <p>Need help? Contact</p>
+        <p class="support">IT Support</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
