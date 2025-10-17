@@ -56,6 +56,49 @@ def faculty_signin(request):
 
     return render(request, "FacultySignIn.html")
 
+
+def forgot_password(request):
+    if request.method == "POST":
+        email = request.POST.get("forgot_username")
+
+        if not email:
+            messages.error(request, "Please fill in email.");
+            return render(request, "ForgotPassword/FacultyForgotPassword.html")
+        
+        try:
+            faculty = Faculty.objects.get(email=email)
+        except Faculty.DoesNotExist:
+            messages.error(request, "Email does not exist.")
+            return render(request, "ForgotPassword/FacultyForgotPassword.html")
+
+        request.session["forgot_email"] = faculty.email
+        return redirect("new_password")
+    return render(request, "ForgotPassword/FacultyForgotPassword.html")
+
+def new_password(request):
+    email = request.session.get("forgot_email")
+    faculty = Faculty.objects.get(email=email)
+
+    if request.method == "POST":
+        new_password = request.POST.get("new_password")
+        confirm_password = request.POST.get("confirm_password")
+
+        if not new_password or not confirm_password:
+            messages.error(request, "Please fill both fields");
+            return render(request, "ForgotPassword/NewPassword.html", {"faculty": faculty})
+
+        if new_password != confirm_password:
+            messages.error(request, "Passwords does not match")
+            return render(request, "ForgotPassword/NewPassword.html", {"faculty": faculty})
+        
+        faculty.password = make_password(new_password)
+        faculty.save()
+
+        messages.success(request, "Password successfully changed.")
+        return redirect("faculty_signin")
+
+    return render(request, "ForgotPassword/NewPassword.html", {"faculty": faculty})
+
 def faculty_signup(request):
     if request.method == "POST":
         first_name = request.POST.get("first_name")
@@ -104,3 +147,4 @@ def faculty_signup(request):
 def faculty_logout(request):
     request.session.flush()  # Clears all session data
     return redirect("GradeFlow")
+
