@@ -21,7 +21,7 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('student/', include('student_signup_signin.urls')),
-    path('faculty/', include('Faculty.urls'))
+    path('', include('Faculty.urls'))
 ]
 if settings.DEBUG:
     # Include django_browser_reload URLs only in DEBUG mode

@@ -1,0 +1,133 @@
+
+
+
+
+.notes {
+  margin-top: 15px;
+}
+
+.note-text {
+  background-color: #fafafa;
+  border-radius: 4px;
+  padding: 8px;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+
+.file-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+  font-size: 0.9rem;
+}
+
+.file-name {
+  font-weight: 500;
+  color: #444;
+}
+
+.buttons .btn.small {
+  font-size: 0.85rem;
+  padding: 4px 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background: #fff;
+  cursor: pointer;
+  margin-left: 5px;
+}
+
+.buttons .btn.small:hover {
+  background-color: #f5f5f5;
+}
+
+
+.comments {
+  margin-top: 100px;
+}
+
+.comment {
+  background: #fafafa;
+  border-left: 3px solid #3b82f6;
+  padding: 10px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 3px;
+}
+
+.comment-author {
+  color: #3b82f6;
+  font-weight: 500;
+  font-size: 0.85rem;
+}
+
+.comment-date {
+  font-size: 0.8rem;
+  color: #888;
+}
+
+
+.comment-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.comment-box textarea {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  background-color: #f3f0ff;
+  border-radius: 6px;
+  resize: none;
+  font-family: "Poppins", sans-serif;
+}
+
+.comment-box .btn.comment {
+  background-color: #eae6ff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 12px;
+  cursor: not-allowed;
+  color: #555;
+}
+
+
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn {
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn.approve {
+  background-color: #22c55e;
+  color: white;
+}
+
+.btn.reject {
+  background-color: #ef4444;
+  color: white;
+}
+
+.btn.approve:hover {
+  background-color: #16a34a;
+}
+
+.btn.reject:hover {
+  background-color: #dc2626;
+}

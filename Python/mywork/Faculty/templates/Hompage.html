@@ -5,7 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="{% static 'faculty_dashboard.css' %}">
+   <link rel="stylesheet" href="{% static 'faculty_dashboard.css' %}">
+   
+
+
     <script src="{% static 'dropdownHomePage.js' %}"></script>
 </head>
 <body>
@@ -33,7 +36,7 @@
                  <hr>
                 <div class="menuOptions">
                  
-                  <a href="#">Profile Settings</a>
+                  <a href={% url 'faculty_profile'%}>Profile Settings</a>
                   <a href="#">Preferences</a>
                   <a href="#">FAQ & Help</a>
                   
@@ -130,23 +133,9 @@
       <h3>📚 Student Submissions</h3>
       <p>Review and approve student clearance submissions.</p>
 
-      {% if submissions %}
-        {% for submission in submissions %}
-          <div class="submission-card">
-            <div class="card-header">
-              <h4>{{ submission.student_name }}</h4>
-              <span class="status {{ submission.status|lower }}">{{ submission.status }}</span>
-            </div>
-            <p><strong>ID:</strong> {{ submission.student_id }}</p>
-            <p><strong>Email:</strong> {{ submission.email }}</p>
-            <p><strong>Department:</strong> {{ submission.department }}</p>
-            <p><strong>Document Type:</strong> {{ submission.document_type }}</p>
-            <p><strong>Submitted:</strong> {{ submission.submitted_at }}</p>
-          </div>
-        {% endfor %}
-      {% else %}
-        <p class="no-submissions">No student submissions yet.</p>
-      {% endif %}
+        {% include "StudentSubmissions/Student_Submission.html" %}
+        
+      
     </section>
 
   </main>
