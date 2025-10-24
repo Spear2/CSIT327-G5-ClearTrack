@@ -1,0 +1,122 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GradeFlow - Student Portal</title>
+    <link rel="stylesheet" href="{% static 'studentDashboard.css' %}">
+    <script src="{% static 'dropdownHomePage.js' %}"></script>
+</head>
+<body>
+
+  <!-- Top Navbar -->
+  <header>
+      <div class="logo">
+          <img src="{% static 'images/gradeFlow_logo.png' %}" class="logo-icon" />
+          <div class="h2andp">
+            <h2>GradeFlow</h2>
+            <p>Student Portal</p>
+          </div>
+      </div>
+
+      <div class="user-menu">
+          <button class="user-circle" id="userBtn">
+              <h4>{{ initials }}</h4>
+          </button>
+
+          <div class="dropdown-menu" id="dropdownMenu">
+              <div class="user-info">
+                <strong>{{ student.first_name }} {{ student.last_name }}</strong><br>
+                <small>{{ student.email_address }}</small>
+              </div>
+              <hr>
+              <div class="menuOptions">
+                <a href="#">Profile Settings</a>
+                <a href="#">Help & Support</a>
+                <a href="#">FAQ</a>
+              </div>
+              <hr>
+              <div class="menuOptions">
+                <a href="{% url 'student_logout' %}">Sign Out</a>
+              </div>
+          </div>
+      </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container">
+
+      <h2>Welcome back, {{ student.first_name }}! 👋</h2>
+      <p class="subtitle">Track your clearance progress and manage your submissions</p>
+
+      <!-- Summary Cards -->
+      <section class="summary">
+          <div class="card completed">
+              <p class="icons">✅</p>
+              <div class="numberOf">
+                  <h3>{{ completed_count|default:0 }}</h3>
+                  <p>Completed</p>
+              </div>
+          </div>
+
+          <div class="card inprogress">
+              <p class="icons">⏳</p>
+              <div class="numberOf">
+                  <h3>{{ inprogress_count|default:0 }}</h3>
+                  <p>In Progress</p>
+              </div>
+          </div>
+
+          <div class="card pending">
+              <p class="icons">⚠️</p>
+              <div class="numberOf">
+                  <h3>{{ pending_count|default:0 }}</h3>
+                  <p>Pending</p>
+              </div>
+          </div>
+
+          <div class="card documents">
+              <p class="icons">📄</p>
+              <div class="numberOf">
+                  <h3>{{ document_count|default:0 }}</h3>
+                  <p>Documents</p>
+              </div>
+          </div>
+      </section>
+
+      <!-- Tabs -->
+      <div class="tabs">
+          <button class="active">Clearance Progress</button>
+          <button onclick="window.location.href='{% url 'request_clearance' %}'">Submit Documents</button>
+          <button>Submission History</button>
+          <button>Profile</button>
+          
+      </div>
+
+      <!-- Clearance Tracker -->
+      <section class="progress-tracker">
+          <h3>📘 Clearance Progress Tracker</h3>
+          <p>Track the status of your clearance requirements across all departments.</p>
+
+          {% if clearances %}
+              {% for clearance in clearances %}
+              <div class="tracker-card {{ clearance.status|lower }}">
+                  <div class="tracker-header">
+                      <h4>{{ clearance.department_name }}</h4>
+                      <span class="status">{{ clearance.status }}</span>
+                  </div>
+                  <p><strong>Requirement:</strong> {{ clearance.requirement }}</p>
+                  <p><strong>Comment:</strong> {{ clearance.comment }}</p>
+                  <p class="timestamp">{{ clearance.updated_at|timesince }} ago</p>
+              </div>
+              {% endfor %}
+          {% else %}
+              <p>No clearance updates available yet.</p>
+          {% endif %}
+      </section>
+
+  </main>
+
+</body>
+</html>

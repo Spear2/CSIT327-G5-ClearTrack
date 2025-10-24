@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'Faculty',
     'tailwind',
     'theme',
+    'studentDashboard',
 ]
 
 MIDDLEWARE = [
