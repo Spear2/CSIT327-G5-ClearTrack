@@ -1,0 +1,223 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GradeFlow - Student Portal</title>
+    <link rel="stylesheet" href="{% static 'clearanceRequest.css' %}">
+    <script src="{% static 'dropdownHomePage.js' %}"></script>
+</head>
+<body>
+
+  <!-- Top Navbar -->
+  <header>
+      <div class="logo">
+          <img src="{% static 'images/gradeFlow_logo.png' %}" class="logo-icon" />
+          <div class="h2andp">
+            <h2>GradeFlow</h2>
+            <p>Student Portal</p>
+          </div>
+      </div>
+
+      <div class="user-menu">
+          <button class="user-circle" id="userBtn">
+              <h4>{{ initials }}</h4>
+          </button>
+
+          <div class="dropdown-menu" id="dropdownMenu">
+              <div class="user-info">
+                <strong>{{ student.first_name }} {{ student.last_name }}</strong><br>
+                <small>{{ student.email_address }}</small>
+              </div>
+              <hr>
+              <div class="menuOptions">
+                <a href="#">Profile Settings</a>
+                <a href="#">Help & Support</a>
+                <a href="#">FAQ</a>
+              </div>
+              <hr>
+              <div class="menuOptions">
+                <a href="{% url 'student_logout' %}">Sign Out</a>
+              </div>
+          </div>
+      </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container">
+
+      <h2>Welcome back, {{ student.first_name }}! 👋</h2>
+      <p class="subtitle">Track your clearance progress and manage your submissions</p>
+
+      <!-- Summary Cards -->
+      <section class="summary">
+          <div class="card completed">
+              <p class="icons">✅</p>
+              <div class="numberOf">
+                  <h3>{{ completed_count|default:0 }}</h3>
+                  <p>Completed</p>
+              </div>
+          </div>
+
+          <div class="card inprogress">
+              <p class="icons">⏳</p>
+              <div class="numberOf">
+                  <h3>{{ inprogress_count|default:0 }}</h3>
+                  <p>In Progress</p>
+              </div>
+          </div>
+
+          <div class="card pending">
+              <p class="icons">⚠️</p>
+              <div class="numberOf">
+                  <h3>{{ pending_count|default:0 }}</h3>
+                  <p>Pending</p>
+              </div>
+          </div>
+
+          <div class="card documents">
+              <p class="icons">📄</p>
+              <div class="numberOf">
+                  <h3>{{ document_count|default:0 }}</h3>
+                  <p>Documents</p>
+              </div>
+          </div>
+      </section>
+
+      <!-- Tabs -->
+      <div class="tabs">
+          <button onclick="window.location.href='{% url 'student_dashboard' %}'">Clearance Progress</button>
+          <button class="active" onclick="window.location.href='{% url 'request_clearance' %}'">Submit Documents</button>
+          <button>Submission History</button>
+          <button>Profile</button>
+          
+      </div>
+
+<main class="main-content">
+  <div class="card submission-card">
+    <!-- Card Header -->
+    <div class="card-header">
+      <h1>📤 Submit Clearance Documents</h1>
+      <p class="subtitle">Upload your clearance documents to the appropriate department</p>
+    </div>
+
+    <!-- Alert Messages -->
+     {% if messages %}
+      {% for message in messages %}
+      <div class="alert">{{ message }}</div>
+      {% endfor %}
+     {% endif %}
+
+
+   <form method="POST" enctype="multipart/form-data">
+  {% csrf_token %}
+  <div class="form-horizontal">
+    <!-- Top Row: Document Type (Left) & Department (Right) -->
+    <div class="form-column">
+      <div class="form-group">
+        <label for="documentType">Document Type</label>
+        <select name="documentType" id="documentType" required>
+          <option value="" disabled selected>Select document type</option>
+          <option>Good Moral</option>
+          <option>Grades</option>
+          <option>Clearance Form</option>
+          <option>Payment Record</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-column">
+      <div class="form-group">
+        <label for="staff">Department</label>
+        <select name="staff" id="staff" required>
+          <option value="" disabled selected>Select department</option>
+          <option>Registrar</option>
+          <option>Guidance Office</option>
+          <option>Library</option>
+          <option>Finance Office</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Additional Notes (Full Width) -->
+  <div class="form-group full">
+    <label for="notes">Additional Notes (Optional)</label>
+    <textarea name="notes" id="notes" placeholder="Add any additional information or context for your submission..."></textarea>
+  </div>
+
+  <!-- Upload Box -->
+  <div class="upload-box" id="uploadBox">
+    <i class="fa-solid fa-cloud-arrow-up upload-icon"></i>
+    <p class="upload-text">Drop files here or click to upload</p>
+    <input type="file" name="document" id="documentInput" accept=".pdf,.jpg,.png,.doc,.docx">
+    <span id="fileName">No file chosen</span>
+    <small>Supports PDF, JPG, PNG, DOC, DOCX (Max 10MB per file)</small>
+  </div>
+
+  <!-- Submit Button -->
+  <button type="submit" class="submit-btn">Submit Documents</button>
+</form>
+
+
+  <script>
+  // ==========================
+  // 👤 USER DROPDOWN
+  // ==========================
+  const userBtn = document.getElementById('userBtn');
+  const dropdownMenu = document.getElementById('dropdownMenu');
+
+  userBtn.addEventListener('click', () => {
+    dropdownMenu.classList.toggle('active');
+  });
+
+  window.addEventListener('click', (e) => {
+    if (!userBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
+      dropdownMenu.classList.remove('active');
+    }
+  });
+
+  // ==========================
+  // 📤 FILE UPLOAD WITH DRAG & DROP
+  // ==========================
+  const uploadSection = document.getElementById('uploadSection');
+  const documentInput = document.getElementById('documentInput');
+  const fileName = document.getElementById('fileName');
+
+  // Click to open file dialog
+  uploadSection.addEventListener('click', () => documentInput.click());
+
+  // Update file name when selected
+  documentInput.addEventListener('change', () => {
+    if (documentInput.files.length > 0) {
+      fileName.textContent = documentInput.files[0].name;
+    } else {
+      fileName.textContent = '';
+    }
+  });
+
+  // Drag over effect
+  uploadSection.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    uploadSection.classList.add('dragover');
+  });
+
+  // Remove highlight when leaving drag area
+  uploadSection.addEventListener('dragleave', () => {
+    uploadSection.classList.remove('dragover');
+  });
+
+  // Handle file drop
+  uploadSection.addEventListener('drop', (e) => {
+    e.preventDefault();
+    uploadSection.classList.remove('dragover');
+    if (e.dataTransfer.files.length > 0) {
+      documentInput.files = e.dataTransfer.files;
+      fileName.textContent = e.dataTransfer.files[0].name;
+    }
+  });
+</script>
+
+</body>
+</html>
