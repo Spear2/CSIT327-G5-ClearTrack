@@ -8,5 +8,7 @@ urlpatterns = [
     path('Dashboard/', views.homepage, name='homepage'),
     path('logout/', views.faculty_logout, name='faculty_logout'),
     path('forogt_password', views.forgot_password, name='forgot_password'),
-    path('new_password', views.new_password, name='new_password')
+    path('new_password', views.new_password, name='new_password'),
+    path('faculty_profile', views.faculty_settings, name ='faculty_profile'),
+    path('add_comment/<uuid:document_id>/', views.add_comment, name='add_comment'),
 ]

@@ -1,10 +1,28 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 from django.contrib.auth.hashers import make_password, check_password
-from .models import Faculty
+from .models import Faculty, Comment
 from django.contrib.auth import authenticate, login
+from studentDashboard.models import ClearanceDocument
+from django.db.models import Q
+from django.utils import timezone
+from datetime import timedelta
+
+DEPARTMENT_MAP = {
+    "library": "Library",
+    "accounting": "Accounting",
+    "acadaffairs": "Academic Affairs",
+    "studaffairs": "Student Affairs",
+    "itDepartment": "IT Department",
+    "plant": "Physical Plant",
+}
+
+
+
+
+
 
 # Create your views here.
 def home(request):
@@ -13,16 +31,65 @@ def home(request):
 def homepage(request):
     faculty = None
     initials = ""
+    requests = []
+    faculty_department = ""
+    selected_status = request.GET.get('status','All')
+    selected_department = request.GET.get('department', 'All_Department')
+    search_query = request.GET.get('search', '')
+    selected_date = request.GET.get('date_filter', 'All_Time')
 
+
+    requests = ClearanceDocument.objects.select_related('student').order_by('-time_submitted')
+
+    if selected_status != 'All':
+        requests = requests.filter(status=selected_status)
+    
+    if selected_department != 'All_Department':
+        requests = requests.filter(department_name=selected_department)
+
+    if search_query:
+        requests = requests.filter(
+            Q(student__first_name__icontains=search_query) |
+            Q(student__last_name__icontains=search_query) |
+            Q(student__student_id__icontains=search_query)
+        )
+   
+    now = timezone.now()
+    if selected_date == 'Last_7_Days':
+        requests = requests.filter(time_submitted__gte=now-timedelta(days=7))
+    elif selected_date == 'Last_30_Days':
+        requests = requests.filter(time_submitted__gte=now-timedelta(days=30))
+    elif selected_date == 'This_Semester':
+        month = now.month
+        if month >= 6:
+            semester_start = timezone.datetime(now.year, 6, 1, tzinfo=timezone.get_current_timezone())
+        else:
+            semester_start = timezone.datetime(now.year, 11, 1, tzinfo=timezone.get_current_timezone())
+        requests = requests.filter(time_submitted__gte=semester_start)
+
+
+    print("Selected status:", selected_status)
+    print("Selected department:", selected_department)
     faculty_id = request.session.get("faculty_id")
     if faculty_id:
         try:
             faculty = Faculty.objects.get(id=faculty_id)
             initials = f"{faculty.first_name[0]}{faculty.last_name[0]}".upper()
+            faculty_department = DEPARTMENT_MAP.get(faculty.department,"").lower()
         except Faculty.DoesNotExist:
             pass
 
-    return render(request, "Hompage.html", {"faculty": faculty, "initials": initials})
+    context = {
+        "faculty": faculty,
+        "initials": initials,
+        "requests": requests,
+        "faculty_department": faculty_department,
+        "selected_status": selected_status,
+        "selected_department": selected_department,
+        "selected_date": selected_date,
+    }
+
+    return render(request, "Hompage.html", context)
 
 def faculty_signin(request):
     if request.method == "POST":
@@ -148,3 +215,19 @@ def faculty_logout(request):
     request.session.flush()  # Clears all session data
     return redirect("GradeFlow")
 
+def faculty_settings(request):
+    return render(request, "Faculty_Profile.html")
+
+def add_comment(request, document_id):
+    if request.method == 'POST':
+        document = get_object_or_404(ClearanceDocument, id=document_id)
+        content = request.POST.get('content', '')
+        faculty_id = request.session.get('faculty_id')
+        faculty = Faculty.objects.get(id=faculty_id) if faculty_id else None
+    
+        
+
+        if content and faculty:
+            Comment.objects.create(document=document, faculty=faculty, content=content)
+        
+        return redirect('homepage')
