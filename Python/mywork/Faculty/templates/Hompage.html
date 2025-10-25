@@ -5,7 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="{% static 'faculty_dashboard.css' %}">
+   <link rel="stylesheet" href="{% static 'faculty_dashboard.css' %}">
+   
+
+
     <script src="{% static 'dropdownHomePage.js' %}"></script>
 </head>
 <body>
@@ -33,7 +36,7 @@
                  <hr>
                 <div class="menuOptions">
                  
-                  <a href="#">Profile Settings</a>
+                  <a href={% url 'faculty_profile'%}>Profile Settings</a>
                   <a href="#">Preferences</a>
                   <a href="#">FAQ & Help</a>
                   
@@ -103,50 +106,46 @@
     <!-- Filter Section -->
     <section class="filters">
       <h3>🔍 Filter Submissions</h3>
-      <div class="filter-grid">
-        <input type="text" placeholder="Search by name or ID...">
-        <select>
-          <option>All statuses</option>
-          <option>Pending</option>
-          <option>Approved</option>
-          <option>Rejected</option>
-        </select>
-        <select>
-          <option>All Departments</option>
-          <option>Library</option>
-          <option>Registrar</option>
-          <option>Accounting</option>
-        </select>
-        <select>
-          <option>Last 7 days</option>
-          <option>Last 30 days</option>
-          <option>This Semester</option>
-        </select>
-      </div>
+      <form method="get" id="filterForm">
+        <div class="filter-grid">
+          <input type="text" name="search" placeholder="Search by name or ID...">
+
+          <select name="status" onchange="document.getElementById('filterForm').submit();">
+            <option value="All" {% if selected_status == 'All' %}selected{% endif %}>All statuses</option>
+            <option value="Pending" {% if selected_status == 'Pending' %}selected{% endif %}>Pending</option>
+            <option value="Approved" {% if selected_status == 'Approved' %}selected{% endif %}>Approved</option>
+            <option value="Rejected" {% if selected_status == 'Rejected' %}selected{% endif %}>Rejected</option>
+          </select>
+
+          <select name="department" onchange="document.getElementById('filterForm').submit();">
+            <option value='All_Department' {% if selected_department == 'All_Department'%}selected {%endif%}>All Departments</option>
+            <option value='Library' {% if selected_department == 'Library'%}selected {%endif%}>Library</option>
+            <option value='Registrar' {% if selected_department == 'Registrar'%}selected {%endif%}>Registrar</option>
+            <option value='Accounting' {% if selected_department == 'Accounting'%}selected {%endif%}>Accounting</option>
+          </select>
+
+          <select name="date_filter" onchange="document.getElementById('filterForm').submit();">
+            <option value="All_Time" {% if selected_date == 'All_Time' %}selected{% endif %}>All Time</option>
+            <option value="Last_7_Days" {% if selected_date == 'Last_7_Days' %}selected{% endif %}>Last 7 Days</option>
+            <option value="Last_30_Days" {% if selected_date == 'Last_30_Days' %}selected{% endif %}>Last 30 Days</option>
+            <option value="This_Semester" {% if selected_date == 'This_Semester' %}selected{% endif %}>This Semester</option>
+          </select>
+        </div>
+      </form>
     </section>
 
     <!-- Student Submissions -->
     <section class="submissions">
       <h3>📚 Student Submissions</h3>
       <p>Review and approve student clearance submissions.</p>
-
-      {% if submissions %}
-        {% for submission in submissions %}
-          <div class="submission-card">
-            <div class="card-header">
-              <h4>{{ submission.student_name }}</h4>
-              <span class="status {{ submission.status|lower }}">{{ submission.status }}</span>
-            </div>
-            <p><strong>ID:</strong> {{ submission.student_id }}</p>
-            <p><strong>Email:</strong> {{ submission.email }}</p>
-            <p><strong>Department:</strong> {{ submission.department }}</p>
-            <p><strong>Document Type:</strong> {{ submission.document_type }}</p>
-            <p><strong>Submitted:</strong> {{ submission.submitted_at }}</p>
-          </div>
-        {% endfor %}
-      {% else %}
-        <p class="no-submissions">No student submissions yet.</p>
-      {% endif %}
+      <p>Total requests: {{requests|length}}</p>
+      <p>Faculty department: {{faculty_department}}</p>
+        {%if requests %}
+          {% include "StudentSubmissions/Student_Submission.html" %}
+        {% else %}
+          <p class="no-submissions">No student submissions yet.</p>
+        {% endif %}
+      
     </section>
 
   </main>

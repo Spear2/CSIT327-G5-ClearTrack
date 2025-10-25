@@ -1,6 +1,6 @@
 body {
   font-family: 'Segoe UI', sans-serif;
-  background: #f5f3ff;
+  /* background: #f5f3ff; */
   margin: 0;
   padding: 0;
 }
@@ -9,7 +9,7 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 40px;
+  padding: 12px 140px;
   background: #fff;
   box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
@@ -128,7 +128,7 @@ header .h2andp p {
 /* dropdown menu */
 
 .container {
-  padding: 20px 40px;
+  padding: 20px 140px;
 }
 
 .subtitle {
@@ -216,6 +216,8 @@ header .h2andp p {
   border: 1px solid #ccc;
 }
 
+
+/* Student Submission */
 .submissions {
   background: white;
   padding: 20px;
@@ -223,24 +225,231 @@ header .h2andp p {
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
-.submission-card {
-  border: 1px solid #eee;
-  border-radius: 10px;
-  padding: 15px;
+.student-card {
+  background-color: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  width: 97%;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  margin-bottom: 10px;
+}
+
+.first_column{
+    width: 100%;
+}
+/* Header */
+.card-header {
+  display: flex;
+  
+  align-items: start;
+}
+
+.student-details h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #000;
+}
+
+.student-details p {
+  font-size: 0.9rem;
+  color: #666;
+  margin: 3px 0 0;
+}
+
+/* student's status */
+.status {
+  margin: 7px 0;
+  margin-left: 20px;
+}
+
+.badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.badge.pending {
+  background-color: #fff8e1;
+  color: #b38300;
+}
+
+/* information */
+.info-grid1 {
+  display: flex;
+  justify-content: space-between;
+ margin-top: 5px;
+}
+
+.info-grid1 .label {
+  color: #666;
+  font-size: 0.85rem;
+  
+}
+.info-grid1 p{
+  font-size: 0.85rem;
+  line-height: 0.3rem;
+}
+
+/* Notes */
+.notes {
   margin-top: 10px;
 }
 
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.notes .label{
+  color: #666;
+  font-size: 0.85rem;
+  line-height: 0rem;
 }
 
-.status {
-  padding: 5px 10px;
-  border-radius: 12px;
-  font-size: 13px;
+.note-text {
+  background-color: #fafafa;
+  border-radius: 4px;
+  padding: 8px;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+/* File section */
+.file-section {
+  display: flex;
+  align-items: center;
+  margin-top: 0;
+  line-height: 0;
+  font-size: 0.9rem;
+}
+
+.file-name {
+  color: #000000;
+}
+
+.buttons .btn.small {
+  font-size: 0.85rem;
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background: #fff;
+  cursor: pointer;
+  margin-left: 10px;
+  border: none;
+}
+
+.buttons .btn.small:hover {
+  background-color: #2563eb;
+}
+
+/* Comments added by faculty */
+.comments {
+  margin-top: 10px;
+}
+
+.comments .label{
+  color: #666;
+  font-size: 0.85rem;
+  line-height: 0.5rem;
+}
+
+.comment {
+  background: #fafafa;
+  border-left: 3px solid #3b82f6;
+  padding: 10px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 3px;
+}
+
+.comment-author {
+  color: #3b82f6;
+  font-weight: 500;
+  font-size: 0.85rem;
+}
+
+.comment-date {
+  font-size: 0.8rem;
+  color: #888;
+}
+
+/* Comment box area by faculty */
+.comment-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.comment-box textarea {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  background-color: #f3f0ff;
+  border-radius: 6px;
+  resize: none;
+  font-family: "Poppins", sans-serif;
+}
+
+.comment-box .btn.comment {
+  background-color: #eae6ff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 12px;
+  cursor: pointer;
+  color: #555;
+}
+
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+}
+
+.btn {
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  padding: 6px 12px;
+ 
+  transition: 0.2s;
+  width: 100px;
+}
+
+.btn.approve {
+  background-color: #22c55e;
   color: white;
+  cursor: pointer;
+}
+
+.btn.reject {
+  background-color: #ef4444;
+  color: white;
+  cursor: pointer;
+}
+
+.btn.approve:hover {
+  background-color: #16a34a;
+   cursor: pointer;
+}
+
+.btn.reject:hover {
+  background-color: #dc2626;
+   cursor: pointer;
+}
+
+.disabled-btn{
+
+  cursor: not-allowed;
+  
 }
 
 .status.pending { background: orange; }
@@ -252,3 +461,5 @@ header .h2andp p {
   color: #888;
   font-style: italic;
 }
+
+
