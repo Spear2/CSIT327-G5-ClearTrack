@@ -63,7 +63,7 @@
         <p class="icons">📄</p>
         <div class="numberOf">
             {% comment %} <h3>{{ total_submissions }}</h3> {% endcomment %}
-            <h3>0</h3>
+            <h3>{{ requests|length}}</h3>
             <p>Total Submissions</p>
         </div>
       </div>
@@ -72,7 +72,7 @@
         <p class="icons">⏰</p>
         <div class="numberOf">
             {% comment %} <h3>{{ pending_review }}</h3> {% endcomment %}
-            <h3>0</h3>
+            <h3>{{ count_Pending }}</h3>
             <p>Pending Review</p>
         </div>
       </div>
@@ -81,7 +81,7 @@
         <p class="icons">✅</p>
         <div class="numberOf">
             {% comment %} <h3>{{ approved }}</h3> {% endcomment %}
-            <h3>0</h3>
+            <h3>{{ count_Approved }}</h3>
             <p>Approved</p>
         </div>
       </div>
@@ -90,7 +90,7 @@
         <p class="icons">❌</p>
         <div class="numberOf">
             {% comment %} <h3>{{ rejected }}</h3> {% endcomment %}
-            <h3>0</h3>
+            <h3>{{ count_Reject}}</h3>
             <p>Rejected</p>
         </div>
       </div>

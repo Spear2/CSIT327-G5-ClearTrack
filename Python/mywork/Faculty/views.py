@@ -6,7 +6,7 @@ from django.contrib.auth.hashers import make_password, check_password
 from .models import Faculty, Comment
 from django.contrib.auth import authenticate, login
 from studentDashboard.models import ClearanceDocument
-from django.db.models import Q
+from django.db.models import Q, Case, When, Value, IntegerField
 from django.utils import timezone
 from datetime import timedelta
 
@@ -19,14 +19,30 @@ DEPARTMENT_MAP = {
     "plant": "Physical Plant",
 }
 
-
-
-
-
-
 # Create your views here.
 def home(request):
     return render(request, 'LandingPage.html')
+
+def update_status(request, document_id):
+    
+    if request.method == 'POST':
+       
+        document = get_object_or_404(ClearanceDocument, id=document_id)
+        new_status = request.POST.get('status')
+
+        faculty_id = request.session.get('faculty_id')
+        faculty = Faculty.objects.get(id=faculty_id)
+        faculty_department = DEPARTMENT_MAP.get(faculty.department,"").lower()
+
+        if faculty_department == document.department_name.lower():
+            print("status is updated")
+            document.status = new_status
+            document.save()
+            
+        else:
+            print("Status won't changed")
+
+    return redirect('homepage')
 
 def homepage(request):
     faculty = None
@@ -37,9 +53,16 @@ def homepage(request):
     selected_department = request.GET.get('department', 'All_Department')
     search_query = request.GET.get('search', '')
     selected_date = request.GET.get('date_filter', 'All_Time')
+    count_Pending = 0
+    count_Approved = 0
+    count_Reject = 0
 
+    count_Pending += ClearanceDocument.objects.filter(status='Pending').count()
+    count_Approved += ClearanceDocument.objects.filter(status='Approved').count()
+    count_Reject += ClearanceDocument.objects.filter(status='Rejected').count()
 
-    requests = ClearanceDocument.objects.select_related('student').order_by('-time_submitted')
+    
+    requests = ClearanceDocument.objects.select_related('student')
 
     if selected_status != 'All':
         requests = requests.filter(status=selected_status)
@@ -53,7 +76,19 @@ def homepage(request):
             Q(student__last_name__icontains=search_query) |
             Q(student__student_id__icontains=search_query)
         )
-   
+    
+
+    requests = requests.annotate(
+        status_priority=Case(
+            When(status='Pending', then=Value(0)),
+            When(status='Approved', then=Value(1)),
+            When(status='Rejected', then=Value(2)),
+            default=Value(3),
+            output_field=IntegerField()
+        )
+    ).order_by('status_priority', '-time_submitted')
+
+    
     now = timezone.now()
     if selected_date == 'Last_7_Days':
         requests = requests.filter(time_submitted__gte=now-timedelta(days=7))
@@ -66,10 +101,6 @@ def homepage(request):
         else:
             semester_start = timezone.datetime(now.year, 11, 1, tzinfo=timezone.get_current_timezone())
         requests = requests.filter(time_submitted__gte=semester_start)
-
-
-    print("Selected status:", selected_status)
-    print("Selected department:", selected_department)
     faculty_id = request.session.get("faculty_id")
     if faculty_id:
         try:
@@ -87,6 +118,9 @@ def homepage(request):
         "selected_status": selected_status,
         "selected_department": selected_department,
         "selected_date": selected_date,
+        "count_Approved": count_Approved,
+        "count_Reject": count_Reject,
+        "count_Pending": count_Pending,
     }
 
     return render(request, "Hompage.html", context)
@@ -231,3 +265,4 @@ def add_comment(request, document_id):
             Comment.objects.create(document=document, faculty=faculty, content=content)
         
         return redirect('homepage')
+    
