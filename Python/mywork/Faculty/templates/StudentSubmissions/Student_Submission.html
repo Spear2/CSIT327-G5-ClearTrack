@@ -7,11 +7,11 @@
           <div class="card-header">
 
               <div class="student-details">
-                  <h3>{{r.student.first_name}}</h3>
+                  <h3>{{r.student.first_name|capfirst}} {{ r.student.last_name|capfirst}}</h3>
                   <p>{{r.student.student_id}} • {{r.student.email_address}}</p>
               </div>
-              <div class="status">
-                  <span class="badge pending">{{r.status}}</span>
+              <div class="badge">
+                  <span class="status {{r.status}}">{{r.status}}</span>
               </div>
           </div>
 
@@ -47,7 +47,8 @@
               <p class="file-name">📄 {{r.file_url}}</p>
 
               <div class="buttons">
-                  <a href="{{ r.file_url }}" target="_blank" class="btn small">👁 Preview</a>
+                  {% comment %} <a href="{{ r.file_url }}" target="_blank" class="btn small">👁 Preview</a> {% endcomment %}
+                  <button class="btn small">👁 Preview</button>
                   <button class="btn small">⬇ Download</button>
               </div>
           </div>
@@ -77,10 +78,15 @@
       </div>
 
     {% if r.department_name|lower == faculty_department %}
-      <div class="actions">
-        <button class="btn approve">✔ Approve</button>
-        <button class="btn reject">✖ Reject</button>
-      </div>
+      {% if r.status == 'Pending' %}
+        <form action="{% url 'update_status' r.id %}" class="actions" method="POST">
+          {% csrf_token %}
+          <button class="btn approve" type="submit" name="status" value="Approved">✔ Approve</button>
+          <button class="btn reject" type="submit" name="status" value="Rejected">✖ Reject</button>
+        </form>
+      {% else %}
+        <div class="actions"></div>
+      {% endif %}
     {% else %}
       <div class="actions">
         <button class="btn disabled-btn" disabled>✔ Approve</button>

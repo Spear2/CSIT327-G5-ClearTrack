@@ -247,12 +247,16 @@ header .h2andp p {
   align-items: start;
 }
 
+
+
 .student-details h3 {
   margin: 0;
   font-size: 1.1rem;
   font-weight: 600;
+  min-width: 250px;
   color: #000;
 }
+
 
 .student-details p {
   font-size: 0.9rem;
@@ -261,22 +265,38 @@ header .h2andp p {
 }
 
 /* student's status */
-.status {
+.badge {
   margin: 7px 0;
   margin-left: 20px;
+  background: #1947e5;
+  border-radius: 15px;
+  border: none;
 }
 
-.badge {
+.status {
   display: inline-block;
   padding: 4px 10px;
   border-radius: 15px;
   font-size: 0.8rem;
   font-weight: 500;
+  
 }
 
-.badge.pending {
+.status.Pending {
   background-color: #fff8e1;
+  transform: translateX(5px);
   color: #b38300;
+}
+
+.status.Approved {
+  background-color: #147900;
+  transform: translateX(5px);
+  color: #ffffff;
+}
+.status.Rejected {
+  background-color: #ff0000;
+  transform: translateX(5px);
+  color: #ffffff;
 }
 
 /* information */
@@ -339,8 +359,10 @@ header .h2andp p {
   border: none;
 }
 
+
+
 .buttons .btn.small:hover {
-  background-color: #2563eb;
+  background-color: #1947e5;
 }
 
 /* Comments added by faculty */
@@ -452,9 +474,9 @@ header .h2andp p {
   
 }
 
-.status.pending { background: orange; }
+/* .status.pending { background: orange; }
 .status.approved { background: green; }
-.status.rejected { background: red; }
+.status.rejected { background: red; } */
 
 .no-submissions {
   text-align: center;
