@@ -1,0 +1,130 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GradeFlow - Profile</title>
+    <link rel="stylesheet" href="{% static 'studentDashboard.css' %}">
+    <script src="{% static 'dropdownHomePage.js' %}"></script>
+</head>
+<body>
+
+<header>
+    <div class="logo">
+        <img src="{% static 'images/gradeFlow_logo.png' %}" class="logo-icon" alt="GradeFlow Logo"/>
+        <div class="h2andp">
+            <h2>GradeFlow</h2>
+            <p>Student Portal</p>
+        </div>
+    </div>
+
+    <div class="user-menu">
+        <button class="user-circle" id="userBtn">
+            <h4>{{ initials }}</h4>
+        </button>
+        <div class="dropdown-menu" id="dropdownMenu">
+            <div class="user-info">
+                <strong>{{ student.first_name }} {{ student.last_name }}</strong><br>
+                <small>{{ student.email_address }}</small>
+            </div>
+            <hr>
+            <div class="menuOptions">
+                <a href="#">Profile Settings</a>
+                <a href="#">Help & Support</a>
+                <a href="#">FAQ</a>
+            </div>
+            <hr>
+            <div class="menuOptions">
+                <a href="{% url 'student_logout' %}">Sign Out</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="container">
+    <h2>Welcome back, {{ student.first_name }}! 👋</h2>
+    <p class="subtitle">Track your clearance progress and manage your submissions</p>
+
+    <section class="summary">
+        <div class="card completed">
+            <p class="icons">✅</p>
+            <div class="numberOf">
+                <h3>{{ completed_count|default:0 }}</h3>
+                <p>Completed</p>
+            </div>
+        </div>
+        <div class="card inprogress">
+            <p class="icons">⏳</p>
+            <div class="numberOf">
+                <h3>{{ inprogress_count|default:0 }}</h3>
+                <p>In Progress</p>
+            </div>
+        </div>
+        <div class="card pending">
+            <p class="icons">⚠️</p>
+            <div class="numberOf">
+                <h3>{{ pending_count|default:0 }}</h3>
+                <p>Pending</p>
+            </div>
+        </div>
+        <div class="card documents">
+            <p class="icons">📄</p>
+            <div class="numberOf">
+                <h3>{{ document_count|default:0 }}</h3>
+                <p>Documents</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="tabs">
+        <button onclick="window.location.href='{% url 'student_dashboard' %}'">Clearance Progress</button>
+        <button onclick="window.location.href='{% url 'request_clearance' %}'">Submit Documents</button>
+        <button onclick="window.location.href='{% url 'submission_history' %}'">Submission History</button>
+        <button class="active">Profile</button>
+    </div>
+
+    <section class="profile-section">
+        <!-- Personal Info Card -->
+        <div class="profile-card">
+            <h3>
+               <img src="{% static 'images/profile.png' %}" alt="Profile Icon" class="profile-icon"/>
+                  Personal Information
+            </h3>
+
+            <label>Full Name</label>
+            <input type="text" value="{{ student.first_name }} {{ student.last_name }}" readonly>
+
+            <label>Student ID</label>
+            <input type="text" value="{{ student.student_id }}" readonly>
+
+            <label>Email Address</label>
+            <input type="email" value="{{ student.email_address }}" readonly>
+
+            <label>Program</label>
+            <input type="text" value="{{ student.program|default:'Bachelor of Science in Computer Science' }}" readonly>
+        </div>
+
+        <!-- Contact Info Card -->
+        <div class="profile-card">
+            <h3>
+               <img src="{% static 'images/email.png' %}" alt="Email Icon" class="profile-icon"/>
+                 Contact Information
+            </h3>
+
+            <label>Phone Number</label>
+            <input type="text" value="{{ student.phone_number|default:'N/A' }}">
+
+            <label>Address</label>
+            <textarea rows="2">{{ student.address|default:'N/A' }}</textarea>
+
+            <label>Emergency Contact</label>
+            <input type="text" value="{{ student.emergency_contact|default:'N/A' }}">
+
+            <button class="update-btn">Update Profile</button>
+        </div>
+    </section>
+</main>
+
+</body>
+</html>
