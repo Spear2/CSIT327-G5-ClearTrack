@@ -44,12 +44,26 @@
 
           <!-- File Section -->
           <div class="file-section">
-              <p class="file-name">📄 {{r.file_url}}</p>
+              <p class="file-name">📄 {{ r.filename}}</p>
 
               <div class="buttons">
-                  {% comment %} <a href="{{ r.file_url }}" target="_blank" class="btn small">👁 Preview</a> {% endcomment %}
-                  <button class="btn small">👁 Preview</button>
-                  <button class="btn small">⬇ Download</button>
+                  
+                  {% if r.file_url %}
+                    {% with file_path=r.file_url|cut:SUPABASE_URL|cut:"/storage/v1/object/public/" %}
+                      <a href="{% url 'download_file' bucket_name=SUPABASE_BUCKET path=file_path %}" class="btn small" style="text-decoration: none; color: inherit;">
+                        ⬇ Download
+                      </a>
+                    {% endwith %}
+                      
+                  {% endif %}
+                  {% with file_path=r.file_url|cut:SUPABASE_URL|cut:"/storage/v1/object/public/student-uploads/" %}
+                      {% if file_path %}
+                        <a href="{% url 'preview_file' SUPABASE_BUCKET file_path %}" target="_blank" class="btn small" style="text-decoration: none; color: inherit;">
+                          👁 Preview
+                        </a>
+                      {% endif %}
+                    {% endwith %}
+                  
               </div>
           </div>
           <!-- Comments -->

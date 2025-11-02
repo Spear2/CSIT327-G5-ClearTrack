@@ -9,6 +9,14 @@ from studentDashboard.models import ClearanceDocument
 from django.db.models import Q, Case, When, Value, IntegerField
 from django.utils import timezone
 from datetime import timedelta
+from supabase import create_client
+from django.http import HttpResponse
+import os
+from django.conf import settings
+
+SUPABASE_URL = os.getenv("SUPABASE_URL")
+SUPABASE_BUCKET = os.getenv("SUPABASE_BUCKET")
+supabase = create_client(settings.SUPABASE_URL, settings.SUPABASE_KEY)
 
 DEPARTMENT_MAP = {
     "library": "Library",
@@ -22,6 +30,11 @@ DEPARTMENT_MAP = {
 # Create your views here.
 def home(request):
     return render(request, 'LandingPage.html')
+
+# def supabase_settings(request):
+#     context = {
+#         "SUPABASE_URL": settings.SUPABASE
+#     }
 
 def update_status(request, document_id):
     
@@ -110,6 +123,12 @@ def homepage(request):
         except Faculty.DoesNotExist:
             pass
 
+    for req in requests:
+        if req.file_url:
+            req.filename = req.file_url.split('/')[-1]
+        else:
+            req.filename = "No file uploaded"
+
     context = {
         "faculty": faculty,
         "initials": initials,
@@ -121,6 +140,9 @@ def homepage(request):
         "count_Approved": count_Approved,
         "count_Reject": count_Reject,
         "count_Pending": count_Pending,
+        "SUPABASE_URL": settings.SUPABASE_URL,
+        "SUPABASE_BUCKET": settings.SUPABASE_BUCKET,
+        
     }
 
     return render(request, "Hompage.html", context)
@@ -266,3 +288,24 @@ def add_comment(request, document_id):
         
         return redirect('homepage')
     
+def download_file(request, bucket_name, path):
+    """Download a file from Supabase storage."""
+    clean_path = path[len(bucket_name) + 1:] if path.startswith(f"{bucket_name}/") else path
+
+    try:
+        response = supabase.storage.from_(bucket_name).download(clean_path)
+        if not response:
+            return HttpResponse("File not found.", status=404)
+    except Exception as e:
+        return HttpResponse(f"Error downloading file: {e}", status=404)
+
+    filename = os.path.basename(clean_path)
+    res = HttpResponse(response, content_type="application/octet-stream")
+    res["Content-Disposition"] = f'attachment; filename="{filename}"'
+    return res
+
+def preview_file(request, bucket_name, path):
+    supabase = create_client(settings.SUPABASE_URL, settings.SUPABASE_KEY)
+    response = supabase.storage.from_(bucket_name).create_signed_url(path, 3600)  # valid for 1 hour
+    signed_url = response['signedURL']
+    return redirect(signed_url)
