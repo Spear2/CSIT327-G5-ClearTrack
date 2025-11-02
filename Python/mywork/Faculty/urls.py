@@ -12,4 +12,6 @@ urlpatterns = [
     path('faculty_profile', views.faculty_settings, name ='faculty_profile'),
     path('add_comment/<uuid:document_id>/', views.add_comment, name='add_comment'),
     path('update_status/<uuid:document_id>/', views.update_status, name='update_status'),
+    path('download/<str:bucket_name>/<path:path>/', views.download_file, name='download_file'),
+    path('preview/<str:bucket_name>/<path:path>/', views.preview_file, name='preview_file'),
 ]

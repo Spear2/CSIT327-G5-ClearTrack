@@ -7,7 +7,7 @@
     <title>Document</title>
    <link rel="stylesheet" href="{% static 'faculty_dashboard.css' %}">
    
-
+  
 
     <script src="{% static 'dropdownHomePage.js' %}"></script>
 </head>
@@ -98,11 +98,14 @@
 
     <!-- Tabs -->
     <div class="tabs">
-      <button class="active">Student Submissions</button>
-      <button>Analytics</button>
-      <button>Department Settings</button>
+      <button class="tab-btn active" onclick="showTab('submissions')">Student Submissions</button>
+      <button class="tab-btn" onclick="showTab('analytics')">Analytics</button>
+      <button class="tab-btn" onclick="showTab('settings')">Department Settings</button>
     </div>
 
+    <!-- Filter Section -->
+    <!-- TAB CONTENTS -->
+  <div id="submissions" class="tab-content active">
     <!-- Filter Section -->
     <section class="filters">
       <h3>🔍 Filter Submissions</h3>
@@ -134,21 +137,55 @@
       </form>
     </section>
 
-    <!-- Student Submissions -->
+    <!-- Student Submissions Section -->
     <section class="submissions">
       <h3>📚 Student Submissions</h3>
       <p>Review and approve student clearance submissions.</p>
-      <p>Total requests: {{requests|length}}</p>
-      <p>Faculty department: {{faculty_department}}</p>
-        {%if requests %}
-          {% include "StudentSubmissions/Student_Submission.html" %}
-        {% else %}
-          <p class="no-submissions">No student submissions yet.</p>
-        {% endif %}
-      
+      {% if requests %}
+        {% include "StudentSubmissions/Student_Submission.html" %}
+      {% else %}
+        <p class="no-submissions">No student submissions yet.</p>
+      {% endif %}
     </section>
+  </div>
+
+  <!-- Analytics -->
+  <section id="analytics" class="tab-content">
+    <h3>📊 Analytics</h3>
+    <p>View statistics and performance reports here.</p>
+  </section>
+    <!-- Department Settings -->
+  <section id="settings" class="tab-content">
+   
+    {% include "Department_settings.html" %}
+  </section>
 
   </main>
+<script>
+function showTab(tabId) {
+  // Hide all tab contents
+  document.querySelectorAll('.tab-content').forEach(tab => {
+    tab.style.display = 'none';
+  });
 
+  // Remove active state from all tab buttons
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.classList.remove('active');
+  });
+
+  // Show the selected tab
+  document.getElementById(tabId).style.display = 'block';
+
+  // Highlight the clicked button
+  event.target.classList.add('active');
+}
+
+// Default active tab
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.tab-content').forEach(tab => tab.style.display = 'none');
+  document.getElementById('submissions').style.display = 'block';
+});
+</script>
 </body>
+
 </html>
