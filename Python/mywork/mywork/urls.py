@@ -16,12 +16,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from Faculty import views as faculty_views
 from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('student/', include('student_signup_signin.urls')),
-    path('faculty/', include('Faculty.urls')),
+    path('', include('Faculty.urls')),
     path('dashboard/', include('studentDashboard.urls')),
 ]
 if settings.DEBUG:
