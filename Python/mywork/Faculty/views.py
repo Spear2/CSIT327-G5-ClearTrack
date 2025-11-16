@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 from django.contrib.auth.hashers import make_password, check_password
-from .models import Faculty, Comment
+from .models import Faculty, Comment, DepartmentSettings
 from django.contrib.auth import authenticate, login
 from studentDashboard.models import ClearanceDocument
 from django.db.models import Q, Case, When, Value, IntegerField
@@ -19,12 +19,10 @@ SUPABASE_BUCKET = os.getenv("SUPABASE_BUCKET")
 supabase = create_client(settings.SUPABASE_URL, settings.SUPABASE_KEY)
 
 DEPARTMENT_MAP = {
-    "library": "Library",
-    "accounting": "Accounting",
-    "acadaffairs": "Academic Affairs",
-    "studaffairs": "Student Affairs",
-    "itDepartment": "IT Department",
-    "plant": "Physical Plant",
+    "Library": "Librarian",
+    "Registrar": "Registrar",
+    "Finance Office": "Finance Office",
+    "Guidance Office": "Guidance Office",
 }
 
 # Create your views here.
@@ -146,6 +144,73 @@ def homepage(request):
     }
 
     return render(request, "Hompage.html", context)
+
+
+
+
+def faculty_settings(request):
+    faculty_id = request.session.get("faculty_id")
+
+    if faculty_id:
+        try:
+            faculty = Faculty.objects.get(id=faculty_id)
+        except Faculty.DoesNotExist:
+            faculty = None
+
+    if request.method == "POST":
+        email = request.POST.get("email")
+        password = request.POST.get("password")
+        confirm_pass = request.POST.get("confirm_password")
+
+        if email:
+            try:
+                validate_email(email)
+            except ValidationError:
+                messages.error(request, "Enter a valid email address.")
+                return render(request, "Faculty_Profile.html", {"faculty": faculty})
+
+        if password:
+            if not confirm_pass:
+                messages.error(request, "Please confirm your new password.")
+                return render(request, "Faculty_Profile.html", {"faculty": faculty})
+
+            if password != confirm_pass:
+                messages.error(request, "Password and Confirm Password do not match.")
+                return render(request, "Faculty_Profile.html", {"faculty": faculty})
+
+            faculty.password = make_password(password)
+
+        if email:
+            faculty.email = email
+
+        faculty.save()
+
+        messages.success(request, "Profile updated successfully!")
+        return render(request, "Faculty_Profile.html", {"faculty": faculty})
+    
+    context = {
+        "faculty": faculty,
+    }
+    return render(request, "Faculty_Profile.html", context)
+
+def department_settings(request):
+    faculty_id = request.session.get("faculty_id")
+    faculty = Faculty.objects.get(id=faculty_id)
+    settings, created = DepartmentSettings.objects.get_or_create(department=faculty)
+
+    if request.method == 'POST':
+        settings.office_hours = request.POST.get('office_hours')
+        settings.special_instructions = request.POST.get('special_instructions')
+        settings.contact_email = request.POST.get('contact_email')
+        settings.phone_number = request.POST.get('phone_number')
+        settings.notify_new_submissions = 'notify_new_submissions' in request.POST
+        settings.urgent_alerts = 'urgent_alerts' in request.POST
+        settings.daily_summary = 'daily_summary' in request.POST
+        settings.save()
+        return redirect('department_settings')
+
+    return render(request, 'Faculty/department_settings.html', {'faculty': faculty, 'settings': settings})
+
 
 def faculty_signin(request):
     if request.method == "POST":
@@ -271,8 +336,6 @@ def faculty_logout(request):
     request.session.flush()  # Clears all session data
     return redirect("GradeFlow")
 
-def faculty_settings(request):
-    return render(request, "Faculty_Profile.html")
 
 def add_comment(request, document_id):
     if request.method == 'POST':
@@ -309,3 +372,5 @@ def preview_file(request, bucket_name, path):
     response = supabase.storage.from_(bucket_name).create_signed_url(path, 3600)  # valid for 1 hour
     signed_url = response['signedURL']
     return redirect(signed_url)
+
+
