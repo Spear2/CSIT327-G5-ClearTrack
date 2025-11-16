@@ -9,12 +9,12 @@
       <div class="left-column">
         <div class="form-group">
           <label for="deptName">Department Name</label>
-          <input type="text" id="deptName" name="dept_name" value="Library Department" required>
+          <input type="text" id="deptName" name="dept_name" value="{{faculty.department|capfirst}} Department" required>
         </div>
 
         <div class="form-group">
           <label for="email">Contact Email</label>
-          <input type="email" id="email" name="dept_email" value="library@university.edu" required>
+          <input type="email" id="email" name="dept_email" value="{{faculty.email}}" required>
         </div>
 
         <div class="form-group">

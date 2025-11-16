@@ -42,3 +42,17 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"Comment by {self.faculty} on {self.document}"
+    
+
+class DepartmentSettings(models.Model):
+    department = models.OneToOneField(Faculty, on_delete=models.CASCADE, related_name='settings')
+    office_hours = models.TextField(blank=True, null=True)
+    special_instructions = models.TextField(blank=True, null=True)
+    contact_email = models.EmailField(blank=True, null=True)
+    phone_number = models.CharField(max_length=20, blank=True, null=True)
+    notify_new_submissions = models.BooleanField(default=False)
+    urgent_alerts = models.BooleanField(default=False)
+    daily_summary = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.department.department_name} Settings"

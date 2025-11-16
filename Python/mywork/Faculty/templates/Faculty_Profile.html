@@ -12,32 +12,35 @@
   <div class="profile-card">
     <h2>Profile Settings</h2>
 
-    <div class="profile-section">
-      <div class="profile-image">
-        <img src="https://via.placeholder.com/120" alt="Profile Picture" id="profilePreview">
-        <label for="profileUpload" class="upload-btn">Change Photo</label>
-        <input type="file" id="profileUpload" accept="image/*">
-      </div>
+    <form method="POST">
+      {% csrf_token %}
+      <div class="profile-section">
+        <div class="profile-image">
+          <img src="https://via.placeholder.com/120" alt="Profile Picture" id="profilePreview">
+          <label for="profileUpload" class="upload-btn">Change Photo</label>
+          <input type="file" id="profileUpload" accept="image/*">
+        </div>
 
-      <div class="profile-info">
-        <label for="name">Full Name</label>
-        <input type="text" id="name" placeholder="Enter your full name" />
+        <div class="profile-info">
+          <label for="email">Email</label>
+          <input type="email" id="email" placeholder="Enter your email" value="{{faculty.email}}" name="email"/>
 
-        <label for="email">Email</label>
-        <input type="email" id="email" placeholder="Enter your email" disabled />
+          <label for="password">New Password</label>
+          <input type="password" id="password" placeholder="Enter new password" name="password"/>
 
-        <label for="password">New Password</label>
-        <input type="password" id="password" placeholder="Enter new password" />
+          <label for="confirmPassword">Confirm Password</label>
+          <input type="password" id="confirmPassword" placeholder="Confirm new password" name="confirm_password"/>
 
-        <label for="confirmPassword">Confirm Password</label>
-        <input type="password" id="confirmPassword" placeholder="Confirm new password" />
-
-        <div class="actions">
-          <button class="btn save">Save Changes</button>
-          <button class="btn cancel" onClick="window.location.href='{% url 'homepage' %}'">Cancel</button>
+          <div class="actions">
+            <button class="btn save" type="submit">Save Changes</button>
+            <button class="btn cancel" type="button" onClick="window.location.href='{% url 'homepage' %}'">Cancel</button>
+          </div>
         </div>
       </div>
-    </div>
+    </form>
+    {% for message in messages %}
+            <p style="color:red">{{ message }}</p>
+        {% endfor %}
   </div>
 
   <script>
