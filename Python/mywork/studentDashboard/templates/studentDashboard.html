@@ -87,24 +87,79 @@
         <button onclick="window.location.href='{% url 'student_profile' %}'">Profile</button>
     </div>
 
-    <section class="progress-tracker">
-        <h3>📘 Clearance Progress Tracker</h3>
-        {% if clearances %}
-            {% for clearance in clearances %}
-            <div class="tracker-card {{ clearance.status|lower }}">
-                <div class="tracker-header">
-                    <h4>{{ clearance.department_name }}</h4>
-                    <span class="status">{{ clearance.status }}</span>
-                </div>
-                <p><strong>Requirement:</strong> {{ clearance.document_type }}</p>
-                <p><strong>Comment:</strong> {{ clearance.additional_notes|default:"No comments." }}</p>
-                <p class="timestamp">{{ clearance.time_submitted|timesince }} ago</p>
+    <!-- Horizontal Clearance Progress Tracker -->
+<section class="clearance-tracker">
+    <h3>✔ Clearance Progress Tracker</h3>
+    <p class="tracker-subtitle">Track the status of your clearance requirements across all departments</p>
+
+    <div class="timeline">
+
+        {% for clearance in clearances %}
+        <div class="timeline-item">
+
+            <!-- Status Icon -->
+            <div class="status-icon 
+                {% if clearance.status|lower == 'completed' %}completed{% endif %}
+                {% if clearance.status|lower == 'in progress' %}inprogress{% endif %}
+                {% if clearance.status|lower == 'pending' %}pending{% endif %}
+                {% if clearance.status|lower == 'rejected' %}rejected{% endif %}
+            ">
+                {% if clearance.status|lower == "completed" %}
+                    ✔
+                {% elif clearance.status|lower == "in progress" %}
+                    ⏳
+                {% elif clearance.status|lower == "rejected" %}
+                    ❌
+                {% else %}
+                    ○
+                {% endif %}
             </div>
-            {% endfor %}
-        {% else %}
-            <p>No clearance updates available yet.</p>
-        {% endif %}
-    </section>
+
+            <!-- Content Box -->
+            <div class="content-box">
+                <div class="content-header">
+                    <h4>{{ clearance.department_name }}</h4>
+                    <span class="timestamp">
+                        {% if clearance.time_submitted %}
+                            {{ clearance.time_submitted|timesince }} ago
+                        {% else %}
+                            -
+                        {% endif %}
+                    </span>
+                </div>
+
+                <!-- Requirement -->
+                <p class="requirement">{{ clearance.document_type }}</p>
+
+                <!-- Comment -->
+                <div class="comment-box">
+                    <strong>Comment:</strong><br>
+                    {{ clearance.additional_notes|default:"No comments." }}
+                </div>
+
+                <!-- Show Resubmit Form if Rejected -->
+                {% if clearance.status|lower == "rejected" %}
+                    <div class="rejected-box">
+                        <p class="rejected-message">Your document was rejected. Please upload a corrected file.</p>
+
+                        <form action="{% url 'resubmit_clearance' clearance.id %}" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <input type="file" name="new_document" required>
+                            <button type="submit" class="resubmit-btn">Resubmit File</button>
+                        </form>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+</section>
+
+
+
+
+
 </main>
 
 </body>
