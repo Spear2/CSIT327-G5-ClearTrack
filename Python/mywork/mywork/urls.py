@@ -24,6 +24,7 @@ urlpatterns = [
     path('student/', include('student_signup_signin.urls')),
     path('', include('Faculty.urls')),
     path('dashboard/', include('studentDashboard.urls')),
+    path('UserManagement/', include('UserManagement.urls')),
 ]
 if settings.DEBUG:
     # Include django_browser_reload URLs only in DEBUG mode

@@ -1,0 +1,142 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manage Students</title>
+    <style>
+        body { font-family: Arial; background:#f4f7fa; padding:20px; }
+        h1 { font-size:28px; margin-bottom:20px; color:#333; }
+
+        .btn {
+            padding: 10px 16px; background:#2d89ef; color:white;
+            border:none; border-radius:6px; cursor:pointer;
+        }
+        .btn:hover { background:#1b5fba; }
+
+        .back-btn { background:gray; margin-top:20px; display:inline-block; }
+
+        table {
+            width:100%; background:white; border-collapse:collapse;
+            border-radius:8px; overflow:hidden;
+        }
+        th { background:#e1e8f0; padding:14px; text-align:left; }
+        td { padding:14px; border-top:1px solid #ddd; }
+
+        .action-btn {
+            padding:6px 12px; background:#e53935; color:white;
+            border-radius:4px; text-decoration:none;
+        }
+        .action-btn:hover { background:#b71c1c; }
+
+        /* MODAL */
+        .modal-bg {
+            display:none; 
+            position:fixed; 
+            top:0; 
+            left:0;
+            width:100%; 
+            height:100%; 
+            background:rgba(0,0,0,0.4);
+            backdrop-filter:blur(3px);
+        }
+        .modal {
+            background:white; max-width:450px; margin:60px auto;
+            padding:20px; border-radius:8px;
+            animation:fadein 0.3s;
+        }
+        @keyframes fadein {
+            from { opacity:0; transform:translateY(-10px); }
+            to { opacity:1; transform:translateY(0); }
+        }
+
+        .modal input {
+            width:95%; padding:10px; margin-top:6px;
+            margin-bottom:14px; border:1px solid #ccc; border-radius:6px;
+        }
+
+        .close-btn {
+            float:right; cursor:pointer; font-size:20px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Manage Students</h1>
+
+<button class="btn" onclick="openModal()">+ Add Student</button>
+
+<br><br>
+
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Student ID</th>
+        <th>Actions</th>
+    </tr>
+
+    {% for s in students %}
+    <tr>
+        <td>{{ s.first_name }} {{ s.last_name }}</td>
+        <td>{{ s.email_address }}</td>
+        <td>{{ s.student_id }}</td>
+        <td>
+            <a href="{% url 'delete_student' s.id %}" class="action-btn">Delete</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<a href="{% url 'admin_dashboard' %}" class="btn back-btn">Back</a>
+
+<!-- Modal -->
+<div id="modalBg" class="modal-bg">
+    <div class="modal">
+        <span class="close-btn" onclick="closeModal()">×</span>
+        <h2>Add Student</h2>
+
+        {% if messages %}
+            <div style="background:#ffdddd; padding:10px; border-left:4px solid #d9534f;
+                        margin-bottom:15px; border-radius:4px; color:#a94442;">
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <form method="POST" action="{% url 'add_student' %}">
+            {% csrf_token %}
+            <input type="text" name="first_name" placeholder="First Name" required>
+            <input type="text" name="last_name" placeholder="Last Name" required>
+            <input type="email" name="email_address" placeholder="Email Address" required>
+
+            <input type="text" name="student_id" placeholder="Student ID" required>
+
+            <input type="password" name="password" placeholder="Password" required>
+            <input type="password" name="confirm_password" placeholder="Confirm Password" required>
+
+            <button class="btn" style="width:100%;">Add Student</button>
+        </form>
+    </div>
+</div>
+
+<script>
+function openModal() {
+    document.getElementById("modalBg").style.display = "block";
+}
+function closeModal() {
+    document.getElementById("modalBg").style.display = "none";
+}
+</script>
+
+{% if messages %}
+    <script>
+        // Auto-open modal if server-side validation failed
+        document.addEventListener("DOMContentLoaded", function() {
+            openModal();
+        });
+    </script>
+{% endif %}
+
+</body>
+</html>
