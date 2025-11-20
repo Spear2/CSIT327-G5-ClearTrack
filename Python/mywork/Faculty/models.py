@@ -4,12 +4,10 @@ from django.utils import timezone
 
 class Faculty(models.Model):
     DEPARTMENT_CHOICES = [
-        ('library', 'Library'),
-        ('accounting', 'Accounting'),
-        ('acadaffairs', 'Academic Affairs'),
-        ('studaffairs', 'Student Affairs'),
-        ('itDepartment', 'IT Department'),
-        ('plant', 'Physical Plant'),
+        ('Library', 'Librarian'),
+        ('Registrar', 'Registrar'),
+        ('Finance Office', 'Finance Office'),
+        ('Guidance Office', 'Guidance Office'),
     ]
 
     first_name = models.CharField(max_length=100)
