@@ -1,0 +1,124 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: #eef2f7;
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #2b2b2b;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            padding: 25px;
+            border-radius: 12px;
+            background: white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+        }
+
+        .student-card {
+            border-left: 8px solid #3b82f6;
+        }
+
+        .faculty-card {
+            border-left: 8px solid #22c55e;
+        }
+
+        .card h2 {
+            font-size: 20px;
+            margin-bottom: 8px;
+            color: #444;
+        }
+
+        .card p {
+            font-size: 38px;
+            font-weight: bold;
+            color: #222;
+        }
+
+        /* Buttons */
+        .button-group {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: bold;
+            color: white;
+            display: inline-block;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+        }
+
+        .btn-blue { background: #2563eb; }
+        .btn-blue:hover { background: #1d4ed8; }
+
+        .btn-green { background: #16a34a; }
+        .btn-green:hover { background: #15803d; }
+
+        .btn-red { background: #dc2626; }
+        .btn-red:hover { background: #b91c1c; }
+    </style>
+</head>
+
+<body>
+
+    <h1>Admin Dashboard</h1>
+
+    <div class="dashboard-grid">
+
+        <!-- Total Students -->
+        <div class="card student-card">
+            <h2>Total Students</h2>
+            <p>{{ student_count }}</p>
+        </div>
+
+        <!-- Total Faculty -->
+        <div class="card faculty-card">
+            <h2>Total Faculty</h2>
+            <p>{{ faculty_count }}</p>
+        </div>
+
+    </div>
+
+    <div class="button-group">
+        <a href="{% url 'manage_students' %}" class="btn btn-blue">Manage Students</a>
+        <a href="{% url 'manage_faculty' %}" class="btn btn-green">Manage Faculty</a>
+        <a href="{% url 'admin_logout' %}" class="btn btn-red">Logout</a>
+    </div>
+
+</body>
+</html>

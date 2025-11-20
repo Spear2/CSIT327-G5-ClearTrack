@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'tailwind',
     'theme',
     'studentDashboard',
+    'UserManagement',
 ]
 
 MIDDLEWARE = [

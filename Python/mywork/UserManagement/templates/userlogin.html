@@ -1,0 +1,26 @@
+{% load static tailwind_tags %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Login</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css">
+</head>
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+    <form method="POST" class="bg-white p-6 rounded shadow w-96">
+        {% csrf_token %}
+        <h2 class="text-xl font-bold mb-4">Admin Login</h2>
+
+        <label>Email</label>
+        <input type="email" name="email" class="w-full border p-2 mb-3" required>
+
+        <label>Password</label>
+        <input type="password" name="password" class="w-full border p-2 mb-3" required>
+
+        <button class="bg-blue-600 text-white p-2 w-full rounded">Login</button>
+        {% for message in messages %}
+            <p style="color:red">{{ message }}</p>
+        {% endfor %}
+    </form>
+</body>
+</html>
