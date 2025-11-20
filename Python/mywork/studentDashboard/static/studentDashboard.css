@@ -130,17 +130,6 @@ header .h2andp p {
   border-radius: 5px;
 }
 
-.user-info strong {
-  display: block;
-  font-size: 14px;
-  color: #222;
-}
-
-.user-info small {
-  color: #666;
-  font-size: 12px;
-}
-
 /* ==========================
    🧭 MAIN CONTAINER
 ========================== */
@@ -185,10 +174,6 @@ header .h2andp p {
   box-shadow: 0 5px 12px rgba(0,0,0,0.12);
 }
 
-.icons {
-  font-size: 25px;
-}
-
 .numberOf h3 {
   margin: 0;
   font-size: 24px;
@@ -199,13 +184,32 @@ header .h2andp p {
   color: #666;
 }
 
-/* ==========================
-   🎯 CARD COLORS
-========================== */
-.completed { border-left: 5px solid #22c55e; }   /* Green */
-.inprogress { border-left: 5px solid #facc15; }  /* Yellow */
-.pending { border-left: 5px solid #f97316; }     /* Orange */
-.documents { border-left: 5px solid #2d31fa; }   /* Blue */
+/* ===== CARD COLORS ===== */
+.completed { border-left: 5px solid #22c55e; }
+.inprogress { border-left: 5px solid #facc15; }
+.pending { border-left: 5px solid #f97316; }
+.documents { border-left: 5px solid #2d31fa; }
+
+/* ===== ICON BOX ===== */
+.icon-box {
+  padding: 10px;
+  border-radius: 50%;
+  background: #f5f0ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  min-height: 36px;
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
 
 /* ==========================
    📁 TABS
@@ -234,58 +238,71 @@ header .h2andp p {
 }
 
 /* ==========================
-   📘 CLEARANCE PROGRESS TRACKER
+   📘 PROGRESS TRACKER
 ========================== */
 .progress-tracker {
-  background: #fff;
+  background: white;
   padding: 25px;
-  border-radius: 12px;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.08);
-}
-
-.progress-tracker h3 {
-  margin-top: 0;
-  color: #2d31fa;
-}
-
-.tracker-card {
-  border: 1px solid #eee;
   border-radius: 10px;
-  padding: 15px 20px;
-  margin-top: 15px;
+  border: 1px solid #e7e7e7;
+  margin-top: 25px;
 }
 
-.tracker-card h4 {
-  margin: 0;
+.section-item {
+  padding: 20px 0;
+  border-bottom: 1px solid #f3f3f3;
+  position: relative;
 }
 
-.tracker-header {
+.section-item:last-child {
+  border-bottom: none;
+}
+
+.section-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 5px;
+  gap: 10px;
 }
 
-.status {
-  padding: 5px 10px;
-  border-radius: 12px;
-  font-size: 13px;
-  color: #fff;
-  text-transform: capitalize;
+.descr {
+  margin-left: 38px;
+  margin-top: 5px;
+  font-size: 14px;
+  color: #555;
 }
 
-.status.completed { background: #22c55e; }
-.status.inprogress { background: #facc15; color: #333; }
-.status.pending { background: #f97316; }
+.comment-box {
+  background: #f8f9fb;
+  padding: 15px;
+  margin-top: 12px;
+  margin-left: 38px;
+  border-radius: 8px;
+  font-size: 14px;
+  border: 1px solid #e7e7e7;
+}
+
+.resubmit-btn {
+  display: inline-block;
+  background: #570600;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 14px;
+}
 
 .timestamp {
-  font-size: 13px;
-  color: #777;
-  text-align: right;
+  position: absolute;
+  right: 0;
+  top: 20px;
+  font-size: 12px;
+  color: gray;
 }
 
 /* ==========================
-   🧾 NO DATA / EMPTY STATE
+   🧾 EMPTY STATE
 ========================== */
 .no-submissions {
   text-align: center;
@@ -293,125 +310,35 @@ header .h2andp p {
   font-style: italic;
   padding: 20px 0;
 }
-.status.approved {
-  background-color: #28a745;
-  color: white;
-  padding: 4px 10px;
-  border-radius: 10px;
-  font-size: 12px;
+/* Spinner animation */
+.spin {
+    animation: spin 1s linear infinite;
 }
 
-.status.pending {
-  background-color: #ffc107;
-  color: black;
-  padding: 4px 10px;
-  border-radius: 10px;
-  font-size: 12px;
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
-.status.inprogress {
-  background-color: #0dcaf0;
-  color: white;
-  padding: 4px 10px;
-  border-radius: 10px;
-  font-size: 12px;
+/* Resubmit Button */
+.resubmit-container {
+    margin-left: 38px;  /* align with description */
+    margin-top: 12px;
 }
 
-.file-actions {
-  margin-top: 8px;
-}
-
-.download-btn {
-  text-decoration: none;
-  font-size: 13px;
-  background: #007bff;
-  color: white;
-  padding: 5px 10px;
-  border-radius: 8px;
-  transition: 0.2s;
-}
-
-.download-btn:hover {
-  background: #0056b3;
-}
-
-
-/* ---- Profile Page Styles ---- */
-.profile-section {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 25px;
-    margin-top: 30px;
-    align-items: flex-start;
-}
-
-.profile-card {
-    flex: 1;
-    min-width: 380px;
-    background: #fff;
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.profile-card h3 {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: #1e293b;
-    margin-bottom: 20px;
-    padding-bottom: 10px;
-    border-bottom: 2px solid #f1f1f1;
-}
-
-.profile-card .profile-icon {
-    width: 1.2em;
-    height: 1.2em;
-    object-fit: contain;
-}
-
-.profile-card label {
-    display: block;
-    margin: 12px 0 6px;
-    font-weight: 500;
-    color: #334155;
-}
-
-.profile-card input,
-.profile-card textarea {
-    width: 100%;
-    padding: 10px 12px;
-    border-radius: 8px;
-    border: 1px solid #d1d5db;
-    background: #f9fafb;
-    font-size: 14px;
-    box-sizing: border-box;
-}
-
-.profile-card textarea {
-    min-height: 40px;
-    resize: none;
-}
-
-.update-btn {
-    background: #2563eb;
-    color: #fff;
+.resubmit-btn {
+    background: #bb0c00;
+    color: white;
     border: none;
-    padding: 10px 18px;
-    border-radius: 8px;
-    margin-top: 20px;
-    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 6px;
     cursor: pointer;
-    transition: background 0.3s ease;
-    width: fit-content;
-    align-self: flex-start;
+    text-decoration: none;
+    font-size: 14px;
+    transition: all 0.2s ease;
 }
 
-.update-btn:hover {
-    background: #1d4ed8;
+.resubmit-btn:hover {
+    background: #e53935;
 }
+

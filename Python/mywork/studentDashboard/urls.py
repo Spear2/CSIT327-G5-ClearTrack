@@ -8,5 +8,6 @@ urlpatterns = [
     path('submission-history/', views.submission_history, name='submission_history'),
     path('download/<str:bucket_name>/<path:path>/', views.download_file, name='download_file'),
     path('profile/', views.profile_view, name='student_profile'),
+    path('resubmit/<int:clearance_id>/', views.resubmit_clearance, name='resubmit_clearance'),
 
 ]

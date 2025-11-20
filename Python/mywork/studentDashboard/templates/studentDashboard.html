@@ -2,11 +2,108 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GradeFlow - Student Portal</title>
-    <link rel="stylesheet" href="{% static 'studentDashboard.css' %}">
-    <script src="{% static 'dropdownHomePage.js' %}"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GradeFlow - Student Portal</title>
+
+<link rel="stylesheet" href="{% static 'studentDashboard.css' %}">
+<script src="{% static 'dropdownHomePage.js' %}"></script>
+<script src="https://unpkg.com/feather-icons"></script>
+
+<style>
+/* Icon Box */
+.icon-box {
+    padding: 10px;
+    border-radius: 50%;
+    background: #f5f0ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    min-height: 36px;
+}
+
+/* Tracker */
+.tracker-box {
+    margin-top: 25px;
+    background: white;
+    border-radius: 10px;
+    padding: 25px;
+    border: 1px solid #e7e7e7;
+}
+
+.section-item {
+    padding: 20px 0;
+    border-bottom: 1px solid #f3f3f3;
+}
+
+.section-item:last-child {
+    border-bottom: none;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.descr {
+    margin-left: 40px;
+    margin-top: 5px;
+    font-size: 14px;
+    color: #555;
+}
+
+.comment-box {
+    background: #f8f9fb;
+    padding: 15px;
+    margin-top: 12px;
+    margin-left: 40px;
+    border-radius: 8px;
+    font-size: 14px;
+    border: 1px solid #e7e7e7;
+}
+
+/* Resubmit Button */
+.resubmit-container {
+    margin-left: 40px;
+    margin-top: 12px;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.resubmit-btn {
+    background: #b30c00;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background 0.2s ease;
+}
+
+.resubmit-btn:hover {
+    background: #e53935;
+}
+
+.timestamp {
+    float: right;
+    font-size: 12px;
+    color: gray;
+}
+
+.spin {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+</style>
 </head>
 <body>
 
@@ -46,9 +143,10 @@
     <h2>Welcome back, {{ student.first_name }}! 👋</h2>
     <p class="subtitle">Track your clearance progress and manage your submissions</p>
 
+    <!-- Summary Cards -->
     <section class="summary">
         <div class="card completed">
-            <p class="icons">✅</p>
+            <div class="icon-box"><i data-feather="check-circle" stroke="#4caf50"></i></div>
             <div class="numberOf">
                 <h3>{{ completed_count|default:0 }}</h3>
                 <p>Completed</p>
@@ -56,7 +154,7 @@
         </div>
 
         <div class="card inprogress">
-            <p class="icons">⏳</p>
+            <div class="icon-box"><i data-feather="refresh-cw" stroke="#ffca28" class="spin"></i></div>
             <div class="numberOf">
                 <h3>{{ inprogress_count|default:0 }}</h3>
                 <p>In Progress</p>
@@ -64,7 +162,7 @@
         </div>
 
         <div class="card pending">
-            <p class="icons">⚠️</p>
+            <div class="icon-box"><i data-feather="alert-circle" stroke="#f97316"></i></div>
             <div class="numberOf">
                 <h3>{{ pending_count|default:0 }}</h3>
                 <p>Pending</p>
@@ -72,7 +170,7 @@
         </div>
 
         <div class="card documents">
-            <p class="icons">📄</p>
+            <div class="icon-box"><i data-feather="file-text" stroke="#2d31fa"></i></div>
             <div class="numberOf">
                 <h3>{{ document_count|default:0 }}</h3>
                 <p>Documents</p>
@@ -80,6 +178,7 @@
         </div>
     </section>
 
+    <!-- Tabs -->
     <div class="tabs">
         <button class="active">Clearance Progress</button>
         <button onclick="window.location.href='{% url 'request_clearance' %}'">Submit Documents</button>
@@ -87,25 +186,72 @@
         <button onclick="window.location.href='{% url 'student_profile' %}'">Profile</button>
     </div>
 
+    <!-- Tracker -->
     <section class="progress-tracker">
-        <h3>📘 Clearance Progress Tracker</h3>
-        {% if clearances %}
-            {% for clearance in clearances %}
-            <div class="tracker-card {{ clearance.status|lower }}">
-                <div class="tracker-header">
-                    <h4>{{ clearance.department_name }}</h4>
-                    <span class="status">{{ clearance.status }}</span>
-                </div>
-                <p><strong>Requirement:</strong> {{ clearance.document_type }}</p>
-                <p><strong>Comment:</strong> {{ clearance.additional_notes|default:"No comments." }}</p>
-                <p class="timestamp">{{ clearance.time_submitted|timesince }} ago</p>
+    <h3>Clearance Progress Tracker</h3>
+    <p style="color: gray; font-size: 14px; margin-bottom: 15px;">
+        Track the status of your clearance requirements across all departments
+    </p>
+
+    {% for dept, clearance in clearances_by_dept.items %}
+        <div class="section-item">
+            <div class="timestamp">
+                {% if clearance and clearance.time_submitted %}
+                    {{ clearance.time_submitted|timesince }} ago
+                {% endif %}
             </div>
-            {% endfor %}
-        {% else %}
-            <p>No clearance updates available yet.</p>
-        {% endif %}
-    </section>
+
+            <div class="section-header">
+                <div class="icon-box">
+                    {% if clearance %}
+                        {% if clearance.status == "Approved" %}
+                            <i data-feather="check-circle" stroke="#4caf50"></i>
+                        {% elif clearance.status == "In Progress" %}
+                            <i data-feather="refresh-cw" stroke="#ffca28" class="spin"></i>
+                        {% elif clearance.status == "Pending" %}
+                            <i data-feather="alert-circle" stroke="#f97316"></i>
+                        {% elif clearance.status == "Rejected" %}
+                            <i data-feather="x-circle" stroke="#f44336"></i>
+                        {% endif %}
+                    {% else %}
+                        <i data-feather="alert-circle" stroke="#d1d1d1"></i>
+                    {% endif %}
+                </div>
+                <b>{{ dept }}</b>
+            </div>
+
+            {% if clearance %}
+                <div class="descr">
+                    <strong>Requirement:</strong> {{ clearance.document_type }}
+                </div>
+
+                {% if clearance.additional_notes %}
+                    <div class="comment-box">
+                        {{ clearance.additional_notes }}
+                    </div>
+                {% endif %}
+
+                {% if clearance.status == "Rejected" %}
+                    <div class="resubmit-container">
+                        <button onclick="window.location.href='{% url 'resubmit_clearance' clearance.id %}'" class="resubmit-btn">Resubmit</button>
+                    </div>
+                {% endif %}
+            {% else %}
+                <div class="descr" style="color: gray;">
+                    No submission yet.
+                </div>
+            {% endif %}
+        </div>
+    {% endfor %}
+</section>
+
 </main>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    feather.replace();
+});
+</script>
 
 </body>
 </html>
