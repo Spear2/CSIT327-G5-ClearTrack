@@ -2,166 +2,205 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GradeFlow - Student Portal</title>
-    <link rel="stylesheet" href="{% static 'clearanceRequest.css' %}">
-    <script src="{% static 'dropdownHomePage.js' %}"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% if is_resubmit %}Resubmit Clearance{% else %}Submit Clearance{% endif %} - GradeFlow</title>
+<link rel="stylesheet" href="{% static 'clearanceRequest.css' %}">
+<script src="{% static 'dropdownHomePage.js' %}"></script>
+<script src="https://unpkg.com/feather-icons"></script>
 </head>
+<style>
+  .card {
+  background: white;
+  flex: 1;
+  min-width: 200px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px 18px;
+  border-radius: 12px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+  transition: all 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 12px rgba(0,0,0,0.12);
+}
+.icon-box {
+    padding: 10px;
+    border-radius: 50%;
+    background: #f5f0ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    min-height: 36px;
+}
+.spin {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+</style>
 <body>
 
-  <!-- Top Navbar -->
-  <header>
-      <div class="logo">
-          <img src="{% static 'images/gradeFlow_logo.png' %}" class="logo-icon" />
-          <div class="h2andp">
-            <h2>GradeFlow</h2>
-            <p>Student Portal</p>
-          </div>
-      </div>
-
-      <div class="user-menu">
-          <button class="user-circle" id="userBtn">
-              <h4>{{ initials }}</h4>
-          </button>
-
-          <div class="dropdown-menu" id="dropdownMenu">
-              <div class="user-info">
-                <strong>{{ student.first_name }} {{ student.last_name }}</strong><br>
-                <small>{{ student.email_address }}</small>
-              </div>
-              <hr>
-              <div class="menuOptions">
-                <a href="#">Profile Settings</a>
-                <a href="#">Help & Support</a>
-                <a href="#">FAQ</a>
-              </div>
-              <hr>
-              <div class="menuOptions">
-                <a href="{% url 'student_logout' %}">Sign Out</a>
-              </div>
-          </div>
-      </div>
-  </header>
-
-  <!-- Main Container -->
-  <main class="container">
-
-      <h2>Welcome back, {{ student.first_name }}! 👋</h2>
-      <p class="subtitle">Track your clearance progress and manage your submissions</p>
-
-      <!-- Summary Cards -->
-      <section class="summary">
-          <div class="card completed">
-              <p class="icons">✅</p>
-              <div class="numberOf">
-                  <h3>{{ completed_count|default:0 }}</h3>
-                  <p>Completed</p>
-              </div>
-          </div>
-
-          <div class="card inprogress">
-              <p class="icons">⏳</p>
-              <div class="numberOf">
-                  <h3>{{ inprogress_count|default:0 }}</h3>
-                  <p>In Progress</p>
-              </div>
-          </div>
-
-          <div class="card pending">
-              <p class="icons">⚠️</p>
-              <div class="numberOf">
-                  <h3>{{ pending_count|default:0 }}</h3>
-                  <p>Pending</p>
-              </div>
-          </div>
-
-          <div class="card documents">
-              <p class="icons">📄</p>
-              <div class="numberOf">
-                  <h3>{{ document_count|default:0 }}</h3>
-                  <p>Documents</p>
-              </div>
-          </div>
-      </section>
-
-      <!-- Tabs -->
-      <div class="tabs">
-          <button onclick="window.location.href='{% url 'student_dashboard' %}'">Clearance Progress</button>
-          <button class="active">Submit Documents</button>
-          <button onclick="window.location.href='{% url 'submission_history' %}'">Submission History</button>
-          <button onclick="window.location.href='{% url 'student_profile' %}'">Profile</button>
-      </div>
-  </main>
-
-  <!-- Submission Section -->
-  <section class="main-content">
-    <div class="card submission-card">
-      <div class="card-header">
-        <h1>📤 Submit Clearance Documents</h1>
-        <p class="subtitle">Upload your clearance documents to the appropriate department</p>
-      </div>
-
-      <!-- Alert Messages -->
-      {% if messages %}
-        {% for message in messages %}
-        <div class="alert">{{ message }}</div>
-        {% endfor %}
-      {% endif %}
-
-      <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        <div class="form-horizontal">
-          <!-- Document Type -->
-          <div class="form-column">
-            <div class="form-group">
-              <label for="documentType">Document Type</label>
-              <select name="documentType" id="documentType" required>
-                <option value="" disabled selected>Select document type</option>
-                <option>Good Moral</option>
-                <option>Grades</option>
-                <option>Clearance Form</option>
-                <option>Payment Record</option>
-              </select>
-            </div>
-          </div>
-
-          <!-- Department -->
-          <div class="form-column">
-            <div class="form-group">
-              <label for="staff">Department</label>
-              <select name="staff" id="staff" required>
-                <option value="" disabled selected>Select department</option>
-                {% for staff in staff_list %}
-                  <option value="{{ staff }}">{{ staff }}</option>
-                {% endfor %}
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <!-- Notes -->
-        <div class="form-group full">
-          <label for="notes">Additional Notes (Optional)</label>
-          <textarea name="notes" id="notes" placeholder="Add any additional information or context for your submission..."></textarea>
-        </div>
-
-        <!-- Upload Box -->
-        <div class="upload-box" id="uploadBox">
-          <p class="upload-text">Drop files here or click to upload</p>
-          <input type="file" name="document" id="documentInput" accept=".pdf,.jpg,.png,.doc,.docx">
-          <span id="fileName">No file chosen</span>
-          <small>Supports PDF, JPG, PNG, DOC, DOCX (Max 10MB per file)</small>
-        </div>
-
-        <!-- Submit -->
-        <button type="submit" class="submit-btn">Submit Documents</button>
-      </form>
+<!-- Header -->
+<header>
+  <div class="logo">
+    <img src="{% static 'images/gradeFlow_logo.png' %}" class="logo-icon" />
+    <div class="h2andp">
+      <h2>GradeFlow</h2>
+      <p>Student Portal</p>
     </div>
+  </div>
+
+  <div class="user-menu">
+    <button class="user-circle" id="userBtn">
+      <h4>{{ initials }}</h4>
+    </button>
+    <div class="dropdown-menu" id="dropdownMenu">
+      <div class="user-info">
+        <strong>{{ student.first_name }} {{ student.last_name }}</strong><br>
+        <small>{{ student.email_address }}</small>
+      </div>
+      <hr>
+      <div class="menuOptions">
+        <a href="#">Profile Settings</a>
+        <a href="#">Help & Support</a>
+        <a href="#">FAQ</a>
+      </div>
+      <hr>
+      <div class="menuOptions">
+        <a href="{% url 'student_logout' %}">Sign Out</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+
+  <h2>Welcome back, {{ student.first_name }}! 👋</h2>
+  <p class="subtitle">Track your clearance progress and manage your submissions</p>
+
+  <!-- Summary Cards -->
+  <section class="summary">
+      <div class="card completed">
+          <div class="icon-box"><i data-feather="check-circle" stroke="#22c55e"></i></div>
+          <div class="numberOf">
+              <h3>{{ completed_count|default:0 }}</h3>
+              <p>Completed</p>
+          </div>
+      </div>
+
+      <div class="card inprogress">
+          <div class="icon-box"><i data-feather="refresh-cw" stroke="#facc15" class="spin"></i></div>
+          <div class="numberOf">
+              <h3>{{ inprogress_count|default:0 }}</h3>
+              <p>In Progress</p>
+          </div>
+      </div>
+
+      <div class="card pending">
+          <div class="icon-box"><i data-feather="alert-circle" stroke="#f97316"></i></div>
+          <div class="numberOf">
+              <h3>{{ pending_count|default:0 }}</h3>
+              <p>Pending</p>
+          </div>
+      </div>
+
+      <div class="card documents">
+          <div class="icon-box"><i data-feather="file-text" stroke="#2d31fa"></i></div>
+          <div class="numberOf">
+              <h3>{{ document_count|default:0 }}</h3>
+              <p>Documents</p>
+          </div>
+      </div>
   </section>
 
-  <!-- JS Section -->
-  <script>
+  <!-- Tabs -->
+  <div class="tabs">
+      <button onclick="window.location.href='{% url 'student_dashboard' %}'">Clearance Progress</button>
+      <button class="active">{% if is_resubmit %}Resubmit Document{% else %}Submit Documents{% endif %}</button>
+      <button onclick="window.location.href='{% url 'submission_history' %}'">Submission History</button>
+      <button onclick="window.location.href='{% url 'student_profile' %}'">Profile</button>
+  </div>
+
+</main>
+
+<!-- Submission Section -->
+<section class="main-content">
+  <div class="card submission-card">
+    <div class="card-header">
+      <h1>📤 {% if is_resubmit %}Resubmit Clearance Document{% else %}Submit Clearance Documents{% endif %}</h1>
+      <p class="subtitle">Upload your clearance documents to the appropriate department</p>
+    </div>
+
+    <!-- Alert Messages -->
+    {% if messages %}
+      {% for message in messages %}
+      <div class="alert">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="form-horizontal">
+        <!-- Document Type -->
+        <div class="form-column">
+          <div class="form-group">
+            <label for="documentType">Document Type</label>
+            <select name="documentType" id="documentType" required>
+              <option value="" disabled {% if not clearance %}selected{% endif %}>Select document type</option>
+              <option {% if clearance.document_type == 'Good Moral' %}selected{% endif %}>Good Moral</option>
+              <option {% if clearance.document_type == 'Grades' %}selected{% endif %}>Grades</option>
+              <option {% if clearance.document_type == 'Clearance Form' %}selected{% endif %}>Clearance Form</option>
+              <option {% if clearance.document_type == 'Payment Record' %}selected{% endif %}>Payment Record</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Department -->
+        <div class="form-column">
+          <div class="form-group">
+            <label for="staff">Department</label>
+            <select name="staff" id="staff" required>
+              <option value="" disabled {% if not clearance %}selected{% endif %}>Select department</option>
+              {% for staff_item in staff_list %}
+                <option value="{{ staff_item }}" {% if clearance.department_name == staff_item %}selected{% endif %}>{{ staff_item }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notes -->
+      <div class="form-group full">
+        <label for="notes">Additional Notes (Optional)</label>
+        <textarea name="notes" id="notes" placeholder="Add any additional information...">{{ clearance.additional_notes }}</textarea>
+      </div>
+
+      <!-- Upload Box -->
+      <div class="upload-box" id="uploadBox">
+        <p class="upload-text">Drop files here or click to upload</p>
+        <input type="file" name="document" id="documentInput" accept=".pdf,.jpg,.png,.doc,.docx">
+        <span id="fileName">{% if clearance.file_url %}{{ clearance.file_url|slice:"-30:" }}{% else %}No file chosen{% endif %}</span>
+        <small>Supports PDF, JPG, PNG, DOC, DOCX (Max 10MB per file)</small>
+      </div>
+
+      <!-- Submit -->
+      <button type="submit" class="submit-btn">{% if is_resubmit %}Resubmit Document{% else %}Submit Documents{% endif %}</button>
+    </form>
+  </div>
+</section>
+
+<script>
+  // Feather icons
+  document.addEventListener('DOMContentLoaded', () => { feather.replace(); });
+
   // Dropdown
   const userBtn = document.getElementById('userBtn');
   const dropdownMenu = document.getElementById('dropdownMenu');
@@ -172,7 +211,7 @@
     }
   });
 
-  // Upload Script (fixed IDs)
+  // Upload Script
   const uploadBox = document.getElementById('uploadBox');
   const documentInput = document.getElementById('documentInput');
   const fileName = document.getElementById('fileName');
@@ -185,13 +224,8 @@
       : 'No file chosen';
   });
 
-  uploadBox.addEventListener('dragover', (e) => {
-    e.preventDefault();
-    uploadBox.classList.add('dragover');
-  });
-
+  uploadBox.addEventListener('dragover', (e) => { e.preventDefault(); uploadBox.classList.add('dragover'); });
   uploadBox.addEventListener('dragleave', () => uploadBox.classList.remove('dragover'));
-
   uploadBox.addEventListener('drop', (e) => {
     e.preventDefault();
     uploadBox.classList.remove('dragover');
@@ -200,7 +234,7 @@
       fileName.textContent = e.dataTransfer.files[0].name;
     }
   });
-  </script>
+</script>
 
 </body>
 </html>

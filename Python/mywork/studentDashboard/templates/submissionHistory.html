@@ -7,6 +7,44 @@
     <title>GradeFlow - Submission History</title>
     <link rel="stylesheet" href="{% static 'studentDashboard.css' %}">
     <script src="{% static 'dropdownHomePage.js' %}"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <style>
+        .card {
+  background: white;
+  flex: 1;
+  min-width: 200px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px 18px;
+  border-radius: 12px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+  transition: all 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 12px rgba(0,0,0,0.12);
+}
+.icon-box {
+    padding: 10px;
+    border-radius: 50%;
+    background: #f5f0ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    min-height: 36px;
+}
+.spin {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+    </style>
 </head>
 <body>
 
@@ -47,35 +85,38 @@
     <p class="subtitle">Track your clearance progress and manage your submissions</p>
 
     <section class="summary">
-        <div class="card completed">
-            <p class="icons">✅</p>
-            <div class="numberOf">
-                <h3>{{ completed_count|default:0 }}</h3>
-                <p>Completed</p>
-            </div>
-        </div>
-        <div class="card inprogress">
-            <p class="icons">⏳</p>
-            <div class="numberOf">
-                <h3>{{ inprogress_count|default:0 }}</h3>
-                <p>In Progress</p>
-            </div>
-        </div>
-        <div class="card pending">
-            <p class="icons">⚠️</p>
-            <div class="numberOf">
-                <h3>{{ pending_count|default:0 }}</h3>
-                <p>Pending</p>
-            </div>
-        </div>
-        <div class="card documents">
-            <p class="icons">📄</p>
-            <div class="numberOf">
-                <h3>{{ submissions|length|default:0 }}</h3>
-                <p>Documents</p>
-            </div>
-        </div>
-    </section>
+      <div class="card completed">
+          <div class="icon-box"><i data-feather="check-circle" stroke="#22c55e"></i></div>
+          <div class="numberOf">
+              <h3>{{ completed_count|default:0 }}</h3>
+              <p>Completed</p>
+          </div>
+      </div>
+
+      <div class="card inprogress">
+          <div class="icon-box"><i data-feather="refresh-cw" stroke="#facc15" class="spin"></i></div>
+          <div class="numberOf">
+              <h3>{{ inprogress_count|default:0 }}</h3>
+              <p>In Progress</p>
+          </div>
+      </div>
+
+      <div class="card pending">
+          <div class="icon-box"><i data-feather="alert-circle" stroke="#f97316"></i></div>
+          <div class="numberOf">
+              <h3>{{ pending_count|default:0 }}</h3>
+              <p>Pending</p>
+          </div>
+      </div>
+
+      <div class="card documents">
+          <div class="icon-box"><i data-feather="file-text" stroke="#2d31fa"></i></div>
+          <div class="numberOf">
+              <h3>{{ document_count|default:0 }}</h3>
+              <p>Documents</p>
+          </div>
+      </div>
+  </section>
 
     <div class="tabs">
         <button onclick="window.location.href='{% url 'student_dashboard' %}'">Clearance Progress</button>
@@ -114,6 +155,8 @@
         {% endif %}
     </section>
 </main>
-
+<script>
+    document.addEventListener('DOMContentLoaded', () => { feather.replace(); });
+</script>
 </body>
 </html>
