@@ -233,7 +233,7 @@
 
                 {% if clearance.status == "Rejected" %}
                     <div class="resubmit-container">
-                        <button onclick="window.location.href='{% url 'resubmit_clearance' clearance.id %}'" class="resubmit-btn">Resubmit</button>
+                        <button onclick="window.location.href='{% url 'resubmit_clearance' clearance.id%}'" class="resubmit-btn">Resubmit</button>
                     </div>
                 {% endif %}
             {% else %}
