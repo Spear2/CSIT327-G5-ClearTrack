@@ -169,17 +169,17 @@ def resubmit_clearance(request, clearance_id):
     student_id = request.session.get('student_id')
     if not student_id:
         return redirect('signin')
-
+ 
     student = Student.objects.get(id=student_id)
     clearance = ClearanceDocument.objects.get(id=clearance_id, student=student)
     staff_list = ['Library', 'Registrar', 'Accounting', 'Academic Adviser']
-
+ 
     if request.method == 'POST':
         document_type = request.POST.get('documentType')
         staff = request.POST.get('staff')
         notes = request.POST.get('notes')
         document_file = request.FILES.get('document')
-
+ 
         file_url = clearance.file_url
         if document_file:
             file_name = f"{student.email_address}/{int(time.time())}_{document_file.name}"
@@ -189,7 +189,7 @@ def resubmit_clearance(request, clearance_id):
             except Exception as e:
                 messages.error(request, f"Error uploading file: {e}")
                 return redirect('resubmit_clearance', clearance_id=clearance_id)
-
+ 
         # Update existing clearance
         clearance.document_type = document_type
         clearance.department_name = staff
@@ -200,10 +200,10 @@ def resubmit_clearance(request, clearance_id):
         if staff == 'Registrar':
             clearance.status = 'In Progress'
         clearance.save()
-
+ 
         messages.success(request, "Document resubmitted successfully!")
         return redirect('student_dashboard')
-
+ 
     context = {
         'student': student,
         'initials': (student.first_name[0] + student.last_name[0]).upper(),
