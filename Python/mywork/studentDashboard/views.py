@@ -8,6 +8,8 @@ from django.conf import settings
 from student_signup_signin.models import Student
 from .models import ClearanceDocument
 from supabase import create_client
+from Faculty.models import Faculty
+from utils.notifications import notify_faculty
 
 # --- Supabase Configuration ---
 SUPABASE_URL = os.getenv("SUPABASE_URL")
@@ -55,12 +57,14 @@ def student_dashboard(request):
 # --- Request Clearance ---
 def request_clearance(request):
     student_id = request.session.get('student_id')
+    
     if not student_id:
         return redirect('signin')
 
     student = Student.objects.get(id=student_id)
     initials = (student.first_name[0] + student.last_name[0]).upper()
     summary = get_student_summary(student)
+    
     staff_list = ['Library', 'Registrar', 'Accounting', 'Academic Adviser']
 
     if request.method == 'POST':
@@ -84,6 +88,15 @@ def request_clearance(request):
         # Example: make Registrar submissions show as In Progress immediately
         if staff == 'Registrar':
             status = 'In Progress'
+
+        faculties = Faculty.objects.filter(department=staff)
+
+        for faculty in faculties:
+            notify_faculty(
+                faculty,
+                title="New Clearance Submission",
+                message=f"{student.first_name} {student.last_name} submitted a clearance request."
+            )
 
         ClearanceDocument.objects.create(
             student=student,
@@ -127,6 +140,7 @@ def submission_history(request):
 
 # --- Logout ---
 def student_logout(request):
+    request.session.flush()
     logout(request)
     return redirect('signin')
 
@@ -189,6 +203,14 @@ def resubmit_clearance(request, clearance_id):
             except Exception as e:
                 messages.error(request, f"Error uploading file: {e}")
                 return redirect('resubmit_clearance', clearance_id=clearance_id)
+            
+        faculties = Faculty.objects.filter(department=staff)
+        for faculty in faculties:
+            notify_faculty(
+                faculty,
+                title="Resubmitted Clearance Submission",
+                message=f"{student.first_name} {student.last_name} with a document type: {document_type}."
+            )
  
         # Update existing clearance
         clearance.document_type = document_type
@@ -212,6 +234,7 @@ def resubmit_clearance(request, clearance_id):
         'is_resubmit': True,
     }
     return render(request, 'clearanceRequest.html', context)
+
 # Helper to map clearances by department
 def get_clearances_by_department(clearances):
     """
