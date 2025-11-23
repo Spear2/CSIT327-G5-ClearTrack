@@ -13,13 +13,16 @@ from supabase import create_client
 from django.http import HttpResponse
 import os
 from django.conf import settings
+from utils.notifications import notify_student
+from student_signup_signin.models import Student
+from UserManagement.models import Notification
 
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_BUCKET = os.getenv("SUPABASE_BUCKET")
 supabase = create_client(settings.SUPABASE_URL, settings.SUPABASE_KEY)
 
 DEPARTMENT_MAP = {
-    "Library": "Librarian",
+    "Library": "Library",
     "Registrar": "Registrar",
     "Finance Office": "Finance Office",
     "Guidance Office": "Guidance Office",
@@ -29,37 +32,59 @@ DEPARTMENT_MAP = {
 def home(request):
     return render(request, 'LandingPage.html')
 
-# def supabase_settings(request):
-#     context = {
-#         "SUPABASE_URL": settings.SUPABASE
-#     }
 
 def update_status(request, document_id):
-    
+
     if request.method == 'POST':
-       
+
         document = get_object_or_404(ClearanceDocument, id=document_id)
         new_status = request.POST.get('status')
 
+        # Get faculty from session
         faculty_id = request.session.get('faculty_id')
         faculty = Faculty.objects.get(id=faculty_id)
-        faculty_department = DEPARTMENT_MAP.get(faculty.department,"").lower()
 
-        if faculty_department == document.department_name.lower():
-            print("status is updated")
+        # Normalize department names
+        faculty_department = DEPARTMENT_MAP.get(faculty.department, "").lower()
+        document_department = document.department_name.lower()
+
+        # Get student correctly
+        student = document.student
+
+        # Check if faculty belongs to this department
+        if faculty_department == document_department:
+            print("Status is updated")
+
             document.status = new_status
             document.save()
-            
+
+            # Notify student
+            if new_status == "Approved":
+                notify_student(
+                    student,
+                    title="Clearance Approved",
+                    message=f"Your clearance for {document.document_type} has been approved."
+                )
+
+            elif new_status == "Rejected":
+                notify_student(
+                    student,
+                    title="Clearance Rejected",
+                    message=f"Your clearance for {document.document_type} has been rejected."
+                )
+
         else:
-            print("Status won't changed")
+            print("Status won't change (faculty not allowed)")
 
     return redirect('homepage')
+
 
 def homepage(request):
     faculty = None
     initials = ""
     requests = []
     faculty_department = ""
+    
     selected_status = request.GET.get('status','All')
     selected_department = request.GET.get('department', 'All_Department')
     search_query = request.GET.get('search', '')
@@ -237,6 +262,7 @@ def faculty_signin(request):
         # Session persistence (manually)
         request.session["faculty_id"] = faculty.id
         request.session["faculty_name"] = f"{faculty.first_name} {faculty.last_name}"
+        request.session["faculty_email"] = faculty.email
         request.session.set_expiry(0)  # session ends on browser close
 
         messages.success(request, f"Welcome, {faculty.first_name}!")
@@ -343,11 +369,17 @@ def add_comment(request, document_id):
         content = request.POST.get('content', '')
         faculty_id = request.session.get('faculty_id')
         faculty = Faculty.objects.get(id=faculty_id) if faculty_id else None
+        student = Student.objects.get(id=document_id)
     
         
 
         if content and faculty:
             Comment.objects.create(document=document, faculty=faculty, content=content)
+            notify_student(
+                student,
+                title="New Comment",
+                message=f"Faculty added a comment to your submission."
+            )
         
         return redirect('homepage')
     

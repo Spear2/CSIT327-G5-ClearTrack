@@ -4,7 +4,44 @@ from student_signup_signin.models import Student
 from Faculty.models import Faculty
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password, check_password
+from django.shortcuts import get_object_or_404, redirect
+from .models import Notification
 # Create your views here.
+
+def mark_notification_read(request, id):
+    notif = get_object_or_404(Notification, id=id)
+
+    faculty_email = request.session.get("faculty_email")
+    student_email = request.session.get("student_email")
+
+    # FACULTY
+    if faculty_email:
+        try:
+            faculty = Faculty.objects.get(email=faculty_email)
+            if notif.faculty_recipient != faculty:
+                return redirect("/")  
+        except Faculty.DoesNotExist:
+            return redirect("/")
+
+    # STUDENT
+    elif student_email:
+        try:
+            student = Student.objects.get(email_address=student_email)
+            if notif.student_recipient != student:
+                return redirect("/")
+        except Student.DoesNotExist:
+            return redirect("/")
+
+    # No logged-in user
+    else:
+        return redirect("/")
+
+    # Mark as read
+    notif.is_read = True
+    notif.save()
+
+    return redirect(request.META.get("HTTP_REFERER", "/"))
+
 
 def user_dashboard(request):
     if "admin_email" not in request.session:

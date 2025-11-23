@@ -11,5 +11,7 @@ urlpatterns = [
     path("faculty/delete/<int:id>/", views.delete_faculty, name="delete_faculty"),
     path('add-faculty/', views.add_faculty, name='add_faculty'),
     path('add-student/', views.add_student, name='add_student'),
+    path("notification/read/<int:id>/", views.mark_notification_read, name="mark_notification_read")
+
 
 ]

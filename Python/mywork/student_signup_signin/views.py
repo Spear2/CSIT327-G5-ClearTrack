@@ -53,6 +53,8 @@ def signin(request):
             messages.success(request, f"Welcome back, {student.first_name}!")
             # You can set a session here if needed
             request.session['student_id'] = student.id
+            request.session["student_email"] = student.email_address
+            request.session.set_expiry(0)  # session ends on browser close
             return redirect('student_dashboard')  # replace with your dashboard/home page
         else:
             messages.error(request, "Incorrect password. Please try again.")
