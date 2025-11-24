@@ -1,5 +1,5 @@
 /* ==========================
-   🌐 GLOBAL STYLES
+   🌐 GLOBAL
 ========================== */
 body {
   font-family: 'Segoe UI', sans-serif;
@@ -9,6 +9,9 @@ body {
   color: #333;
 }
 
+/* ==========================
+   🔝 HEADER
+========================== */
 header {
   display: flex;
   justify-content: space-between;
@@ -60,7 +63,7 @@ header .h2andp p {
 
 .user-circle {
   background: #2d31fa;
-  color: #fff;
+  color: white;
   border-radius: 50%;
   width: 38px;
   height: 38px;
@@ -70,7 +73,6 @@ header .h2andp p {
   font-weight: 600;
   border: none;
   font-size: 15px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
   cursor: pointer;
 }
 
@@ -78,7 +80,7 @@ header .h2andp p {
   position: absolute;
   right: 0;
   top: 50px;
-  background: #fff;
+  background: white;
   border: 1px solid #e3e3e3;
   border-radius: 10px;
   width: 230px;
@@ -94,12 +96,6 @@ header .h2andp p {
 
 .dropdown-menu .user-info {
   padding: 10px 15px;
-  text-align: left;
-}
-
-.dropdown-menu .user-info strong {
-  color: #2d31fa;
-  font-size: 14px;
 }
 
 .dropdown-menu hr {
@@ -108,35 +104,17 @@ header .h2andp p {
   border-top: 1px solid #eee;
 }
 
-.dropdown-menu .menuOptions {
-  display: flex;
-  flex-direction: column;
-}
-
 .dropdown-menu .menuOptions a {
   text-decoration: none;
   color: #333;
   padding: 10px 15px;
   font-size: 14px;
-  transition: all 0.2s ease;
+  transition: 0.2s ease;
 }
 
 .dropdown-menu .menuOptions a:hover {
   background: #2d31fa;
-  color: #fff;
-  border-radius: 5px;
-}
-
-.user-info strong {
-  display: inline-block;
-  font-size: 14px;
-  color: #222;
-}
-
-.user-info small {
-  display: inline-block;
-  color: #666;
-  font-size: 12px;
+  color: white;
 }
 
 /* ==========================
@@ -146,17 +124,13 @@ header .h2andp p {
   padding: 30px 40px;
 }
 
-.container h2 {
-  margin-bottom: 5px;
-}
-
 .subtitle {
   color: #666;
   margin-bottom: 25px;
 }
 
 /* ==========================
-   📊 SUMMARY CARDS
+   📊 SUMMARY CARDS (Dashboard Style)
 ========================== */
 .summary {
   display: flex;
@@ -165,64 +139,74 @@ header .h2andp p {
   margin-bottom: 30px;
 }
 
-.summary .card {
-  flex: 1;                /* makes cards flexible width */
-  min-width: 200px;
-  display: flex;          /* flex inside each summary card if needed */
-  align-items: center;
-  gap: 10px;
-  padding: 15px 18px;
-  border-radius: 12px;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.08);
-  transition: all 0.2s ease;
-}
-
-.summary .card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 5px 12px rgba(0,0,0,0.12);
-}
-
 .card {
-  background: white;
-  flex: 1;
-  min-width: 200px;
+  background: #fff;                /* same as profile card */
+  flex: 1 1 200px;                 /* responsive, min-width 200px */
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 15px 18px;
-  border-radius: 12px;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.08);
-  transition: all 0.2s ease;
+  gap: 12px;
+  padding: 15px 18px;              /* consistent padding */
+  border-radius: 12px;             /* rounded corners */
+  box-shadow: 0 6px 20px rgba(13,15,30,0.06); /* match profile card shadow */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 5px 12px rgba(0,0,0,0.12);
-}
-
-
-.icons {
-  font-size: 25px;
+  box-shadow: 0 8px 24px rgba(13,15,30,0.1);
 }
 
 .numberOf h3 {
   margin: 0;
   font-size: 24px;
+  color: #0f172a;                  /* match profile text */
+  font-weight: 700;
 }
 
 .numberOf p {
   margin: 0;
-  color: #666;
+  color: #6b7280;                  /* muted text like profile */
+  font-size: 14px;
+}
+
+/* ===== CARD COLORS (Left Border) ===== */
+.completed { border-left: 5px solid #22c55e; }
+.inprogress { border-left: 5px solid #facc15; }
+.pending { border-left: 5px solid #f97316; }
+.documents { border-left: 5px solid #2d31fa; }
+
+/* ===== ICON BOX ===== */
+.icon-box {
+  padding: 10px;
+  border-radius: 50%;
+  background: #f5f0ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  min-height: 36px;
+}
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 /* ==========================
-   🎯 CARD COLORS
+   RESPONSIVE SUMMARY CARDS
 ========================== */
-.completed { border-left: 5px solid #22c55e; }   /* Green */
-.inprogress { border-left: 5px solid #facc15; }  /* Yellow */
-.pending { border-left: 5px solid #f97316; }     /* Orange */
-.documents { border-left: 5px solid #2d31fa; }   /* Blue */
-
+@media screen and (max-width: 880px) {
+  .summary {
+    flex-direction: column;
+  }
+}
+  .card {
+    min-width: 100%;
+    justify-content: flex-start;
+  }
 /* ==========================
    📁 TABS
 ========================== */
@@ -238,8 +222,6 @@ header .h2andp p {
   border-radius: 6px;
   padding: 8px 16px;
   cursor: pointer;
-  font-weight: 500;
-  transition: all 0.2s ease;
 }
 
 .tabs button.active,
@@ -250,41 +232,32 @@ header .h2andp p {
 }
 
 /* ==========================
-   📝 MAIN CONTENT CARD
+   📝 FORM CARD
 ========================== */
 .main-content {
-  padding: 50px 25px;
+  padding: 40px;
   display: flex;
   justify-content: center;
-  align-items: flex-start;
 }
 
-
 .card.submission-card {
-  display: block;          /* ensures this card stacks normally */
-  max-width: 1000px;
+  display: block;
+  max-width: 900px;
   width: 100%;
   padding: 30px;
   border-radius: 16px;
+  background: #fff;
   box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-  margin-top: 30px;        /* space between first and second card */
 }
 
 .card h1 {
   font-size: 26px;
   color: #2d31fa;
   margin-bottom: 10px;
-  font-weight: 700;
-}
-
-.card .subtitle {
-  margin-bottom: 30px;
-  color: #666;
-  font-size: 15px;
 }
 
 /* ==========================
-   FORM LAYOUT
+   FORM
 ========================== */
 .form-horizontal {
   display: flex;
@@ -295,39 +268,30 @@ header .h2andp p {
 
 .form-column {
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
 }
 
 .form-group.full {
   width: 100%;
-  margin-bottom: 20px;
 }
 
 label {
   font-weight: 600;
   margin-bottom: 8px;
   display: block;
-  font-size: 15px;
 }
 
 select,
 textarea {
-  width: 970px;
+  width: 100%;
   border-radius: 12px;
   border: 1px solid #d1d5db;
   padding: 14px;
   font-size: 15px;
   background: #f9f9ff;
-  transition: all 0.2s ease;
-}
-
-select:focus,
-textarea:focus {
-  border-color: #8b5cf6;
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
 }
 
 textarea {
@@ -342,41 +306,25 @@ textarea {
   border: 2px dashed #c9c4ff;
   border-radius: 16px;
   text-align: center;
-  padding: 50px 25px;
+  padding: 40px 20px;
   background: #f6f5ff;
-  transition: all 0.3s ease;
   cursor: pointer;
   margin-bottom: 20px;
 }
 
-.upload-box:hover {
-  border-color: #8b5cf6;
-  background: #f3f0ff;
-}
-
-.upload-text {
-  font-weight: 600;
-  color: #4b5563;
-  font-size: 16px;
-  margin-bottom: 10px;
-}
-
-#fileName {
-  display: block;
-  margin-top: 15px;
-  font-weight: 600;
-  color: #2d31fa;
-  font-size: 15px;
-}
-
-/* Dragover visual feedback */
 .upload-box.dragover {
-  background-color: #ece8ff;
+  background: #ece8ff;
   border-color: #7c3aed;
 }
 
+#fileName {
+  margin-top: 10px;
+  font-weight: 600;
+  color: #2d31fa;
+}
+
 /* ==========================
-   SUBMIT BUTTON
+   BUTTON
 ========================== */
 .submit-btn {
   background: #2d31fa;
@@ -387,17 +335,11 @@ textarea {
   font-size: 17px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
   width: 100%;
 }
 
-.submit-btn:hover {
-  background-color: #1f25c6;
-  transform: translateY(-2px);
-}
-
 /* ==========================
-   ALERT MESSAGES
+   ALERT
 ========================== */
 .alert {
   background: #f0efff;
@@ -406,7 +348,6 @@ textarea {
   margin-bottom: 20px;
   color: #2d31fa;
   font-weight: 500;
-  font-size: 14px;
   border: 1px solid #d1c4ff;
 }
 
@@ -415,12 +356,10 @@ textarea {
 ========================== */
 @media screen and (max-width: 900px) {
   .form-horizontal {
-    flex-direction: column; /* stack left & right vertically */
-    gap: 30px;
+    flex-direction: column;
   }
 
-  .upload-box,
-  .submit-btn {
-    width: 100%;
+  .summary {
+    flex-direction: column;
   }
 }

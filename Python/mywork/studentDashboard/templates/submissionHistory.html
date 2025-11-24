@@ -5,46 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GradeFlow - Submission History</title>
-    <link rel="stylesheet" href="{% static 'studentDashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'submissionHistory.css' %}">
     <script src="{% static 'dropdownHomePage.js' %}"></script>
     <script src="https://unpkg.com/feather-icons"></script>
-    <style>
-        .card {
-  background: white;
-  flex: 1;
-  min-width: 200px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 15px 18px;
-  border-radius: 12px;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.08);
-  transition: all 0.2s ease;
-}
-
-.card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 5px 12px rgba(0,0,0,0.12);
-}
-.icon-box {
-    padding: 10px;
-    border-radius: 50%;
-    background: #f5f0ff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 36px;
-    min-height: 36px;
-}
-.spin {
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-    </style>
+ 
 </head>
 <body>
 
@@ -140,9 +104,7 @@
                     {% if doc.file_url %}
                         {# Convert Supabase public URL into file path for download #}
                         {% with file_path=doc.file_url|cut:SUPABASE_URL|cut:"/storage/v1/object/public/" %}
-                            {% with file_path=doc.file_url|cut:SUPABASE_URL|cut:"/storage/v1/object/public/" %}
-    <a href="{% url 'download_file' bucket_name=SUPABASE_BUCKET path=file_path %}" class="download-btn">⬇️ Download</a>
-{% endwith %}
+                            <a href="{% url 'download_file' bucket_name=SUPABASE_BUCKET path=file_path %}" class="download-btn">Download</a>
                         {% endwith %}
                     {% else %}
                         <span class="no-file">No file uploaded</span>

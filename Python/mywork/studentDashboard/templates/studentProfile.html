@@ -5,46 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GradeFlow - Profile</title>
-    <link rel="stylesheet" href="{% static 'studentDashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'studentProfile.css' %}">
     <script src="{% static 'dropdownHomePage.js' %}"></script>
     <script src="https://unpkg.com/feather-icons"></script>
-    <style>
-       .card {
-  background: white;
-  flex: 1;
-  min-width: 200px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 15px 18px;
-  border-radius: 12px;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.08);
-  transition: all 0.2s ease;
-}
-
-.card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 5px 12px rgba(0,0,0,0.12);
-}
-.icon-box {
-    padding: 10px;
-    border-radius: 50%;
-    background: #f5f0ff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 36px;
-    min-height: 36px;
-}
-.spin {
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-} 
-    </style>
+    
 </head>
 <body>
 
@@ -125,7 +89,8 @@
         <button class="active">Profile</button>
     </div>
 
-    <section class="profile-section">
+    <form method="post" class="profile-section">
+        {% csrf_token %}
         <!-- Personal Info Card -->
         <div class="profile-card">
             <h3>
@@ -134,16 +99,16 @@
             </h3>
 
             <label>Full Name</label>
-            <input type="text" value="{{ student.first_name }} {{ student.last_name }}" readonly>
+            <input type="text" value="{{ student.first_name }} {{ student.last_name }}" readonly name="full_name">
 
             <label>Student ID</label>
-            <input type="text" value="{{ student.student_id }}" readonly>
+            <input type="text" value="{{ student.student_id }}" readonly name="student_id">
 
             <label>Email Address</label>
-            <input type="email" value="{{ student.email_address }}" readonly>
+            <input type="email" value="{{ student.email_address }}" readonly name="email">
 
             <label>Program</label>
-            <input type="text" value="{{ student.program|default:'Bachelor of Science in Computer Science' }}" readonly>
+            <input type="text" value="{{ student.program|default:'Bachelor of Science in Computer Science' }}" readonly name="program">
         </div>
 
         <!-- Contact Info Card -->
@@ -154,17 +119,17 @@
             </h3>
 
             <label>Phone Number</label>
-            <input type="text" value="{{ student.phone_number|default:'N/A' }}">
+            <input type="text" value="{{ student.phone_number|default:'' }}" name="phone_number">
 
             <label>Address</label>
-            <textarea rows="2">{{ student.address|default:'N/A' }}</textarea>
+            <textarea rows="2" name="address">{{ student.address|default:'' }}</textarea>
 
             <label>Emergency Contact</label>
-            <input type="text" value="{{ student.emergency_contact|default:'N/A' }}">
+            <input type="text" value="{{ student.emergency_contact|default:'' }}" name="emergency_contact">
 
-            <button class="update-btn">Update Profile</button>
+            <button type="submit" class="update-btn">Save Changes</button>
         </div>
-    </section>
+    </form>
 </main>
 <script>
     document.addEventListener('DOMContentLoaded', () => { feather.replace(); });
