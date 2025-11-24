@@ -10,118 +10,6 @@
 <script src="{% static 'dropdownHomePage.js' %}"></script>
 <script src="https://unpkg.com/feather-icons"></script>
 
-<style>
-/* Icon Box */
-.icon-box {
-    padding: 10px;
-    border-radius: 50%;
-    background: #f5f0ff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 36px;
-    min-height: 36px;
-}
-
-/* Tracker */
-.tracker-box {
-    margin-top: 25px;
-    background: white;
-    border-radius: 10px;
-    padding: 25px;
-    border: 1px solid #e7e7e7;
-}
-
-.section-item {
-    padding: 20px 0;
-    border-bottom: 1px solid #f3f3f3;
-}
-
-.section-item:last-child {
-    border-bottom: none;
-}
-
-.section-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.descr {
-    margin-left: 40px;
-    margin-top: 5px;
-    font-size: 14px;
-    color: #555;
-}
-
-.comment-box {
-    background: #f8f9fb;
-    padding: 15px;
-    margin-top: 12px;
-    margin-left: 40px;
-    border-radius: 8px;
-    font-size: 14px;
-    border: 1px solid #e7e7e7;
-}
-
-/* Resubmit Button */
-.resubmit-container {
-    margin-left: 40px;
-    margin-top: 12px;
-    display: flex;
-    justify-content: flex-start;
-}
-
-.resubmit-btn {
-    background: #b30c00;
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 6px;
-    cursor: pointer;
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 500;
-    transition: background 0.2s ease;
-}
-
-.resubmit-btn:hover {
-    background: #e53935;
-}
-
-.timestamp {
-    float: right;
-    font-size: 12px;
-    color: gray;
-}
-
-.spin {
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-.notif-dropdown {
-        position: absolute;
-        right: 0;
-        background: white;
-        width: 320px;
-        border-radius: 6px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        display: none;
-        z-index: 999;
-    }
-    .notif-item {
-        padding: 10px;
-        border-bottom: 1px solid #eee;
-    }
-    .notif-item.unread {
-        background: #f2f8ff;
-        font-weight: bold;
-    }    
-</style>
 </head>
 <body>
 
@@ -139,41 +27,27 @@
 
           <!-- CLICKABLE NOTIFICATION IMAGE -->
           <span id="notifBell" class="notif-bell">
-            <img src="{% static 'images/bell.png' %}" 
-                alt="Notifications" 
-                style="width: 26px; height: 26px;">
+    <img src="{% static 'images/bell.png' %}" alt="Notifications" style="width:26px; height:26px;">
+    {% if unread_count > 0 %}
+        <span class="notif-badge">{{ unread_count }}</span>
+    {% endif %}
+</span>
 
-            {% if unread_count > 0 %}
-              <span style="
-                background:red; 
-                color:white; 
-                padding:2px 6px; 
-                border-radius:50%; 
-                font-size:12px;
-                position:absolute;
-                top:-5px;
-                right:-5px;
-                ">
-                {{ unread_count }}
-              </span>
-            {% endif %}
-          </span>
-          <!-- Dropdown -->
-          <div id="notifDropdown" class="notif-dropdown">
-              {% if notifications %}
-                  {% for n in notifications|slice:":8" %}
-                      <a href="{% url 'mark_notification_read' n.id %}" style="text-decoration:none; color:black;">
-                          <div class="notif-item {% if not n.is_read %}unread{% endif %}">
-                              <strong>{{ n.title }}</strong><br>
-                              <small>{{ n.message }}</small><br>
-                              <small style="color:gray;">{{ n.created_at|timesince }} ago</small>
-                          </div>
-                      </a>
-                  {% endfor %}
-              {% else %}
-                  <div class="notif-item">No notifications yet.</div>
-              {% endif %}
-          </div>
+<div id="notifDropdown" class="notif-dropdown">
+    {% if notifications %}
+        {% for n in notifications|slice:":8" %}
+            <a href="{% url 'mark_notification_read' n.id %}" style="text-decoration:none; color:black;">
+                <div class="notif-item {% if not n.is_read %}unread{% endif %}">
+                    <strong>{{ n.title }}</strong><br>
+                    <small>{{ n.message }}</small><br>
+                    <small style="color:gray;">{{ n.created_at|timesince }} ago</small>
+                </div>
+            </a>
+        {% endfor %}
+    {% else %}
+        <div class="notif-item">No notifications yet.</div>
+    {% endif %}
+</div>
         </div>
         <div class="user-menu">
             <button class="user-circle" id="userBtn">
@@ -247,8 +121,7 @@
         <button onclick="window.location.href='{% url 'student_profile' %}'">Profile</button>
     </div>
 
-    <!-- Tracker -->
-    <section class="progress-tracker">
+<section class="progress-tracker">
     <h3>Clearance Progress Tracker</h3>
     <p style="color: gray; font-size: 14px; margin-bottom: 15px;">
         Track the status of your clearance requirements across all departments
@@ -263,22 +136,25 @@
             </div>
 
             <div class="section-header">
-                <div class="icon-box">
-                    {% if clearance %}
-                        {% if clearance.status == "Approved" %}
-                            <i data-feather="check-circle" stroke="#4caf50"></i>
-                        {% elif clearance.status == "In Progress" %}
-                            <i data-feather="refresh-cw" stroke="#ffca28" class="spin"></i>
-                        {% elif clearance.status == "Pending" %}
-                            <i data-feather="alert-circle" stroke="#f97316"></i>
-                        {% elif clearance.status == "Rejected" %}
-                            <i data-feather="x-circle" stroke="#f44336"></i>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div class="icon-box">
+                        {% if clearance %}
+                            {% if clearance.status == "Approved" %}
+                                <i data-feather="check-circle" stroke="#4caf50"></i>
+                            {% elif clearance.status == "In Progress" %}
+                                <i data-feather="refresh-cw" stroke="#ffca28" class="spin"></i>
+                            {% elif clearance.status == "Pending" %}
+                                <i data-feather="alert-circle" stroke="#f97316"></i>
+                            {% elif clearance.status == "Rejected" %}
+                                <i data-feather="x-circle" stroke="#f44336"></i>
+                            {% endif %}
+                        {% else %}
+                            <i data-feather="alert-circle" stroke="#d1d1d1"></i>
                         {% endif %}
-                    {% else %}
-                        <i data-feather="alert-circle" stroke="#d1d1d1"></i>
-                    {% endif %}
+                    </div>
+                    <b>{{ dept }}</b>
                 </div>
-                <b>{{ dept }}</b>
+
             </div>
 
             {% if clearance %}

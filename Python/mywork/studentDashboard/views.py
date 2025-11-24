@@ -168,6 +168,22 @@ def profile_view(request):
     student = Student.objects.get(id=student_id)
     initials = (student.first_name[0] + student.last_name[0]).upper()
 
+    if request.method == 'POST':
+        # Get submitted contact info
+        phone_number = request.POST.get('phone_number', '').strip()
+        address = request.POST.get('address', '').strip()
+        emergency_contact = request.POST.get('emergency_contact', '').strip()
+
+        # Update student record
+        student.phone_number = phone_number
+        student.address = address
+        student.emergency_contact = emergency_contact
+        student.save()
+
+        messages.success(request, "Contact information updated successfully!")
+        # Refresh student object to show new values
+        student.refresh_from_db()
+
     context = {
         'student': student,
         'initials': initials,
@@ -177,6 +193,7 @@ def profile_view(request):
         'document_count': ClearanceDocument.objects.filter(student=student).count(),
     }
     return render(request, 'studentProfile.html', context)
+
 
 # --- Resubmit Clearance ---
 def resubmit_clearance(request, clearance_id):

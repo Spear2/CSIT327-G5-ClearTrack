@@ -1,6 +1,6 @@
-/* ==========================
-   🌐 GLOBAL STYLES
-========================== */
+/* =========================================================
+   GLOBAL STYLES
+========================================================= */
 body {
   font-family: 'Segoe UI', sans-serif;
   background: #f5f3ff;
@@ -9,9 +9,9 @@ body {
   color: #333;
 }
 
-/* ==========================
-   🔝 HEADER / NAVBAR
-========================== */
+/* =========================================================
+   HEADER
+========================================================= */
 header {
   display: flex;
   justify-content: space-between;
@@ -27,34 +27,26 @@ header .logo {
   gap: 10px;
 }
 
-header .logo-icon {
+.logo-icon {
   width: 40px;
   height: 35px;
   border-radius: 8px;
 }
 
-header .h2andp {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.2;
-}
-
-header .h2andp h2 {
+.h2andp h2 {
   margin: 0;
   font-size: 20px;
   font-weight: 600;
   color: #2d31fa;
 }
 
-header .h2andp p {
+.h2andp p {
   margin: 0;
   font-size: 13px;
   color: #777;
 }
 
-/* ==========================
-   👤 USER MENU / DROPDOWN
-========================== */
+/* USER MENU */
 .user-menu {
   display: flex;
   align-items: center;
@@ -71,10 +63,10 @@ header .h2andp p {
   align-items: center;
   justify-content: center;
   font-weight: 600;
-  border: none;
   font-size: 15px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
   cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
 .dropdown-menu {
@@ -93,41 +85,6 @@ header .h2andp p {
 
 .dropdown-menu.active {
   display: flex;
-}
-
-.dropdown-menu .user-info {
-  padding: 10px 15px;
-  text-align: left;
-}
-
-.dropdown-menu .user-info strong {
-  color: #2d31fa;
-  font-size: 14px;
-}
-
-.dropdown-menu hr {
-  margin: 5px 0;
-  border: none;
-  border-top: 1px solid #eee;
-}
-
-.dropdown-menu .menuOptions {
-  display: flex;
-  flex-direction: column;
-}
-
-.dropdown-menu .menuOptions a {
-  text-decoration: none;
-  color: #333;
-  padding: 10px 15px;
-  font-size: 14px;
-  transition: all 0.2s ease;
-}
-
-.dropdown-menu .menuOptions a:hover {
-  background: #2d31fa;
-  color: #fff;
-  border-radius: 5px;
 }
 
 /* ==========================
@@ -236,20 +193,18 @@ header .h2andp p {
   color: white;
   border-color: #2d31fa;
 }
-
-/* ==========================
-   📘 PROGRESS TRACKER
-========================== */
+/* =========================================================
+   PROGRESS TRACKER
+========================================================= */
 .progress-tracker {
   background: white;
   padding: 25px;
-  border-radius: 10px;
+  border-radius: 12px;
   border: 1px solid #e7e7e7;
-  margin-top: 25px;
 }
 
 .section-item {
-  padding: 20px 0;
+  padding: 22px 0;
   border-bottom: 1px solid #f3f3f3;
   position: relative;
 }
@@ -259,14 +214,53 @@ header .h2andp p {
 }
 
 .section-header {
-  display: flex;
+  display: flex !important;
+  justify-content: space-between !important;
   align-items: center;
-  gap: 10px;
+  width: 100%;
+  /* reserve room on the right for the timestamp */
+  padding-right: 110px;
 }
 
+.section-header > div {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+
+/* Make the left area grow so the status pill stays on the right */
+.section-header > div:first-child { flex: 1 1 auto; }
+
+/* Status pill placed at the right side of the header */
+.status-pill {
+  align-self: center;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center;
+  white-space: nowrap;
+  padding: 6px 12px !important;
+  border-radius: 12px !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  box-shadow: 0 4px 12px rgba(15,23,42,0.04);
+  transition: transform 140ms ease, box-shadow 140ms ease;
+}
+
+.status-pill:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(15,23,42,0.06); }
+
+/* Ensure the status pill is pushed to the right; allow left area to shrink */
+.section-header > div:first-child { min-width: 0; }
+.status-pill { margin-left: auto; z-index: 3; }
+.timestamp { z-index: 2; }
+
+/* Prevent long department names from pushing layout */
+.section-header b { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+
+
 .descr {
-  margin-left: 38px;
-  margin-top: 5px;
+  margin-left: 46px;
+  margin-top: 6px;
   font-size: 14px;
   color: #555;
 }
@@ -275,70 +269,138 @@ header .h2andp p {
   background: #f8f9fb;
   padding: 15px;
   margin-top: 12px;
-  margin-left: 38px;
+  margin-left: 46px;
   border-radius: 8px;
   font-size: 14px;
   border: 1px solid #e7e7e7;
 }
 
-.resubmit-btn {
-  display: inline-block;
-  background: #570600;
-  color: white;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 6px;
-  cursor: pointer;
-  text-decoration: none;
-  font-size: 14px;
+/* =========================================================
+   ✨ BEAUTIFUL NEW STATUS PILL
+========================================================= */
+/* SIMPLE PILL — OVERRIDES OLD ONE */
+.status-pill {
+  display: inline-block !important;
+  padding: 4px 12px !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  border-radius: 999px !important;
+  color: #fff !important;
+  background: none !important;
 }
 
+/* COLORS */
+.status-pill.pending {
+  background: #d05700 !important;
+}
+
+.status-pill.approved {
+  background: #22c55e !important;
+}
+
+.status-pill.inprogress {
+  background: #facc15 !important;
+  color: #7a5c00 !important;
+}
+
+.status-pill.rejected {
+  background: #ef4444 !important;
+}
+
+.status-pill.not-submitted {
+  background: #d1d5db !important;
+  color: #4b5563 !important;
+}
+
+
+/* Resubmit Button */
+.resubmit-container {
+  margin-left: 46px;
+  margin-top: 12px;
+}
+
+.resubmit-btn {
+  background: #bb0c00;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.2s ease;
+}
+
+.resubmit-btn:hover {
+  background: #e53935;
+}
+
+/* Timestamp */
 .timestamp {
   position: absolute;
   right: 0;
-  top: 20px;
+  top: 22px;
   font-size: 12px;
   color: gray;
 }
 
-/* ==========================
-   🧾 EMPTY STATE
-========================== */
-.no-submissions {
-  text-align: center;
-  color: #888;
-  font-style: italic;
-  padding: 20px 0;
-}
-/* Spinner animation */
-.spin {
-    animation: spin 1s linear infinite;
+.notif-wrapper {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
 }
 
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+.notif-bell img {
+  width: 15px;
+  height: 15px;
 }
 
-/* Resubmit Button */
-.resubmit-container {
-    margin-left: 38px;  /* align with description */
-    margin-top: 12px;
+.notif-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: red;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.resubmit-btn {
-    background: #bb0c00;
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 6px;
-    cursor: pointer;
-    text-decoration: none;
-    font-size: 14px;
-    transition: all 0.2s ease;
+.notif-dropdown {
+  display: none;
+  position: absolute;
+  top: 32px;
+  right: 0;
+  width: 280px;
+  max-height: 400px;
+  overflow-y: auto;
+  background: #fff;
+  border: 1px solid #e3e3e3;
+  border-radius: 8px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+  z-index: 999;
 }
 
-.resubmit-btn:hover {
-    background: #e53935;
+.notif-item {
+  padding: 10px 12px;
+  border-bottom: 1px solid #f1f1f1;
+  font-size: 14px;
+  color: #333;
+  transition: background 0.2s ease;
 }
 
+.notif-item:last-child {
+  border-bottom: none;
+}
+
+.notif-item.unread {
+  background-color: #f0f8ff;
+  font-weight: 600;
+}
+
+.notif-item:hover {
+  background-color: #f5f5f5;
+}
