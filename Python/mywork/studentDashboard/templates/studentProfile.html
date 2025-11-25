@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GradeFlow - Profile</title>
     <link rel="stylesheet" href="{% static 'studentProfile.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <script src="{% static 'dropdownHomePage.js' %}"></script>
     <script src="https://unpkg.com/feather-icons"></script>
     
@@ -32,13 +33,13 @@
             </div>
             <hr>
             <div class="menuOptions">
-                <a href="#">Profile Settings</a>
-                <a href="#">Help & Support</a>
-                <a href="#">FAQ</a>
+                <a href="{% url 'student_profile_settings' %}"><i class="fa-solid fa-id-card"></i> Profile Settings</a>
+                <a href="{% url 'help_support' %}"><i class="fa-solid fa-circle-question"></i> Help & Support</a>
+                <a href="{% url 'FAQs_page' %}"><i class="fa-solid fa-question"></i> FAQ</a>
             </div>
             <hr>
             <div class="menuOptions">
-                <a href="{% url 'student_logout' %}">Sign Out</a>
+                <a href="{% url 'student_logout' %}"><i class="fa-solid fa-right-from-bracket"></i> Sign Out</a>
             </div>
         </div>
     </div>

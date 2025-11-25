@@ -1,0 +1,170 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GradeFlow - Student Portal</title>
+    <link rel="stylesheet" href="{% static 'studentHelp&Support.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="{% static 'dropdownHomePage.js' %}"></script>
+</head>
+<body>
+
+<header>
+    <div class="logo">
+        <img src="{% static 'images/gradeFlow_logo.png' %}" class="logo-icon" />
+        <div class="h2andp">
+            <h2>GradeFlow</h2>
+            <p>Student Portal</p>
+        </div>
+    </div>
+
+    <div class="user-menu">
+        <button class="user-circle" id="userBtn">
+            <h4>{{ initials }}</h4>
+        </button>
+        <div class="dropdown-menu" id="dropdownMenu">
+            <div class="user-info">
+                <strong><i class="fa-solid fa-user"></i> {{ student.first_name }} {{ student.last_name }}</strong><br>
+                <small><i class="fa-solid fa-envelope"></i> {{ student.email_address }}</small>
+            </div>
+            <hr>
+            <div class="menuOptions">
+                <a href="{% url 'student_profile_settings' %}"><i class="fa-solid fa-id-card"></i> Profile Settings</a>
+                <a href="{% url 'help_support' %}"><i class="fa-solid fa-circle-question"></i> Help & Support</a>
+                <a href="{% url 'FAQs_page' %}"><i class="fa-solid fa-question"></i> FAQ</a>
+            </div>
+            <hr>
+            <div class="menuOptions">
+                <a href="{% url 'student_logout' %}"><i class="fa-solid fa-right-from-bracket"></i> Sign Out</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+    <!--<section class="card-help&support">
+    <div class="card submission-card">/*-->
+    <main class="container">
+    <h2>💡 Help & Support</h2>
+    <p class="subtitle">Need assistance? Follow the steps below or reach out to our support team.</p>
+    <div class="help-layout">
+
+        <!-- SIDEBAR -->
+        <div class="help-sidebar">
+            <h3><i class="fa-solid fa-bars"></i> Categories</h3>
+            <ul>
+                <li class="active" onclick="showHelpSection('contact-support')"><i class="fa-solid fa-envelope"></i> Contact Support</li>
+                <li onclick="showHelpSection('troubleshooting')"><i class="fa-solid fa-tools"></i> Troubleshooting</li>
+                <li onclick="showHelpSection('tips-section')"><i class="fa-solid fa-lightbulb"></i> Tips for Submission</li>
+                <li onclick="showHelpSection('guide')"><i class="fa-solid fa-list-ol"></i> Step-by-Step Guide</li>
+                <li onclick="showHelpSection('system-updates')"><i class="fa-solid fa-bell"></i> System Notices</li>
+                <li onclick="showHelpSection('feedback')"><i class="fa-solid fa-comment-dots"></i> Feedback / Report Issue</li>
+                <li onclick="showHelpSection('resources')"><i class="fa-solid fa-download"></i> External Resources</li>
+                <li>
+                    <a href="{% url 'student_dashboard' %}" style="text-decoration: none; color: inherit;">
+                        <i class="fa-solid fa-house"></i> Back to Home
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- CONTENT AREA -->
+        <div class="help-content">
+
+            <!-- CONTACT SUPPORT -->
+            <div id="contact-support" class="help-card">
+                <h3>Contact Support</h3>
+                <ul>
+                    <li><strong>Email</strong>: <a href="mailto:ClearTrack-helpdesk@gmail.com">ClearTrack-helpdesk@gmail.com</a></li>
+                    <li><strong>Phone</strong>: +63 912 345 6789</li>
+                </ul>
+            </div>
+
+            <!-- TROUBLESHOOTING -->
+            <div id="troubleshooting" class="help-card hidden">
+                <h3>Common Issues & Solutions</h3>
+                <ul>
+    <li>
+        <strong>File upload not working:</strong> Check internet and file type.
+    </li>
+    <li>
+        <strong>Document not showing in progress:</strong> Refresh or check Submission History.
+    </li>
+    <li>
+        <strong>Unable to login:</strong> Reset password or contact support.
+    </li>
+</ul>
+            </div>
+
+            <!-- TIPS -->
+            <div id="tips-section" class="help-card hidden">
+                <h3>Tips for Smooth Submission</h3>
+                <ul>
+                    <li>Use clear file names</li>
+                    <li>Check file size limits</li>
+                    <li>Select correct department</li>
+                    <li>Keep copies of submissions</li>
+                </ul>
+            </div>
+
+            <!-- STEP-BY-STEP GUIDE -->
+            <div id="guide" class="help-card hidden">
+                <h3>Step-by-Step Submission Guide</h3>
+                <ol>
+                    <li>Log in to the student portal</li>
+                    <li>Click "Submit Documents"</li>
+                    <li>Select document type and department</li>
+                    <li>Upload files</li>
+                    <li>Add notes (if needed)</li>
+                    <li>Click Submit</li>
+                    <li>Check Submission History</li>
+                </ol>
+            </div>
+
+            <!-- SYSTEM UPDATES -->
+            <div id="system-updates" class="help-card hidden">
+                <h3>System Notices & Updates</h3>
+                <ul>
+                    <li>Maintenance: Every Saturday 12:00 AM - 2:00 AM</li>
+                    <li>Supported file types: PDF, DOCX, JPG, PNG</li>
+                    <li>Use latest Chrome, Firefox, or Edge</li>
+                </ul>
+            </div>
+
+            <!-- FEEDBACK -->
+            <div id="feedback" class="help-card hidden">
+                <h3>Feedback / Report Issues</h3>
+                <form method="POST" action="{% url 'submit_feedback' %}">
+                    {% csrf_token %}
+                    <textarea name="feedback" placeholder="Describe issue or suggestion..." required></textarea>
+                    <button type="submit">Submit Feedback</button>
+                </form>
+            </div>
+
+            <!-- RESOURCES -->
+            <div id="resources" class="help-card hidden">
+                <h3>External Resources</h3>
+                <ul>
+                    <li><a href="/documents/clearance_form.pdf" target="_blank">Clearance Form (PDF)</a></li>
+                    <li><a href="/documents/guidelines.pdf" target="_blank">Submission Guidelines</a></li>
+                    <li><a href="/departments" target="_blank">Department Websites</a></li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+</main>
+
+<script>
+function showHelpSection(sectionId) {
+    document.querySelectorAll(".help-card").forEach(el => el.classList.add("hidden"));
+    document.getElementById(sectionId).classList.remove("hidden");
+
+    document.querySelectorAll(".help-sidebar ul li").forEach(li => li.classList.remove("active"));
+    event.target.classList.add("active");
+}
+</script>
+
+</body>
+</html>
