@@ -88,8 +88,8 @@ def request_clearance(request):
         # Set initial status: Pending by default
         status = 'Pending'
         # Example: make Registrar submissions show as In Progress immediately
-        if staff == 'Registrar':
-            status = 'In Progress'
+        # if staff == 'Registrar':
+        #     status = 'In Progress'
 
         faculties = Faculty.objects.filter(department=staff)
 
@@ -238,8 +238,8 @@ def resubmit_clearance(request, clearance_id):
         clearance.file_url = file_url
         clearance.status = 'Pending'
         # Example: Registrar submissions go In Progress automatically
-        if staff == 'Registrar':
-            clearance.status = 'In Progress'
+        # if staff == 'Registrar':
+        #     clearance.status = 'In Progress'
         clearance.save()
  
         messages.success(request, "Document resubmitted successfully!")

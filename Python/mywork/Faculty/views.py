@@ -369,7 +369,7 @@ def add_comment(request, document_id):
         content = request.POST.get('content', '')
         faculty_id = request.session.get('faculty_id')
         faculty = Faculty.objects.get(id=faculty_id) if faculty_id else None
-        student = Student.objects.get(id=document_id)
+        student = document.student
     
         
 
