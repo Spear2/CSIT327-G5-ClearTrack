@@ -10,6 +10,8 @@ from .models import ClearanceDocument
 from supabase import create_client
 from Faculty.models import Faculty
 from utils.notifications import notify_faculty
+from django.contrib.auth.hashers import check_password, make_password
+
 
 # --- Supabase Configuration ---
 SUPABASE_URL = os.getenv("SUPABASE_URL")
@@ -265,3 +267,151 @@ def get_clearances_by_department(clearances):
             clearance_dict[c.department_name] = c
     return clearance_dict
 
+#view profile settings
+def settings_profile(request):
+    student_id = request.session.get('student_id')
+    if not student_id:
+        return redirect('signin')
+
+    student = Student.objects.get(id=student_id)
+    initials = (student.first_name[0] + student.last_name[0]).upper()
+    summary = get_student_summary(student)
+
+    context = {
+        'student': student,
+        'initials': initials,
+        **summary
+    }
+    return render(request, 'studentProfileSettings.html', context)
+
+#update profile info
+def update_profile(request):
+    student_id = request.session.get('student_id')
+    if not student_id:
+        return redirect('signin')
+
+    student = Student.objects.get(id=student_id)
+
+    if request.method == "POST":
+        student.phone_number = request.POST.get("phone_number", student.phone_number)
+        student.address = request.POST.get("address", student.address)
+        student.emergency_contact = request.POST.get("emergency_contact", student.emergency_contact)
+        student.save()
+        messages.success(request, "Profile updated successfully!")
+        return redirect("student_profile_settings")  # or "student_profile"
+
+    # Handle GET requests by redirecting to the profile settings page
+    return redirect("student_profile_settings")
+
+
+
+#change_password
+def change_password(request):
+    student_id = request.session.get('student_id')
+    if not student_id:
+        return redirect('signin')
+
+    student = Student.objects.get(id=student_id)
+
+    if request.method == "POST":
+        current_password = request.POST.get("current_password")
+        new_password = request.POST.get("new_password")
+        confirm_password = request.POST.get("confirm_password")
+
+        # Check current password
+        if not check_password(current_password, student.password):
+            messages.error(request, "Current password is incorrect.")
+            return redirect('student_profile_settings')
+
+        # Check matching
+        if new_password != confirm_password:
+            messages.error(request, "New passwords do not match.")
+            return redirect('student_profile_settings')
+
+        # Save new password
+        student.password = make_password(new_password)
+        student.save()
+
+        messages.success(request, "Password updated successfully!")
+        return redirect('student_profile_settings')
+
+    return redirect('student_profile_settings')
+
+# --- HELP & SUPPORT ---
+def help_support(request):
+    """Render the Help & Support page."""
+    student_id = request.session.get('student_id')
+    if not student_id:
+        return redirect('signin')
+
+    student = Student.objects.get(id=student_id)
+    initials = (student.first_name[0] + student.last_name[0]).upper()
+    summary = get_student_summary(student)
+
+    context = {
+        'student': student,
+        'initials': initials,
+        **summary,
+    }
+    return render(request, 'studentHelp&Support.html', context)
+
+
+def submit_feedback(request):
+    """Handle feedback form submission from Help & Support page."""
+    student_id = request.session.get('student_id')
+    if not student_id:
+        return redirect('signin')
+
+    student = Student.objects.get(id=student_id)
+
+    if request.method == "POST":
+        feedback_text = request.POST.get("feedback")
+        if feedback_text:
+            # Example: save to database
+            # Feedback.objects.create(student=student, message=feedback_text)
+            messages.success(request, "Thank you! Your feedback has been submitted.")
+        else:
+            messages.error(request, "Please enter feedback before submitting.")
+        return redirect('help_support')
+    
+    return redirect('help_support')
+
+
+def faq_page(request):
+    """Render a separate FAQ page."""
+    student_id = request.session.get('student_id')
+    if not student_id:
+        return redirect('signin')
+
+    student = Student.objects.get(id=student_id)
+    initials = (student.first_name[0] + student.last_name[0]).upper()
+    summary = get_student_summary(student)
+
+    context = {
+        'student': student,
+        'initials': initials,
+        **summary,
+    }
+    return render(request, 'faq_page.html', context)
+
+def FAQs_page(request):
+    student_id = request.session.get('student_id')
+    if not student_id:
+        return redirect('signin')
+
+    # Get student
+    student = Student.objects.get(id=student_id)
+
+    # Initials for the user circle
+    initials = (student.first_name[0] + student.last_name[0]).upper()
+
+    # Dashboard summary (same helper function)
+    summary = get_student_summary(student)
+
+    context = {
+        'student': student,
+        'initials': initials,
+        **summary
+    }
+
+    return render(request, 'studentFAQs.html', context)

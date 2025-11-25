@@ -10,6 +10,10 @@ class Student(models.Model):
     student_id = models.CharField(max_length=12, unique=True)
     password = models.CharField(max_length=128)
 
+    phone_number = models.CharField(max_length=20, blank=True, null=True)
+    address = models.TextField(blank=True, null=True)
+    emergency_contact = models.CharField(max_length=20, blank=True, null=True)
+
     date_registered = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

@@ -1,0 +1,214 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GradeFlow – Profile Settings</title>
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="{% static 'studentProfileSettings.css' %}">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="{% static 'dropdownHomePage.js' %}"></script>
+</head>
+<body>
+<!-- HEADER -->
+<header>
+    <div class="logo">
+        <img src="{% static 'images/gradeFlow_logo.png' %}" class="logo-icon" alt="GradeFlow" />
+        <div class="h2andp">
+            <h2>GradeFlow</h2>
+            <p>Student Portal</p>
+        </div>
+    </div>
+
+    <div class="user-menu">
+        <button class="user-circle" id="userBtn">
+            <h4>{{ initials }}</h4>
+        </button>
+
+        <div class="dropdown-menu" id="dropdownMenu">
+            <div class="user-info">
+                <strong><i class="fa-solid fa-user"></i> {{ student.first_name }} {{ student.last_name }}</strong><br>
+                <small><i class="fa-solid fa-envelope"></i> {{ student.email_address }}</small>
+            </div>
+            <hr>
+            <div class="menuOptions">
+                <a href="{% url 'student_profile_settings' %}"><i class="fa-solid fa-id-card"></i> Profile Settings</a>
+                <a href="{% url 'help_support' %}"><i class="fa-solid fa-circle-question"></i> Help & Support</a>
+                <a href="{% url 'FAQs_page' %}"><i class="fa-solid fa-question"></i> FAQ</a>
+            </div>
+            <hr>
+            <div class="menuOptions">
+                <a href="{% url 'student_logout' %}"><i class="fa-solid fa-right-from-bracket"></i> Sign Out</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="container">
+    <h2><i class="fa-solid fa-gear"></i> Profile Settings</h2>
+    <p class="subtitle">Manage your personal information and preferences</p>
+    <div class="settings-layout">
+
+        <!-- SIDEBAR -->
+        <div class="settings-sidebar">
+            <h3><i class="fa-solid fa-bars"></i> Settings Menu</h3>
+            <ul>
+                <li class="active" onclick="showSection('profile-section')">
+                    <i class="fa-solid fa-id-card"></i> Profile Information
+                </li>
+
+                <li onclick="showSection('preferences-section')">
+                    <i class="fa-solid fa-sliders"></i> Preferences & Settings
+                </li>
+
+                <li onclick="showSection('security-section')">
+                    <i class="fa-solid fa-lock"></i> Security
+                </li>
+
+                <li onclick="showSection('notifications-section')">
+                    <i class="fa-solid fa-bell"></i> Notification Settings
+                </li>
+                <li>
+                  <a href="{% url 'student_dashboard' %}" style="text-decoration: none; color: inherit;">
+                    <i class="fa-solid fa-house"></i> Back to Home
+                  </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- CONTENT AREA -->
+        <div class="settings-content">
+
+            <!-- PROFILE INFORMATION -->
+            <div id="profile-section" class="settings-card main-settings-card">
+                <h3><i class="fa-solid fa-user-pen"></i> Personal Information</h3>
+
+                <form method="POST" action="{% url 'update_profile' %}">
+                    {% csrf_token %}
+
+                    <div class="form-group">
+                        <label><i class="fa-solid fa-user"></i> Full Name</label>
+                        <input type="text" value="{{ student.first_name }} {{ student.last_name }}" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fa-solid fa-envelope"></i> Email Address</label>
+                        <input type="email" value="{{ student.email_address }}" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fa-solid fa-phone"></i> Phone Number</label>
+                        <input type="text" name="phone_number" value="{{ student.phone_number|default:'' }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fa-solid fa-location-dot"></i> Address</label>
+                        <input type="text" name="address" class="form-input" value="{{ student.address|default:'' }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fa-solid fa-user-shield"></i> Emergency Contact</label>
+                        <input type="text" name="emergency_contact" value="{{ student.emergency_contact|default:'' }}">
+                    </div>
+
+                    <button class="update-btn"><i class="fa-solid fa-floppy-disk"></i> Save Changes</button>
+                </form>
+            </div>
+
+            <!-- PREFERENCES -->
+            <div id="preferences-section" class="settings-card main-settings-card hidden">
+                <h3><i class="fa-solid fa-sliders"></i> Preferences & Settings</h3>
+
+            <div class="form-group">
+                <label><i class="fa-solid fa-palette"></i> Theme</label>
+                <select>
+                    <option>Light Mode</option>
+                    <option>Dark Mode</option>
+                    <option>System Default</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label><i class="fa-solid fa-language"></i> Language</label>
+                <select>
+                    <option>English</option>
+                    <option>Filipino</option>
+                    <option value="spanish">Spanish</option>
+                    <option value="french">French</option>
+                    <option value="german">German</option>
+                    <option value="chinese">Chinese</option>
+                    <option value="japanese">Japanese</option>
+                    <option value="korean">Korean</option>
+                    <option value="arabic">Arabic</option>
+                    <option value="hindi">Hindi</option>
+                    <option value="portuguese">Portuguese</option>
+                </select>
+            </div>
+            <div class="form-group">    
+                <label><i class="fa-solid fa-clock"></i> Time Zone</label>
+                <select>
+                    <option>Asia/Manila (PHT)</option>
+                    <option>UTC +8</option>
+                    <option value="SGT">Asia/Singapore (SGT) - UTC+8</option>
+                    <option value="HKT">Asia/Hong_Kong (HKT) - UTC+8</option>
+                    <option value="CST">Asia/Shanghai (CST) - UTC+8</option>
+                    <option value="JST">Asia/Tokyo (JST) - UTC+9</option>
+                    <option value="KST">Asia/Seoul (KST) - UTC+9</option>
+                    <option value="IST">Asia/Kolkata (IST) - UTC+5:30</option>
+                    <option value="BST">Europe/London (BST) - UTC+1</option>
+                    <option value="EST">America/New_York (EST) - UTC-5</option>
+                    <option value="PST">America/Los_Angeles (PST) - UTC-8</option>
+                    <option value="CET">Europe/Paris (CET) - UTC+1</option>
+                    <option value="EET">Europe/Athens (EET) - UTC+2</option>
+                    <option value="UTC">UTC - Coordinated Universal Time</option>
+                </select>
+            </div>
+                <button class="update-btn"><i class="fa-solid fa-floppy-disk"></i> Save Preferences</button>
+            </div>
+
+            <!-- SECURITY -->
+            <div id="security-section" class="settings-card main-settings-card hidden">
+                <h3><i class="fa-solid fa-lock"></i> Security</h3>
+
+                <form method="POST" action="{% url 'change_password' %}">
+                    {% csrf_token %}
+                <div class="form-group">
+                    <label><i class="fa-solid fa-key"></i> Current Password</label>
+                    <input type="password" name="current_password" placeholder="Enter old password" required>
+                </div>  
+                <div class="form-group">  
+                    <label><i class="fa-solid fa-lock-open"></i> New Password</label>
+                    <input type="password" name="new_password" placeholder="Enter new password" required>
+                </div>
+                <div class="form-group">
+                    <label><i class="fa-solid fa-lock"></i> Confirm New Password</label>
+                    <input type="password" name="confirm_password" placeholder="Confirm new password"required>
+                </div>
+                    <button class="update-btn"><i class="fa-solid fa-shield"></i> Change Password</button>
+                </form>
+            </div>
+
+            <!-- NOTIFICATIONS -->
+            <div id="notifications-section" class="settings-card  main-settings-card hidden">
+                <h3><i class="fa-solid fa-bell"></i> Notifications</h3>
+                <label><input type="checkbox" checked> <i class="fa-solid fa-envelope"></i> Email notifications</label><br>
+                <label><input type="checkbox"> <i class="fa-solid fa-sms"></i> SMS notifications</label><br>
+                <label><input type="checkbox" checked> <i class="fa-solid fa-circle-check"></i> Clearance approval updates</label><br>
+                <button class="update-btn"><i class="fa-solid fa-floppy-disk"></i> Save Notification Settings</button>
+        </div>
+    </div>
+</main>
+
+<script>
+function showSection(sectionId) {
+    document.querySelectorAll(".settings-card.main-settings-card").forEach(el => el.classList.add("hidden"));
+    document.getElementById(sectionId).classList.remove("hidden");
+
+    document.querySelectorAll(".settings-sidebar ul li").forEach(li => li.classList.remove("active"));
+    event.target.classList.add("active");
+}
+</script>
+
+</body>
+</html>
