@@ -221,8 +221,6 @@
       <button onclick="window.location.href='{% url 'student_profile' %}'">Profile</button>
   </div>
 
-</main>
-
 <!-- Submission Section -->
 <section class="main-content">
   <div class="card submission-card">
@@ -287,8 +285,8 @@
       <button type="submit" class="submit-btn">{% if is_resubmit %}Resubmit Document{% else %}Submit Documents{% endif %}</button>
     </form>
   </div>
-</section>
-
+  </section>
+</main>
 <script>
   // Feather icons
   document.addEventListener('DOMContentLoaded', () => { feather.replace(); });
