@@ -157,7 +157,7 @@ header .h2andp p {
   position: absolute;
   right: 0;
   top: 50px;
-  background: #fff;
+  background: white;
   border: 1px solid #e3e3e3;
   border-radius: 10px;
   width: 230px;
@@ -176,11 +176,6 @@ header .h2andp p {
   text-align: left;
 }
 
-.dropdown-menu .user-info strong {
-  color: #2d31fa;
-  font-size: 14px;
-}
-
 .dropdown-menu hr {
   margin: 5px 0;
   border: none;
@@ -197,13 +192,12 @@ header .h2andp p {
   color: #333;
   padding: 10px 15px;
   font-size: 14px;
-  transition: all 0.2s ease;
+  transition: 0.2s ease;
 }
 
 .dropdown-menu .menuOptions a:hover {
   background: #2d31fa;
-  color: #fff;
-  border-radius: 5px;
+  color: white;
 }
 
 /* ==========================
