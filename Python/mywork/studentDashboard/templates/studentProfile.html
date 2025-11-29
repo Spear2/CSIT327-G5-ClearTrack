@@ -1,28 +1,31 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>GradeFlow - Profile</title>
-    <link rel="stylesheet" href="{% static 'studentProfile.css' %}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'studentProfile.css' %}" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
     <script src="{% static 'dropdownHomePage.js' %}"></script>
     <script src="https://unpkg.com/feather-icons"></script>
-    
+
     <style>
-        .notif-wrapper {
+      .notif-wrapper {
         position: relative;
         display: inline-block;
         cursor: pointer;
-        }
+      }
 
-        .notif-bell img {
+      .notif-bell img {
         width: 15px;
         height: 15px;
-        }
+      }
 
-        .notif-badge {
+      .notif-badge {
         position: absolute;
         top: -5px;
         right: -5px;
@@ -35,9 +38,9 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        }
+      }
 
-        .notif-dropdown {
+      .notif-dropdown {
         display: none;
         position: absolute;
         top: 32px;
@@ -48,195 +51,264 @@
         background: #fff;
         border: 1px solid #e3e3e3;
         border-radius: 8px;
-        box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
         z-index: 999;
-        }
+      }
 
-        .notif-item {
+      .notif-item {
         padding: 10px 12px;
         border-bottom: 1px solid #f1f1f1;
         font-size: 14px;
         color: #333;
         transition: background 0.2s ease;
-        }
+      }
 
-        .notif-item:last-child {
+      .notif-item:last-child {
         border-bottom: none;
-        }
+      }
 
-        .notif-item.unread {
+      .notif-item.unread {
         background-color: #f0f8ff;
         font-weight: 600;
-        }
+      }
 
-        .notif-item:hover {
+      .notif-item:hover {
         background-color: #f5f5f5;
-        }
-
+      }
     </style>
-</head>
-<body>
-
-<header>
-    <div class="logo">
+  </head>
+  <body>
+    <header>
+      <div class="logo">
         <img src="{% static 'images/gradeFlow_logo.png' %}" class="logo-icon" />
         <div class="h2andp">
-            <h2>GradeFlow</h2>
-            <p>Student Portal</p>
+          <h2>GradeFlow</h2>
+          <p>Student Portal</p>
         </div>
-    </div>
+      </div>
 
-    <div style="display: flex; align-items: center; gap: 20px;">
-        <div class="notif-wrapper" style="position: relative; cursor: pointer;">
-
+      <div style="display: flex; align-items: center; gap: 20px">
+        <div class="notif-wrapper" style="position: relative; cursor: pointer">
           <!-- CLICKABLE NOTIFICATION IMAGE -->
           <span id="notifBell" class="notif-bell">
-    <img src="{% static 'images/bell.png' %}" alt="Notifications" style="width:26px; height:26px;">
-    {% if unread_count > 0 %}
-        <span class="notif-badge">{{ unread_count }}</span>
-    {% endif %}
-</span>
+            <img
+              src="{% static 'images/bell.png' %}"
+              alt="Notifications"
+              style="width: 26px; height: 26px"
+            />
+            {% if unread_count > 0 %}
+            <span class="notif-badge">{{ unread_count }}</span>
+            {% endif %}
+          </span>
 
-<div id="notifDropdown" class="notif-dropdown">
-    {% if notifications %}
-        {% for n in notifications|slice:":8" %}
-            <a href="{% url 'mark_notification_read' n.id %}" style="text-decoration:none; color:black;">
-                <div class="notif-item {% if not n.is_read %}unread{% endif %}">
-                    <strong>{{ n.title }}</strong><br>
-                    <small>{{ n.message }}</small><br>
-                    <small style="color:gray;">{{ n.created_at|timesince }} ago</small>
-                </div>
+          <div id="notifDropdown" class="notif-dropdown">
+            {% if notifications %} {% for n in notifications|slice:":8" %}
+            <a
+              href="{% url 'mark_notification_read' n.id %}"
+              style="text-decoration: none; color: black"
+            >
+              <div class="notif-item {% if not n.is_read %}unread{% endif %}">
+                <strong>{{ n.title }}</strong><br />
+                <small>{{ n.message }}</small><br />
+                <small style="color: gray"
+                  >{{ n.created_at|timesince }} ago</small
+                >
+              </div>
             </a>
-        {% endfor %}
-    {% else %}
-        <div class="notif-item">No notifications yet.</div>
-    {% endif %}
-</div>
+            {% endfor %} {% else %}
+            <div class="notif-item">No notifications yet.</div>
+            {% endif %}
+          </div>
         </div>
         <div class="user-menu">
-            <button class="user-circle" id="userBtn">
-                <h4>{{ initials }}</h4>
-            </button>
-            <div class="dropdown-menu" id="dropdownMenu">
-                <div class="user-info">
-                    <strong>{{ student.first_name }} {{ student.last_name }}</strong><br>
-                    <small>{{ student.email_address }}</small>
-                </div>
-                <hr>
-                <div class="menuOptions">
-                    <a href="{% url 'student_profile_settings' %}"><i class="fa-solid fa-id-card"></i> Profile Settings</a>
-                    <a href="{% url 'help_support' %}"><i class="fa-solid fa-circle-question"></i> Help & Support</a>
-                    <a href="{% url 'FAQs_page' %}"><i class="fa-solid fa-question"></i> FAQ</a>
-                </div>
-                <hr>
-                <div class="menuOptions">
-                    <a href="{% url 'student_logout' %}"><i class="fa-solid fa-right-from-bracket"></i> Sign Out</a>
-                </div>
+          <button class="user-circle" id="userBtn">
+            <h4>{{ initials }}</h4>
+          </button>
+          <div class="dropdown-menu" id="dropdownMenu">
+            <div class="user-info">
+              <strong>{{ student.first_name }} {{ student.last_name }}</strong
+              ><br />
+              <small>{{ student.email_address }}</small>
             </div>
+            <hr />
+            <div class="menuOptions">
+              <a href="{% url 'student_profile_settings' %}"
+                ><i class="fa-solid fa-id-card"></i> Profile Settings</a
+              >
+              <a href="{% url 'help_support' %}"
+                ><i class="fa-solid fa-circle-question"></i> Help & Support</a
+              >
+              <a href="{% url 'FAQs_page' %}"
+                ><i class="fa-solid fa-question"></i> FAQ</a
+              >
+            </div>
+            <hr />
+            <div class="menuOptions">
+              <a href="{% url 'student_logout' %}"
+                ><i class="fa-solid fa-right-from-bracket"></i> Sign Out</a
+              >
+            </div>
+          </div>
         </div>
-    </div>
-
-</header>
-
-<main class="container">
-    <h2>Welcome back, {{ student.first_name }}! 👋</h2>
-    <p class="subtitle">Track your clearance progress and manage your submissions</p>
-
-   <section class="summary">
-      <div class="card completed">
-          <div class="icon-box"><i data-feather="check-circle" stroke="#22c55e"></i></div>
-          <div class="numberOf">
-              <h3>{{ completed_count|default:0 }}</h3>
-              <p>Completed</p>
-          </div>
       </div>
+    </header>
 
-      <div class="card inprogress">
-          <div class="icon-box"><i data-feather="refresh-cw" stroke="#facc15" class="spin"></i></div>
-          <div class="numberOf">
-              <h3>{{ inprogress_count|default:0 }}</h3>
-              <p>In Progress</p>
+    <main class="container">
+      <h2>Welcome back, {{ student.first_name }}! 👋</h2>
+      <p class="subtitle">
+        Track your clearance progress and manage your submissions
+      </p>
+
+      <section class="summary">
+        <div class="card completed">
+          <div class="icon-box">
+            <i data-feather="check-circle" stroke="#22c55e"></i>
           </div>
-      </div>
-
-      <div class="card pending">
-          <div class="icon-box"><i data-feather="alert-circle" stroke="#f97316"></i></div>
           <div class="numberOf">
-              <h3>{{ pending_count|default:0 }}</h3>
-              <p>Pending</p>
+            <h3>{{ completed_count|default:0 }}</h3>
+            <p>Completed</p>
           </div>
-      </div>
+        </div>
 
-      <div class="card documents">
-          <div class="icon-box"><i data-feather="file-text" stroke="#2d31fa"></i></div>
+        <div class="card inprogress">
+          <div class="icon-box">
+            <i data-feather="refresh-cw" stroke="#facc15" class="spin"></i>
+          </div>
           <div class="numberOf">
-              <h3>{{ document_count|default:0 }}</h3>
-              <p>Documents</p>
+            <h3>{{ inprogress_count|default:0 }}</h3>
+            <p>In Progress</p>
           </div>
-      </div>
-  </section>
+        </div>
 
-    <div class="tabs">
-        <button onclick="window.location.href='{% url 'student_dashboard' %}'">Clearance Progress</button>
-        <button onclick="window.location.href='{% url 'request_clearance' %}'">Submit Documents</button>
-        <button onclick="window.location.href='{% url 'submission_history' %}'">Submission History</button>
+        <div class="card pending">
+          <div class="icon-box">
+            <i data-feather="alert-circle" stroke="#f97316"></i>
+          </div>
+          <div class="numberOf">
+            <h3>{{ pending_count|default:0 }}</h3>
+            <p>Pending</p>
+          </div>
+        </div>
+
+        <div class="card documents">
+          <div class="icon-box">
+            <i data-feather="file-text" stroke="#2d31fa"></i>
+          </div>
+          <div class="numberOf">
+            <h3>{{ document_count|default:0 }}</h3>
+            <p>Documents</p>
+          </div>
+        </div>
+      </section>
+
+      <div class="tabs">
+        <button onclick="window.location.href='{% url 'student_dashboard' %}'">
+          Clearance Progress
+        </button>
+        <button onclick="window.location.href='{% url 'request_clearance' %}'">
+          Submit Documents
+        </button>
+        <button onclick="window.location.href='{% url 'submission_history' %}'">
+          Submission History
+        </button>
         <button class="active">Profile</button>
-    </div>
+      </div>
 
-    <form method="post" class="profile-section">
+      <form method="post" class="profile-section">
         {% csrf_token %}
         <!-- Personal Info Card -->
         <div class="profile-card">
-            <h3>
-               <img src="{% static 'images/profile.png' %}" alt="Profile Icon" class="profile-icon"/>
-                  Personal Information
-            </h3>
+          <h3>
+            <img
+              src="{% static 'images/profile.png' %}"
+              alt="Profile Icon"
+              class="profile-icon"
+            />
+            Personal Information
+          </h3>
 
-            <label>Full Name</label>
-            <input type="text" value="{{ student.first_name }} {{ student.last_name }}" readonly name="full_name">
+          <label>Full Name</label>
+          <input
+            type="text"
+            value="{{ student.first_name }} {{ student.last_name }}"
+            readonly
+            name="full_name"
+          />
 
-            <label>Student ID</label>
-            <input type="text" value="{{ student.student_id }}" readonly name="student_id">
+          <label>Student ID</label>
+          <input
+            type="text"
+            value="{{ student.student_id }}"
+            readonly
+            name="student_id"
+          />
 
-            <label>Email Address</label>
-            <input type="email" value="{{ student.email_address }}" readonly name="email">
+          <label>Email Address</label>
+          <input
+            type="email"
+            value="{{ student.email_address }}"
+            readonly
+            name="email"
+          />
 
-            <label>Program</label>
-            <input type="text" value="{{ student.program|default:'Bachelor of Science in Computer Science' }}" readonly name="program">
+          <label>Program</label>
+          <input
+            type="text"
+            value="{{ student.program|default:'Bachelor of Science in Computer Science' }}"
+            readonly
+            name="program"
+          />
         </div>
 
         <!-- Contact Info Card -->
         <div class="profile-card">
-            <h3>
-               <img src="{% static 'images/email.png' %}" alt="Email Icon" class="profile-icon"/>
-                 Contact Information
-            </h3>
+          <h3>
+            <img
+              src="{% static 'images/email.png' %}"
+              alt="Email Icon"
+              class="profile-icon"
+            />
+            Contact Information
+          </h3>
 
-            <label>Phone Number</label>
-            <input type="text" value="{{ student.phone_number|default:'' }}" name="phone_number">
+          <label>Phone Number</label>
+          <input
+            type="text"
+            value="{{ student.phone_number|default:'' }}"
+            name="phone_number"
+          />
 
-            <label>Address</label>
-            <textarea rows="2" name="address">{{ student.address|default:'' }}</textarea>
+          <label>Address</label>
+          <textarea rows="2" name="address">
+{{ student.address|default:'' }}</textarea
+          >
 
-            <label>Emergency Contact</label>
-            <input type="text" value="{{ student.emergency_contact|default:'' }}" name="emergency_contact">
+          <label>Emergency Contact</label>
+          <input
+            type="text"
+            value="{{ student.emergency_contact|default:'' }}"
+            name="emergency_contact"
+          />
 
-            <button type="submit" class="update-btn">Save Changes</button>
+          <button type="submit" class="update-btn">Save Changes</button>
         </div>
-    </form>
-</main>
-<script>
-    document.addEventListener('DOMContentLoaded', () => { feather.replace(); });
-    document.getElementById("notifBell").onclick = function() {
-    let dropdown = document.getElementById("notifDropdown");
-    dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
-};
-document.addEventListener("click", function(e){
-    let dropdown = document.getElementById("notifDropdown");
-    if (!e.target.closest("#notifBell")) {
-        dropdown.style.display = "none";
-    }
-});
-</script>
-</body>
+      </form>
+    </main>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        feather.replace();
+      });
+      document.getElementById("notifBell").onclick = function () {
+        let dropdown = document.getElementById("notifDropdown");
+        dropdown.style.display =
+          dropdown.style.display === "block" ? "none" : "block";
+      };
+      document.addEventListener("click", function (e) {
+        let dropdown = document.getElementById("notifDropdown");
+        if (!e.target.closest("#notifBell")) {
+          dropdown.style.display = "none";
+        }
+      });
+    </script>
+  </body>
 </html>

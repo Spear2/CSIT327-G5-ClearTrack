@@ -1,180 +1,247 @@
-{% load static tailwind_tags %}
-{% load static %}
+{% load static tailwind_tags %} {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GradeFlow - Sign Up</title>
-  {% tailwind_css %}
-  
-  <style>
-    /* Prevent image dragging and selection */
-    img {
-      user-drag: none;
-      user-select: none;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GradeFlow - Sign Up</title>
+    {% tailwind_css %}
 
-    /* Common icon style */
-    .icon {
-      pointer-events: none;
-      opacity: 0.7; /* Light grey color for icons */
-    }
-  </style>
-</head>
-<body class="bg-purple-50 flex items-center justify-center min-h-screen">
+    <style>
+      /* Prevent image dragging and selection */
+      img {
+        user-drag: none;
+        user-select: none;
+      }
 
-  <div class="w-full max-w-md px-6">
-    
-    <!-- Back to Home Button -->
-    <div class="mb-6 text-gray-500 hover:text-white w-1/2 mx-auto">
-      <a href="{% url 'GradeFlow' %}" 
-         class="flex items-center justify-center hover:bg-blue-600 p-2 rounded-lg">
-        <img src="{% static 'images/arrow.png' %}" 
-             alt="Back" class="w-5 h-5 mr-1 icon" draggable="false" />
-        Back to Home
-      </a>
-    </div>
-
-    <!-- Logo & App Title -->
-    <div class="flex flex-col items-center mb-6">
-      <img src="{% static 'images/logo.png' %}" 
-           alt="GradeFlow Logo" class="w-20 h-16 mb-2 rounded-xl" />
-      <h1 class="text-2xl font-bold text-blue-600">GradeFlow</h1>
-      <p class="text-gray-500 text-sm">Student Portal</p>
-    </div>
-
-    <!-- Form Container -->
-    <div class="bg-white shadow-md rounded-lg p-6 text-gray-500">
-      <h2 class="text-lg font-bold mb-4 text-center">Student Sign Up</h2>
-      <p class="text-gray-500 text-sm mb-6 text-center">Create your student account to get started.</p>
-
-      <!-- Navigation Tabs -->
-      <div class="flex w-full bg-gray-100 rounded-full p-1 mb-6 shadow-sm border border-gray-200">
-        <!-- Sign In Tab -->
-        <a href="{% url 'signin' %}"
-           class="flex-1 text-center py-2 text-sm font-medium rounded-full transition
-           {% if request.resolver_match.url_name == 'signin' %}
-             bg-blue-600 text-white
-           {% else %}
-             bg-gray-100 text-gray-600 hover:bg-gray-200
-           {% endif %}">
-          Sign In
-        </a>
-
-        <!-- Sign Up Tab -->
-        <a href="{% url 'signup' %}"
-           class="flex-1 text-center py-2 text-sm font-medium rounded-full transition
-           {% if request.resolver_match.url_name == 'signup' %}
-             bg-blue-600 text-white
-           {% else %}
-             bg-gray-100 text-gray-600 hover:bg-gray-200
-           {% endif %}">
-          Sign Up
+      /* Common icon style */
+      .icon {
+        pointer-events: none;
+        opacity: 0.5; /* Light grey color for icons */
+      }
+    </style>
+  </head>
+  <body class="bg-purple-50 flex items-center justify-center min-h-screen">
+    <div class="w-full max-w-md px-6">
+      <!-- Back to Home Button -->
+      <div class="mb-6 text-gray-500 hover:text-white w-1/2 mx-auto">
+        <a
+          href="{% url 'GradeFlow' %}"
+          class="flex items-center justify-center hover:bg-blue-600 p-2 rounded-lg"
+        >
+          <img
+            src="{% static 'images/arrow.png' %}"
+            alt="Back"
+            class="w-5 mr-1"
+            draggable="false"
+          />
+          Back to Home
         </a>
       </div>
 
-      <!-- Sign Up Form -->
-      <form id="signupForm" method="POST" action="{% url 'signup' %}">
-        {% csrf_token %}
+      <!-- Logo & App Title -->
+      <div class="flex flex-col items-center mb-6">
+        <img
+          src="{% static 'images/logo.png' %}"
+          alt="GradeFlow Logo"
+          class="w-20 h-16 mb-2 rounded-xl"
+        />
+        <h1 class="text-2xl font-bold text-blue-600">GradeFlow</h1>
+        <p class="text-gray-500 text-sm">Student Portal</p>
+      </div>
 
-        <!-- Name Fields (First & Last) -->
-        <div class="grid grid-cols-2 gap-4 mb-4">
-          
-          <!-- First Name -->
-          <div>
-            <label class="block text-gray-700 mb-1">First Name</label>
-            <div class="relative">
-              <img src="{% static 'images/profile.png' %}" 
-                   alt="Profile" class="icon absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5" />
-              <input type="text" name="first_name" placeholder="Eric"
-                     class="w-full pl-10 pr-3 py-2 rounded border border-gray-300 bg-purple-50 focus:ring-2 focus:ring-blue-500"/>
+      <!-- Form Container -->
+      <div class="bg-white shadow-md rounded-lg p-6 text-gray-500">
+        <h2 class="text-lg font-bold mb-4 text-center">Student Sign Up</h2>
+        <p class="text-gray-500 text-sm mb-6 text-center">
+          Create your student account to get started.
+        </p>
+
+        <!-- Navigation Tabs -->
+        <div
+          class="flex w-full bg-gray-100 rounded-full p-1 mb-6 shadow-sm border border-gray-200"
+        >
+          <!-- Sign In Tab -->
+          <a
+            href="{% url 'signin' %}"
+            class="flex-1 text-center py-2 text-sm font-medium rounded-full transition {% if request.resolver_match.url_name == 'signin' %} bg-blue-600 text-white {% else %} bg-gray-100 text-gray-600 hover:bg-gray-200 {% endif %}"
+          >
+            Sign In
+          </a>
+
+          <!-- Sign Up Tab -->
+          <a
+            href="{% url 'signup' %}"
+            class="flex-1 text-center py-2 text-sm font-medium rounded-full transition {% if request.resolver_match.url_name == 'signup' %} bg-blue-600 text-white {% else %} bg-gray-100 text-gray-600 hover:bg-gray-200 {% endif %}"
+          >
+            Sign Up
+          </a>
+        </div>
+
+        <!-- Sign Up Form -->
+        <form id="signupForm" method="POST" action="{% url 'signup' %}">
+          {% csrf_token %}
+
+          <!-- Name Fields (First & Last) -->
+          <div class="grid grid-cols-2 gap-4 mb-4">
+            <!-- First Name -->
+            <div>
+              <label class="block text-gray-700 mb-1">First Name</label>
+              <div class="relative">
+                <img
+                  src="{% static 'images/profile.png' %}"
+                  alt="Profile"
+                  class="icon absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5"
+                />
+                <input
+                  type="text"
+                  name="first_name"
+                  placeholder="Eric"
+                  class="w-full pl-10 pr-3 py-2 rounded border border-gray-300 bg-purple-50 focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+            </div>
+
+            <!-- Last Name -->
+            <div>
+              <label class="block text-gray-700 mb-1">Last Name</label>
+              <div class="relative">
+                <img
+                  src="{% static 'images/profile.png' %}"
+                  alt="Profile"
+                  class="icon absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5"
+                />
+                <input
+                  type="text"
+                  name="last_name"
+                  placeholder="Santos"
+                  class="w-full pl-10 pr-3 py-2 rounded border border-gray-300 bg-purple-50 focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
             </div>
           </div>
 
-          <!-- Last Name -->
-          <div>
-            <label class="block text-gray-700 mb-1">Last Name</label>
+          <!-- Email -->
+          <div class="mb-4">
+            <label class="block text-gray-700 mb-1">Email Address</label>
             <div class="relative">
-              <img src="{% static 'images/profile.png' %}" 
-                   alt="Profile" class="icon absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5" />
-              <input type="text" name="last_name" placeholder="Santos"
-                     class="w-full pl-10 pr-3 py-2 rounded border border-gray-300 bg-purple-50 focus:ring-2 focus:ring-blue-500"/>
+              <img
+                src="{% static 'images/email.png' %}"
+                alt="Email"
+                class="icon absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5"
+              />
+              <input
+                type="email"
+                name="email_address"
+                placeholder="johndoe@cit.edu"
+                class="w-full pl-10 pr-3 py-2 rounded border border-gray-300 bg-purple-50 focus:ring-2 focus:ring-blue-500"
+              />
             </div>
           </div>
-        </div>
 
-        <!-- Email -->
-        <div class="mb-4">
-          <label class="block text-gray-700 mb-1">Email Address</label>
-          <div class="relative">
-            <img src="{% static 'images/email.png' %}" 
-                 alt="Email" class="icon absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5" />
-            <input type="email" name="email_address" placeholder="johndoe@cit.edu"
-                   class="w-full pl-10 pr-3 py-2 rounded border border-gray-300 bg-purple-50 focus:ring-2 focus:ring-blue-500"/>
+          <!-- Student ID -->
+          <div class="mb-4">
+            <label class="block text-gray-700 mb-1">Student ID</label>
+            <div class="relative">
+              <img
+                src="{% static 'images/profile.png' %}"
+                alt="ID"
+                class="icon absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5"
+              />
+              <input
+                type="text"
+                name="student_id"
+                placeholder="21-4312-321"
+                class="w-full pl-10 pr-3 py-2 rounded border border-gray-300 bg-purple-50 focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
           </div>
-        </div>
 
-        <!-- Student ID -->
-        <div class="mb-4">
-          <label class="block text-gray-700 mb-1">Student ID</label>
-          <div class="relative">
-            <img src="{% static 'images/profile.png' %}" 
-                 alt="ID" class="icon absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5" />
-            <input type="text" name="student_id" placeholder="21-4312-321"
-                   class="w-full pl-10 pr-3 py-2 rounded border border-gray-300 bg-purple-50 focus:ring-2 focus:ring-blue-500"/>
+          <!-- Password -->
+          <div class="mb-4">
+            <label class="block text-gray-700 mb-1">Password</label>
+            <div class="relative">
+              <img
+                src="{% static 'images/padlock.png' %}"
+                alt="Lock"
+                class="icon absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5"
+              />
+              <input
+                id="password"
+                type="password"
+                name="password"
+                placeholder="Create a strong password"
+                class="w-full pl-10 pr-10 py-2 rounded border border-gray-300 bg-purple-50 focus:ring-2 focus:ring-blue-500"
+              />
+              <!-- Eye Icon for Toggle -->
+              <button
+                type="button"
+                onclick="togglePassword('password', 'eye1')"
+                class="absolute right-3 top-1/2 -translate-y-1/2"
+              >
+                <img
+                  id="eye1"
+                  src="{% static 'images/visible.png' %}"
+                  alt="Show"
+                  class="w-5 h-5 opacity-70 hover:opacity-100"
+                />
+              </button>
+            </div>
           </div>
-        </div>
 
-        <!-- Password -->
-        <div class="mb-4">
-          <label class="block text-gray-700 mb-1">Password</label>
-          <div class="relative">
-            <img src="{% static 'images/padlock.png' %}" 
-                 alt="Lock" class="icon absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5" />
-            <input id="password" type="password" name="password" placeholder="Create a strong password"
-                   class="w-full pl-10 pr-10 py-2 rounded border border-gray-300 bg-purple-50 focus:ring-2 focus:ring-blue-500"/>
-            <!-- Eye Icon for Toggle -->
-            <button type="button" onclick="togglePassword('password', 'eye1')" 
-                    class="absolute right-3 top-1/2 -translate-y-1/2">
-              <img id="eye1" src="{% static 'images/visible.png' %}" 
-                   alt="Show" class="w-5 h-5 opacity-70 hover:opacity-100" />
-            </button>
+          <!-- Confirm Password -->
+          <div class="mb-6">
+            <label class="block text-gray-700 mb-1">Confirm Password</label>
+            <div class="relative">
+              <img
+                src="{% static 'images/padlock.png' %}"
+                alt="Lock"
+                class="icon absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5"
+              />
+              <input
+                id="confirm_password"
+                type="password"
+                name="confirm_password"
+                placeholder="Confirm your password"
+                class="w-full pl-10 pr-10 py-2 rounded border border-gray-300 bg-purple-50 focus:ring-2 focus:ring-blue-500"
+              />
+              <!-- Eye Icon for Toggle -->
+              <button
+                type="button"
+                onclick="togglePassword('confirm_password', 'eye2')"
+                class="absolute right-3 top-1/2 -translate-y-1/2"
+              >
+                <img
+                  id="eye2"
+                  src="{% static 'images/visible.png' %}"
+                  alt="Show"
+                  class="w-5 h-5 opacity-70 hover:opacity-100"
+                />
+              </button>
+            </div>
           </div>
-        </div>
 
-        <!-- Confirm Password -->
-        <div class="mb-6">
-          <label class="block text-gray-700 mb-1">Confirm Password</label>
-          <div class="relative">
-            <img src="{% static 'images/padlock.png' %}" 
-                 alt="Lock" class="icon absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5" />
-            <input id="confirm_password" type="password" name="confirm_password" placeholder="Confirm your password"
-                   class="w-full pl-10 pr-10 py-2 rounded border border-gray-300 bg-purple-50 focus:ring-2 focus:ring-blue-500"/>
-            <!-- Eye Icon for Toggle -->
-            <button type="button" onclick="togglePassword('confirm_password', 'eye2')" 
-                    class="absolute right-3 top-1/2 -translate-y-1/2">
-              <img id="eye2" src="{% static 'images/visible.png' %}" 
-                   alt="Show" class="w-5 h-5 opacity-70 hover:opacity-100" />
-            </button>
-          </div>
-        </div>
+          <!-- Submit Button -->
+          <button
+            type="submit"
+            class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition cursor-pointer"
+          >
+            Create Student Account
+          </button>
+        </form>
+      </div>
 
-        <!-- Submit Button -->
-        <button type="submit"
-                class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition cursor-pointer">
-          Create Student Account
-        </button>
-      </form>
+      <!-- Footer -->
+      <p class="text-center text-gray-400 text-sm mt-4">
+        Need help? Contact
+        <a
+          href="mailto:support@gradeflow.edu"
+          class="text-blue-600 hover:text-blue-800"
+          >IT Support</a
+        >
+      </p>
     </div>
 
-    <!-- Footer -->
-    <p class="text-center text-gray-400 text-sm mt-4">
-      Need help? Contact 
-      <a href="mailto:support@gradeflow.edu" class="text-blue-600 hover:text-blue-800">IT Support</a>
-    </p>
-  </div>
-
-  <script src="{% static 'js/signup.js' %}"></script>
-</body>
+    <script src="{% static 'js/signup.js' %}"></script>
+  </body>
 </html>

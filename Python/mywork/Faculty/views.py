@@ -24,8 +24,8 @@ supabase = create_client(settings.SUPABASE_URL, settings.SUPABASE_KEY)
 DEPARTMENT_MAP = {
     "Library": "Library",
     "Registrar": "Registrar",
-    "Finance Office": "Finance Office",
-    "Guidance Office": "Guidance Office",
+    "Accounting": "Accounting",
+    "Academic Adviser": "Academic Adviser",
 }
 
 # Create your views here.

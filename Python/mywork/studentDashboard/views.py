@@ -87,10 +87,6 @@ def request_clearance(request):
 
         # Set initial status: Pending by default
         status = 'Pending'
-        # Example: make Registrar submissions show as In Progress immediately
-        # if staff == 'Registrar':
-        #     status = 'In Progress'
-
         faculties = Faculty.objects.filter(department=staff)
 
         for faculty in faculties:
