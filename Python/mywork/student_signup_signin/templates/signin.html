@@ -1,125 +1,153 @@
-{% load static tailwind_tags %}
-{% load static %}
+{% load static tailwind_tags %} {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GradeFlow - Sign In</title>
-  {% tailwind_css %}
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GradeFlow - Sign In</title>
+    {% tailwind_css %}
 
-  <style>
-    /* Prevent image dragging and selection */
-    img {
-      user-drag: none;
-      user-select: none;
-    }
+    <style>
+      /* Prevent image dragging and selection */
+      img {
+        user-drag: none;
+        user-select: none;
+      }
 
-    /* Common icon style */
-    .icon {
-      pointer-events: none;
-      opacity: 0.7; /* Light grey color for icons */
-    }
-  </style>
-</head>
-<body class="bg-purple-50 flex items-center justify-center min-h-screen">
-
-  <div class="w-full max-w-md px-6">
-
-    <!-- Back to Home -->
-    <div class="mb-6 text-gray-500 hover:text-white w-1/2 mx-auto">
-      <a href="{% url 'GradeFlow' %}" 
-         class="flex items-center justify-center hover:bg-blue-600 p-2 rounded-lg">
-        <img src="{% static 'images/arrow.png' %}" 
-             alt="Back" class="w-5 h-5 mr-1" draggable="false" />
-        Back to Home
-      </a>
-    </div>
-
-    <!-- Logo -->
-    <div class="flex flex-col items-center mb-6">
-      <img src="{% static 'images/logo.png' %}" 
-           alt="GradeFlow Logo" class="w-20 h-16 mb-2 rounded-xl" />
-      <h1 class="text-2xl font-bold text-blue-600">GradeFlow</h1>
-      <p class="text-gray-500 text-sm">Student Portal</p>
-    </div>
-
-    <!-- Form -->
-    <div class="bg-white shadow-md rounded-lg p-6 text-gray-500">
-      <h2 class="text-lg font-bold mb-4 text-center">Student Sign In</h2>
-      <p class="text-gray-500 text-sm mb-6 text-center">Welcome back! Sign in to your student account.</p>
-
-      <!-- Navigation Tabs -->
-      <div class="flex mb-6 bg-gray-200 rounded-full p-1">
-        <!-- Sign In Tab -->
-        <a href="{% url 'signin' %}"
-           class="flex-1 text-center py-2 text-sm font-medium rounded-full transition
-           {% if request.resolver_match.url_name == 'signin' %}
-             bg-blue-600 text-white shadow
-           {% else %}
-             text-gray-600 hover:bg-gray-300
-           {% endif %}">
-          Sign In
-        </a>
-
-        <!-- Sign Up Tab -->
-        <a href="{% url 'signup' %}"
-           class="flex-1 text-center py-2 text-sm font-medium rounded-full transition
-           {% if request.resolver_match.url_name == 'signup' %}
-             bg-blue-600 text-white shadow
-           {% else %}
-             text-gray-600 hover:bg-gray-300
-           {% endif %}">
-          Sign Up
+      /* Common icon style */
+      .icon {
+        pointer-events: none;
+        opacity: 0.5; /* Light grey color for icons */
+      }
+    </style>
+  </head>
+  <body class="bg-purple-50 flex items-center justify-center min-h-screen">
+    <div class="w-full max-w-md px-6">
+      <!-- Back to Home -->
+      <div class="mb-6 text-gray-500 hover:text-white w-1/2 mx-auto">
+        <a
+          href="{% url 'GradeFlow' %}"
+          class="flex items-center justify-center hover:bg-blue-600 p-2 rounded-lg"
+        >
+          <img
+            src="{% static 'images/arrow.png' %}"
+            alt="Back"
+            class="w-5 mr-1"
+            draggable="false"
+          />
+          Back to Home
         </a>
       </div>
 
-      <!-- Sign In Form -->
-      <form method="POST" action="{% url 'signin' %}">
-        {% csrf_token %}
+      <!-- Logo -->
+      <div class="flex flex-col items-center mb-6">
+        <img
+          src="{% static 'images/logo.png' %}"
+          alt="GradeFlow Logo"
+          class="w-20 h-16 mb-2 rounded-xl"
+        />
+        <h1 class="text-2xl font-bold text-blue-600">GradeFlow</h1>
+        <p class="text-gray-500 text-sm">Student Portal</p>
+      </div>
 
-        <!-- Email -->
-        <div class="mb-4">
-          <label class="block text-gray-700 mb-1">Email Address</label>
-          <div class="relative flex items-center border border-gray-300 rounded bg-purple-50 focus-within:ring-2 focus-within:ring-blue-500">
-            <img src="{% static 'images/email.png' %}" 
-                 alt="Email" class="absolute left-3 w-5 h-5 opacity-70 pointer-events-none icon" />
-            <input type="email" name="email_address" placeholder="your.email@university.edu"
-                   class="w-full pl-10 pr-3 py-2 bg-transparent focus:outline-none rounded" />
+      <!-- Form -->
+      <div class="bg-white shadow-md rounded-lg p-6 text-gray-500">
+        <h2 class="text-lg font-bold mb-4 text-center">Student Sign In</h2>
+        <p class="text-gray-500 text-sm mb-6 text-center">
+          Welcome back! Sign in to your student account.
+        </p>
+
+        <!-- Navigation Tabs -->
+        <div class="flex mb-6 bg-gray-200 rounded-full p-1">
+          <!-- Sign In Tab -->
+          <a
+            href="{% url 'signin' %}"
+            class="flex-1 text-center py-2 text-sm font-medium rounded-full transition {% if request.resolver_match.url_name == 'signin' %} bg-blue-600 text-white shadow {% else %} text-gray-600 hover:bg-gray-300 {% endif %}"
+          >
+            Sign In
+          </a>
+
+          <!-- Sign Up Tab -->
+          <a
+            href="{% url 'signup' %}"
+            class="flex-1 text-center py-2 text-sm font-medium rounded-full transition {% if request.resolver_match.url_name == 'signup' %} bg-blue-600 text-white shadow {% else %} text-gray-600 hover:bg-gray-300 {% endif %}"
+          >
+            Sign Up
+          </a>
+        </div>
+
+        <!-- Sign In Form -->
+        <form method="POST" action="{% url 'signin' %}">
+          {% csrf_token %}
+
+          <!-- Email -->
+          <div class="mb-4">
+            <label class="block text-gray-700 mb-1">Email Address</label>
+            <div
+              class="relative flex items-center border border-gray-300 rounded bg-purple-50 focus-within:ring-2 focus-within:ring-blue-500"
+            >
+              <img
+                src="{% static 'images/email.png' %}"
+                alt="Email"
+                class="absolute left-3 w-5 h-5 opacity-70 pointer-events-none icon"
+              />
+              <input
+                type="email"
+                name="email_address"
+                placeholder="your.email@university.edu"
+                class="w-full pl-10 pr-3 py-2 bg-transparent focus:outline-none rounded"
+              />
+            </div>
           </div>
-        </div>
 
-        <!-- Password -->
-        <div class="mb-4">
-          <label class="block text-gray-700 mb-1">Password</label>
-          <div class="relative flex items-center border border-gray-300 rounded bg-purple-50 focus-within:ring-2 focus-within:ring-blue-500">
-            <img src="{% static 'images/padlock.png' %}" 
-                 alt="Password" class="absolute left-3 w-5 h-5 opacity-70 pointer-events-none icon" />
-            <input type="password" name="password" placeholder="Enter your password"
-                   class="w-full pl-10 pr-3 py-2 bg-transparent focus:outline-none rounded" />
+          <!-- Password -->
+          <div class="mb-4">
+            <label class="block text-gray-700 mb-1">Password</label>
+            <div
+              class="relative flex items-center border border-gray-300 rounded bg-purple-50 focus-within:ring-2 focus-within:ring-blue-500"
+            >
+              <img
+                src="{% static 'images/padlock.png' %}"
+                alt="Password"
+                class="absolute left-3 w-5 h-5 opacity-70 pointer-events-none icon"
+              />
+              <input
+                type="password"
+                name="password"
+                placeholder="Enter your password"
+                class="w-full pl-10 pr-3 py-2 bg-transparent focus:outline-none rounded"
+              />
+            </div>
           </div>
-        </div>
 
-        <!-- Forgot Password -->
-        <div class="flex justify-between items-center mb-4">
-          <a href="#" class="text-sm text-blue-600 hover:underline">Forgot password?</a>
-        </div>
+          <!-- Forgot Password -->
+          <div class="flex justify-between items-center mb-4">
+            <a href="#" class="text-sm text-blue-600 hover:underline"
+              >Forgot password?</a
+            >
+          </div>
 
-        <!-- Submit -->
-        <button type="submit"
-                class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition cursor-pointer">
-          Sign In to Student Portal
-        </button>
-      </form>
+          <!-- Submit -->
+          <button
+            type="submit"
+            class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition cursor-pointer"
+          >
+            Sign In to Student Portal
+          </button>
+        </form>
+      </div>
+
+      <!-- Footer -->
+      <p class="text-center text-gray-400 text-sm mt-4">
+        Need help? Contact
+        <a
+          href="mailto:support@gradeflow.edu"
+          class="text-blue-600 hover:text-blue-800"
+          >IT Support</a
+        >
+      </p>
     </div>
 
-    <!-- Footer -->
-    <p class="text-center text-gray-400 text-sm mt-4">
-      Need help? Contact 
-      <a href="mailto:support@gradeflow.edu" class="text-blue-600 hover:text-blue-800">IT Support</a>
-    </p>
-  </div>
-
-  <script src="{% static 'js/signin.js' %}"></script>
-</body>
+    <script src="{% static 'js/signin.js' %}"></script>
+  </body>
 </html>

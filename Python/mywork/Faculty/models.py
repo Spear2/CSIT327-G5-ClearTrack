@@ -6,8 +6,8 @@ class Faculty(models.Model):
     DEPARTMENT_CHOICES = [
         ('Library', 'Librarian'),
         ('Registrar', 'Registrar'),
-        ('Finance Office', 'Finance Office'),
-        ('Guidance Office', 'Guidance Office'),
+        ('Accounting', 'Accounting'),
+        ('Academic Adviser', 'Academic Adviser'),
     ]
 
     first_name = models.CharField(max_length=100)

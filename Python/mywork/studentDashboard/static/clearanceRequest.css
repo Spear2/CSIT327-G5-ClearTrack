@@ -1,75 +1,75 @@
 /* ========================== 🌐 GLOBAL STYLES ========================== */
 body {
-    font-family: 'Segoe UI', sans-serif;
-    background: #f5f3ff;
-    margin: 0;
-    padding: 0;
-    color: #333;
+  font-family: "Segoe UI", sans-serif;
+  background: #f5f3ff;
+  margin: 0;
+  padding: 0;
+  color: #333;
 }
- 
+
 header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 14px 40px;
-    background: #fff;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 40px;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
- 
+
 header .logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
- 
+
 header .logo-icon {
-    width: 40px;
-    height: 35px;
-    border-radius: 8px;
+  width: 40px;
+  height: 35px;
+  border-radius: 8px;
 }
- 
+
 header .h2andp {
-    display: flex;
-    flex-direction: column;
-    line-height: 1.2;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
 }
- 
+
 header .h2andp h2 {
-    margin: 0;
-    font-size: 20px;
-    font-weight: 600;
-    color: #2d31fa;
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: #2d31fa;
 }
- 
+
 header .h2andp p {
-    margin: 0;
-    font-size: 13px;
-    color: #777;
+  margin: 0;
+  font-size: 13px;
+  color: #777;
 }
- 
+
 /* ========================== 👤 USER MENU / DROPDOWN ========================== */
 .user-menu {
-    display: flex;
-    align-items: center;
-    position: relative;
+  display: flex;
+  align-items: center;
+  position: relative;
 }
- 
+
 .user-circle {
-    background: #2d31fa;
-    color: #fff;
-    border-radius: 50%;
-    width: 38px;
-    height: 38px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 600;
-    border: none;
-    font-size: 15px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
+  background: #2d31fa;
+  color: #fff;
+  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  border: none;
+  font-size: 15px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
 }
- 
+
 .dropdown-menu {
   position: absolute;
   right: 0;
@@ -78,7 +78,7 @@ header .h2andp p {
   border: 1px solid #e3e3e3;
   border-radius: 10px;
   width: 230px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   display: none;
   flex-direction: column;
   z-index: 100;
@@ -116,248 +116,344 @@ header .h2andp p {
   background: #2d31fa;
   color: white;
 }
- 
+
 /* ========================== 🧭 MAIN CONTAINER ========================== */
 .container {
-    padding: 30px 40px 0 40px; /* removed bottom padding for close tabs+content */
+  padding: 30px 40px 0 40px;
 }
- 
+
 .container h2 {
-    margin-bottom: 5px;
+  margin-bottom: 5px;
 }
- 
+
 .subtitle {
-    color: #666;
-    margin-bottom: 25px;
+  color: #666;
+  margin-bottom: 25px;
 }
- 
+
 /* ========================== 📊 SUMMARY CARDS ========================== */
 .summary {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    margin-bottom: 15px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 15px;
 }
- 
+
 .summary .card {
-    flex: 1;
-    min-width: 200px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 15px 18px;
-    border-radius: 12px;
-    background-color: white;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
-    transition: all 0.2s ease;
+  flex: 1;
+  min-width: 200px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px 18px;
+  border-radius: 12px;
+  background-color: white;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.2s ease;
 }
- 
+
 .summary .card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.12);
+  transform: translateY(-3px);
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.12);
 }
- 
+
 .icons {
-    font-size: 25px;
+  font-size: 25px;
 }
- 
+
 .numberOf h3 {
-    margin: 0;
-    font-size: 24px;
+  margin: 0;
+  font-size: 24px;
 }
- 
+
 .numberOf p {
-    margin: 0;
-    color: #666;
+  margin: 0;
+  color: #666;
 }
- 
+
 /* ========================== 🎯 CARD COLORS ========================== */
-.completed { border-left: 5px solid #22c55e; } /* Green */
-.inprogress { border-left: 5px solid #facc15; } /* Yellow */
-.pending { border-left: 5px solid #f97316; } /* Orange */
-.documents { border-left: 5px solid #2d31fa; } /* Blue */
- 
+.completed {
+  border-left: 5px solid #22c55e;
+} /* Green */
+.inprogress {
+  border-left: 5px solid #facc15;
+} /* Yellow */
+.pending {
+  border-left: 5px solid #f97316;
+} /* Orange */
+.documents {
+  border-left: 5px solid #2d31fa;
+} /* Blue */
+
 /* ========================== 📁 TABS ========================== */
 .tabs {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 10px;
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
 }
- 
+
 .tabs button {
-    background: white;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    padding: 8px 16px;
-    cursor: pointer;
-    font-weight: 500;
-    transition: all 0.2s ease;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
 }
- 
+
 .tabs button.active,
 .tabs button:hover {
-    background: #2d31fa;
-    color: white;
-    border-color: #2d31fa;
+  background: #2d31fa;
+  color: white;
+  border-color: #2d31fa;
 }
- 
+
 /* ========================== 📝 MAIN CONTENT CARD ========================== */
 .main-content {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    background-color: white;
-    border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  border-radius: 12px;
+  /* removed background-color: white */
 }
- 
+
 .card.submission-card {
-    display: block;
-    width: 100%;
-    max-width: 1400px;
-    padding: 30px;
-    border-radius: 16px;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+  display: block;
+  width: 100%;
+  max-width: 1400px;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+  background-color: white; /* keeps only the form white */
 }
- 
+
 .card h1 {
-    font-size: 26px;
-    color: #2d31fa;
-    margin-bottom: 10px;
-    font-weight: 700;
+  font-size: 26px;
+  color: #2d31fa;
+  margin-bottom: 10px;
+  font-weight: 700;
 }
- 
+
 .card .subtitle {
-    margin-bottom: 20px;
-    color: #666;
-    font-size: 15px;
+  margin-bottom: 20px;
+  color: #666;
+  font-size: 15px;
 }
- 
+
 /* ========================== FORM LAYOUT ========================== */
 .form-horizontal {
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
-    margin-bottom: 20px;
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
 }
- 
+
 .form-column {
-    flex: 1 1 45%;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+  flex: 1 1 45%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
- 
+
 .form-group.full {
-    width: 100%;
-    margin-bottom: 20px;
+  width: 100%;
+  margin-bottom: 20px;
 }
- 
+
 label {
-    font-weight: 600;
-    margin-bottom: 8px;
-    display: block;
-    font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  display: block;
+  font-size: 15px;
 }
- 
+
 select,
 textarea {
-    width: 100%;
-    border-radius: 12px;
-    border: 1px solid #d1d5db;
-    padding: 14px;
-    font-size: 15px;
-    background: #f9f9ff;
-    transition: all 0.2s ease;
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid #d1d5db;
+  padding: 14px;
+  font-size: 15px;
+  background: #f9f9ff;
+  transition: all 0.2s ease;
 }
- 
+
 select:focus,
 textarea:focus {
-    border-color: #8b5cf6;
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+  border-color: #8b5cf6;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
 }
- 
+
 textarea {
-    height: 140px;
-    resize: none;
+  height: 140px;
+  resize: none;
 }
- 
+
 /* ========================== UPLOAD BOX ========================== */
 .upload-box {
-    border: 2px dashed #c9c4ff;
-    border-radius: 16px;
-    text-align: center;
-    padding: 50px 25px;
-    background: #f6f5ff;
-    transition: all 0.3s ease;
-    cursor: pointer;
-    margin-bottom: 20px;
+  border: 2px dashed #c9c4ff;
+  border-radius: 16px;
+  text-align: center;
+  padding: 50px 25px;
+  background: #f6f5ff;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  margin-bottom: 20px;
 }
- 
+
 .upload-box:hover {
-    border-color: #8b5cf6;
-    background: #f3f0ff;
+  border-color: #8b5cf6;
+  background: #f3f0ff;
 }
- 
+
 .upload-text {
-    font-weight: 600;
-    color: #4b5563;
-    font-size: 16px;
-    margin-bottom: 10px;
+  font-weight: 600;
+  color: #4b5563;
+  font-size: 16px;
+  margin-bottom: 10px;
 }
- 
+
 #fileName {
-    display: block;
-    margin-top: 15px;
-    font-weight: 600;
-    color: #2d31fa;
-    font-size: 15px;
+  display: block;
+  margin-top: 15px;
+  font-weight: 600;
+  color: #2d31fa;
+  font-size: 15px;
 }
- 
+
 .upload-box.dragover {
-    background-color: #ece8ff;
-    border-color: #7c3aed;
+  background-color: #ece8ff;
+  border-color: #7c3aed;
 }
- 
+
 /* ========================== SUBMIT BUTTON ========================== */
 .submit-btn {
-    background: #2d31fa;
-    color: white;
-    border: none;
-    border-radius: 12px;
-    padding: 15px;
-    font-size: 17px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    width: 100%;
+  background: #2d31fa;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 15px;
+  font-size: 17px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
 }
- 
+
 .submit-btn:hover {
-    background-color: #1f25c6;
-    transform: translateY(-2px);
+  background-color: #1f25c6;
+  transform: translateY(-2px);
 }
- 
+
 /* ========================== ALERT MESSAGES ========================== */
 .alert {
-    background: #f0efff;
-    padding: 12px 15px;
-    border-radius: 12px;
-    margin-bottom: 20px;
-    color: #2d31fa;
-    font-weight: 500;
-    font-size: 14px;
-    border: 1px solid #d1c4ff;
+  background: #f0efff;
+  padding: 12px 15px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  color: #2d31fa;
+  font-weight: 500;
+  font-size: 14px;
+  border: 1px solid #d1c4ff;
 }
- 
+
 /* ========================== RESPONSIVE ========================== */
 @media screen and (max-width: 900px) {
-    .form-horizontal {
-        flex-direction: column;
-        gap: 30px;
-    }
-    .upload-box,
-    .submit-btn {
-        width: 100%;
-    }
+  .form-horizontal {
+    flex-direction: column;
+    gap: 30px;
+  }
+  .upload-box,
+  .submit-btn {
+    width: 100%;
+  }
+}
+
+/* ========================== ICON & NOTIF SPECIFIC ========================== */
+.icon-box {
+  padding: 10px;
+  border-radius: 50%;
+  background: #f5f0ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  min-height: 36px;
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.notif-wrapper {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.notif-bell img {
+  width: 15px;
+  height: 15px;
+}
+
+.notif-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: red;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.notif-dropdown {
+  display: none;
+  position: absolute;
+  top: 32px;
+  right: 0;
+  width: 280px;
+  max-height: 400px;
+  overflow-y: auto;
+  background: #fff;
+  border: 1px solid #e3e3e3;
+  border-radius: 8px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+  z-index: 999;
+}
+
+.notif-item {
+  padding: 10px 12px;
+  border-bottom: 1px solid #f1f1f1;
+  font-size: 14px;
+  color: #333;
+  transition: background 0.2s ease;
+}
+
+.notif-item:last-child {
+  border-bottom: none;
+}
+
+.notif-item.unread {
+  background-color: #f0f8ff;
+  font-weight: 600;
+}
+
+.notif-item:hover {
+  background-color: #f5f5f5;
 }
