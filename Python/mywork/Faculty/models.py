@@ -11,13 +11,13 @@ class Faculty(models.Model):
     ]
 
     first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100, db_index=True)
     email = models.EmailField(
         unique=True,
         validators=[EmailValidator(message="Enter a valid school email address.")]
     )
     password = models.CharField(max_length=255)
-    department = models.CharField(max_length=50, choices=DEPARTMENT_CHOICES)
+    department = models.CharField(max_length=50, choices=DEPARTMENT_CHOICES, db_index=True)
     date_joined = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

@@ -1,3 +1,4 @@
+
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -6,58 +7,39 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Faculty Profile Settings</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href={% static 'faculty_profile.css'%} />
+  <link rel="stylesheet" href="{% static 'css/faculty_profile.css' %}">
+  <link rel="stylesheet" href="{% static 'css/header.css' %}">
+  <link rel="stylesheet" href="{% static 'css/notifications.css' %}">
+  <link rel="stylesheet" href="{% static 'css/profile_section.css' %}">
+  <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+
 </head>
 <body>
-  <div class="profile-card">
-    <h2>Profile Settings</h2>
 
-    <form method="POST">
-      {% csrf_token %}
-      <div class="profile-section">
-        <div class="profile-image">
-          <img src="https://via.placeholder.com/120" alt="Profile Picture" id="profilePreview">
-          <label for="profileUpload" class="upload-btn">Change Photo</label>
-          <input type="file" id="profileUpload" accept="image/*">
+  {% include 'components/header.html' %}
+
+    <main class="container">
+        <h2><img src={% static "images/cogwheel.png" %} style="width: 26px; height: 26px; justify-content: center;"/> 
+          Profile Settings</h2>
+        <p class="subtitle">Manage your personal information and preferences</p>
+
+        <div class="settings-layout">
+            {% include 'components/facultySidebar.html' %}
+
+            <div class="settings-content">
+                {% include 'components/facultyProfileSection.html' %}
+                {% include 'components/preferences_section.html' %}
+                {% include 'components/security_section.html' %}
+            </div>
         </div>
+    </main>
 
-        <div class="profile-info">
-          <label for="email">Email</label>
-          <input type="email" id="email" placeholder="Enter your email" value="{{faculty.email}}" name="email"/>
 
-          <label for="password">New Password</label>
-          <input type="password" id="password" placeholder="Enter new password" name="password"/>
-
-          <label for="confirmPassword">Confirm Password</label>
-          <input type="password" id="confirmPassword" placeholder="Confirm new password" name="confirm_password"/>
-
-          <div class="actions">
-            <button class="btn save" type="submit">Save Changes</button>
-            <button class="btn cancel" type="button" onClick="window.location.href='{% url 'homepage' %}'">Cancel</button>
-          </div>
-        </div>
-      </div>
-    </form>
-    {% for message in messages %}
-            <p style="color:red">{{ message }}</p>
-        {% endfor %}
-  </div>
-
-  <script>
-    // Preview selected image
-    const upload = document.getElementById("profileUpload");
-    const preview = document.getElementById("profilePreview");
-
-    upload.addEventListener("change", function() {
-      const file = this.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          preview.src = e.target.result;
-        };
-        reader.readAsDataURL(file);
-      }
-    });
-  </script>
+  <script src="{% static 'js/notification.js' %}"></script>
+  <script src="{% static 'js/userDropdown.js' %}"></script>
+  <script src="{% static 'js/faculty_profileSettings.js' %}"></script>
+  
 </body>
 </html>

@@ -8,6 +8,7 @@ from django.http import HttpResponse
 from django.utils import timezone
 from datetime import timedelta
 from django.conf import settings
+from functools import lru_cache
 
 from studentDashboard.models import ClearanceDocument
 from student_signup_signin.models import Student
@@ -28,6 +29,10 @@ DEPARTMENT_MAP = {
     "Accounting": "Accounting",
     "Academic Adviser": "Academic Adviser",
 }
+
+@lru_cache(maxsize=1)
+def get_department_map():
+    return DEPARTMENT_MAP
 
 # Create your views here.
 def home(request):
@@ -76,71 +81,57 @@ def update_status(request, document_id):
     return redirect('homepage')
 
 
-def homepage(request):
-
-    if not request.session.get('faculty_email') or not request.session.get('faculty_id'):
-        return redirect('faculty_signin')
-    
-    faculty = None
-    initials = ""
-    requests_qs = []
-    faculty_department = ""
-    
-    selected_status = request.GET.get('status', 'All')
-    selected_department = request.GET.get('department', 'All_Department')
-    search_query = request.GET.get('search', '')
-    selected_date = request.GET.get('date_filter', 'All_Time')
-
-    # -----------------------------
-    # 1. FAST COUNTS (single query)
-    # -----------------------------
-    counts = ClearanceDocument.objects.aggregate(
+def get_clearance_counts():
+    """Efficiently fetches clearance counts."""
+    return ClearanceDocument.objects.aggregate(
         pending=Count('id', filter=Q(status='Pending')),
         approved=Count('id', filter=Q(status='Approved')),
         rejected=Count('id', filter=Q(status='Rejected')),
     )
 
-    # -----------------------------
-    # 2. Build Base Query
-    # -----------------------------
-    requests_qs = ClearanceDocument.objects.select_related("student")
 
-    if selected_status != "All":
-        requests_qs = requests_qs.filter(status=selected_status)
+def filter_clearance_requests(qs, status, department, query, date_filter):
+    """Optimized filtering of clearance documents."""
 
-    if selected_department != "All_Department":
-        requests_qs = requests_qs.filter(department_name=selected_department)
+    filters = Q()
 
-    if search_query:
-        requests_qs = requests_qs.filter(
-            Q(student__first_name__icontains=search_query) |
-            Q(student__last_name__icontains=search_query) |
-            Q(student__student_id__icontains=search_query)
+    if status != "All":
+        filters &= Q(status=status)
+
+    if department != "All_Department":
+        filters &= Q(department_name=department)
+
+    if query:
+        filters &= (
+            Q(student__first_name__icontains=query) |
+            Q(student__last_name__icontains=query) |
+            Q(student__student_id__icontains=query)
         )
 
-    # -----------------------------
-    # 3. Date Filtering
-    # -----------------------------
-    now = timezone.now()
+    if date_filter != "All_Time":
+        now = timezone.now()
 
-    if selected_date == "Last_7_Days":
-        requests_qs = requests_qs.filter(time_submitted__gte=now - timedelta(days=7))
+        if date_filter == "Last_7_Days":
+            filters &= Q(time_submitted__gte=now - timedelta(days=7))
+        elif date_filter == "Last_30_Days":
+            filters &= Q(time_submitted__gte=now - timedelta(days=30))
+        elif date_filter == "This_Semester":
+            month = now.month
+            start_month = 6 if month >= 6 else 11
+            sem_start = timezone.datetime(
+                now.year,
+                start_month,
+                1,
+                tzinfo=timezone.get_current_timezone(),
+            )
+            filters &= Q(time_submitted__gte=sem_start)
 
-    elif selected_date == "Last_30_Days":
-        requests_qs = requests_qs.filter(time_submitted__gte=now - timedelta(days=30))
+    return qs.filter(filters)
 
-    elif selected_date == "This_Semester":
-        month = now.month
-        semester_start = timezone.datetime(
-            now.year, 6 if month >= 6 else 11, 1,
-            tzinfo=timezone.get_current_timezone()
-        )
-        requests_qs = requests_qs.filter(time_submitted__gte=semester_start)
 
-    # -----------------------------
-    # 4. Annotate + Order (fast)
-    # -----------------------------
-    requests_qs = requests_qs.annotate(
+def annotate_and_order_requests(qs):
+    """Efficient priority sorting."""
+    return qs.annotate(
         status_priority=Case(
             When(status='Pending', then=Value(0)),
             When(status='Approved', then=Value(1)),
@@ -150,40 +141,59 @@ def homepage(request):
         )
     ).order_by("status_priority", "-time_submitted")
 
-    # -----------------------------
-    # 5. Faculty Info
-    # -----------------------------
-    faculty = None
-    initials = ""
-    faculty_department = ""
 
+def get_faculty_info(request):
+    """Uses a lightweight existence check and select-only fields."""
     faculty_id = request.session.get("faculty_id")
-    if faculty_id:
-        try:
-            faculty = Faculty.objects.get(id=faculty_id)
-            initials = (faculty.first_name[0] + faculty.last_name[0]).upper()
-            faculty_department = DEPARTMENT_MAP.get(faculty.department, "").lower()
-        except Faculty.DoesNotExist:
-            pass
+    if not faculty_id:
+        return None, "", ""
 
-    # -----------------------------
-    # 6. Template Context
-    # -----------------------------
+    faculty = Faculty.objects.filter(id=faculty_id).only(
+        "first_name", "last_name", "department"
+    ).first()
+
+    if not faculty:
+        return None, "", ""
+
+    initials = (faculty.first_name[0] + faculty.last_name[0]).upper()
+    faculty_department = get_department_map().get(faculty.department, "").lower()
+
+    return faculty, initials, faculty_department
+
+
+def homepage(request):
+    if not request.session.get("faculty_id"):
+        return redirect("faculty_signin")
+
+    faculty, initials, faculty_department = get_faculty_info(request)
+
+    status = request.GET.get('status', 'All')
+    department = request.GET.get('department', 'All_Department')
+    search = request.GET.get('search', '')
+    date_filter = request.GET.get('date_filter', 'All_Time')
+
+    # OPTIMIZED: fetch only fields used and join student efficiently
+    qs = ClearanceDocument.objects.select_related("student").only(
+        "status", "department_name", "time_submitted",
+        "student__first_name", "student__last_name", "student__student_id"
+    )
+
+    qs = filter_clearance_requests(qs, status, department, search, date_filter)
+    qs = annotate_and_order_requests(qs)
+
+    counts = get_clearance_counts()
+
     context = {
         "faculty": faculty,
         "initials": initials,
-        "requests": requests_qs,
+        "requests": qs,
         "faculty_department": faculty_department,
-
-        "selected_status": selected_status,
-        "selected_department": selected_department,
-        "selected_date": selected_date,
-
-        # fast counts
+        "selected_status": status,
+        "selected_department": department,
+        "selected_date": date_filter,
         "count_Approved": counts["approved"],
         "count_Reject": counts["rejected"],
         "count_Pending": counts["pending"],
-
         "SUPABASE_URL": settings.SUPABASE_URL,
         "SUPABASE_BUCKET": settings.SUPABASE_BUCKET,
     }
@@ -191,54 +201,54 @@ def homepage(request):
     return render(request, "Hompage.html", context)
 
 
-
-
-def faculty_settings(request):
-    if not request.session.get('faculty_email') or not request.session.get('faculty_id'):
-        return redirect('faculty_signin')
+def get_logged_in_faculty(request):
     faculty_id = request.session.get("faculty_id")
+    if not faculty_id:
+        return None
+    try:
+        return Faculty.objects.only("id", "first_name", "last_name", "email", "password").get(id=faculty_id)
+    except Faculty.DoesNotExist:
+        return None
 
-    if faculty_id:
-        try:
-            faculty = Faculty.objects.get(id=faculty_id)
-        except Faculty.DoesNotExist:
-            faculty = None
+def faculty_security(request):
+    faculty = get_logged_in_faculty(request)
+    if not faculty:
+        return redirect('faculty_signin')
+
+    if request.method == "POST":
+        current_password = request.POST.get("current_password")
+        new_password = request.POST.get("new_password")
+        confirm_password = request.POST.get("confirm_password")
+
+        if not check_password(current_password, faculty.password):
+            messages.error(request, "Current password is incorrect.")
+        elif new_password != confirm_password:
+            messages.error(request, "New password and confirmation do not match.")
+        else:
+            faculty.password = make_password(new_password)
+            faculty.save()
+            messages.success(request, "Password updated successfully!")
+
+    return render(request, "Faculty_Profile.html", {"faculty": faculty, "section": "security"})
+
+
+def faculty_profile(request):
+    faculty = get_logged_in_faculty(request)
+    if not faculty:
+        return redirect('faculty_signin')
 
     if request.method == "POST":
         email = request.POST.get("email")
-        password = request.POST.get("password")
-        confirm_pass = request.POST.get("confirm_password")
-
         if email:
             try:
                 validate_email(email)
+                faculty.email = email
+                faculty.save()
+                messages.success(request, "Profile updated successfully!")
             except ValidationError:
                 messages.error(request, "Enter a valid email address.")
-                return render(request, "Faculty_Profile.html", {"faculty": faculty})
 
-        if password:
-            if not confirm_pass:
-                messages.error(request, "Please confirm your new password.")
-                return render(request, "Faculty_Profile.html", {"faculty": faculty})
-
-            if password != confirm_pass:
-                messages.error(request, "Password and Confirm Password do not match.")
-                return render(request, "Faculty_Profile.html", {"faculty": faculty})
-
-            faculty.password = make_password(password)
-
-        if email:
-            faculty.email = email
-
-        faculty.save()
-
-        messages.success(request, "Profile updated successfully!")
-        return render(request, "Faculty_Profile.html", {"faculty": faculty})
-    
-    context = {
-        "faculty": faculty,
-    }
-    return render(request, "Faculty_Profile.html", context)
+    return render(request, "Faculty_Profile.html", {"faculty": faculty, "section": "profile"})
 
 def department_settings(request):
 
@@ -254,9 +264,9 @@ def department_settings(request):
         settings.special_instructions = request.POST.get('special_instructions')
         settings.contact_email = request.POST.get('contact_email')
         settings.phone_number = request.POST.get('phone_number')
-        settings.notify_new_submissions = 'notify_new_submissions' in request.POST
-        settings.urgent_alerts = 'urgent_alerts' in request.POST
-        settings.daily_summary = 'daily_summary' in request.POST
+        settings.notify_new_submissions = 'notify_new' in request.POST
+        # settings.urgent_alerts = 'urgent_alerts' in request.POST
+        # settings.daily_summary = 'daily_summary' in request.POST
         settings.save()
         return redirect('department_settings')
 
@@ -264,6 +274,10 @@ def department_settings(request):
 
 
 def faculty_signin(request):
+
+    if( request.session.get('faculty_email') and request.session.get('faculty_id')):
+        return redirect('homepage')
+    
     if request.method == "POST":
         email = request.POST.get("username")
         password = request.POST.get("password")
@@ -385,6 +399,9 @@ def faculty_signup(request):
     return render(request, "FacultySignUp.html")
 
 def faculty_logout(request):
+    storage = messages.get_messages(request)
+    for _ in storage:
+        pass
     request.session.flush()  # Clears all session data
     return redirect("GradeFlow")
 
@@ -394,7 +411,7 @@ def add_comment(request, document_id):
         document = get_object_or_404(ClearanceDocument, id=document_id)
         content = request.POST.get('content', '')
         faculty_id = request.session.get('faculty_id')
-        faculty = Faculty.objects.get(id=faculty_id) if faculty_id else None
+        faculty = Faculty.objects.only("id", "first_name", "last_name").get(id=faculty_id)
         student = document.student
     
         

@@ -6,113 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
    <link rel="stylesheet" href="{% static 'faculty_dashboard.css' %}">
-   
-  
-
-    <script src="{% static 'dropdownHomePage.js' %}"></script>
-    <style>
-      .notif-dropdown {
-        position: absolute;
-        right: 0;
-        background: white;
-        width: 320px;
-        border-radius: 6px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        display: none;
-        z-index: 999;
-    }
-    .notif-item {
-        padding: 10px;
-        border-bottom: 1px solid #eee;
-    }
-    .notif-item.unread {
-        background: #f2f8ff;
-        font-weight: bold;
-    }
-    </style>
+  <link rel="stylesheet" href="{% static 'css/header.css' %}">
+  <link rel="stylesheet" href="{% static 'css/notifications.css' %}">
 </head>
 <body>
 
   <!-- Top Navbar -->
-    <header>
-        <div class="logo">
-            <img src="{% static 'images/gradeFlow_logo.png' %}" class="logo-icon" />
-            <div class="h2andp">
-            <h2>GradeFlow</h2>
-            <p>Faculty Portal</p>
-            </div>
-        </div>
-        
-      <div style="display: flex; align-items: center; gap: 20px;">
-        <div class="notif-wrapper" style="position: relative; cursor: pointer;">
-
-          <!-- CLICKABLE NOTIFICATION IMAGE -->
-          <span id="notifBell" class="notif-bell">
-            <img src="{% static 'images/bell.png' %}" 
-                alt="Notifications" 
-                style="width: 26px; height: 26px;">
-
-            {% if unread_count > 0 %}
-              <span style="
-                background:red; 
-                color:white; 
-                padding:2px 6px; 
-                border-radius:50%; 
-                font-size:12px;
-                position:absolute;
-                top:-5px;
-                right:-5px;
-                ">
-                {{ unread_count }}
-              </span>
-            {% endif %}
-          </span>
-          <!-- Dropdown -->
-          <div id="notifDropdown" class="notif-dropdown">
-              {% if notifications %}
-                  {% for n in notifications|slice:":8" %}
-                      <a href="{% url 'mark_notification_read' n.id %}" style="text-decoration:none; color:black;">
-                          <div class="notif-item {% if not n.is_read %}unread{% endif %}">
-                              <strong>{{ n.title }}</strong><br>
-                              <small>{{ n.message }}</small><br>
-                              <small style="color:gray;">{{ n.created_at|timesince }} ago</small>
-                          </div>
-                      </a>
-                  {% endfor %}
-              {% else %}
-                  <div class="notif-item">No notifications yet.</div>
-              {% endif %}
-          </div>
-        </div>
-
-        <div class="user-menu">
-            <button class="user-circle" id="userBtn">
-            <h4>{{ initials }}</h4>
-            </button>
-
-            <div class="dropdown-menu" id="dropdownMenu">
-                <div class="user-info">
-                    <strong>{{ faculty.first_name }} {{ faculty.last_name }}</strong><br>
-                    <small>{{ faculty.email }}</small>
-                </div>
-                 <hr>
-                <div class="menuOptions">
-                 
-                  <a href={% url 'faculty_profile'%}>Profile Settings</a>
-                  <a href="#">Preferences</a>
-                  <a href="#">FAQ & Help</a>
-                  
-                </div>
-                <hr>
-                <div class="menuOptions">
-                  <a href="{% url 'faculty_logout'%}">Sign Out</a>
-                </div>
-                
-               
-            </div>
-        </div>
-      </div>
-    </header>
+    {% include 'components/header.html' %}
 
   <!-- Main Content -->
   <main class="container">
@@ -226,42 +126,10 @@
   </section>
 
   </main>
-<script>
-function showTab(tabId) {
-  // Hide all tab contents
-  document.querySelectorAll('.tab-content').forEach(tab => {
-    tab.style.display = 'none';
-  });
 
-  // Remove active state from all tab buttons
-  document.querySelectorAll('.tab-btn').forEach(btn => {
-    btn.classList.remove('active');
-  });
-
-  // Show the selected tab
-  document.getElementById(tabId).style.display = 'block';
-
-  // Highlight the clicked button
-  event.target.classList.add('active');
-}
-
-// Default active tab
-document.addEventListener('DOMContentLoaded', function() {
-  document.querySelectorAll('.tab-content').forEach(tab => tab.style.display = 'none');
-  document.getElementById('submissions').style.display = 'block';
-});
-
-document.getElementById("notifBell").onclick = function() {
-    let dropdown = document.getElementById("notifDropdown");
-    dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
-};
-document.addEventListener("click", function(e){
-    let dropdown = document.getElementById("notifDropdown");
-    if (!e.target.closest("#notifBell")) {
-        dropdown.style.display = "none";
-    }
-});
-</script>
+  <script src="{% static 'js/facultyDashboard.js' %}"></script>
+  <script src="{% static 'js/notification.js' %}"></script>
+  <script src="{% static 'js/userDropdown.js' %}"></script>
 </body>
 
 </html>
