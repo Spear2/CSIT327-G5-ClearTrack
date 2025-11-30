@@ -1,0 +1,24 @@
+{% load static %}
+<!-- SIDEBAR -->
+        <div class="settings-sidebar">
+            <h3><i class="fa-solid fa-bars"></i> Settings Menu</h3>
+            <ul>
+                <li class="active" onclick="showSection('profile-section')">
+                    <i class="fa-solid fa-id-card"></i> Profile Information
+                </li>
+
+                <li onclick="showSection('preferences-section')">
+                    <i class="fa-solid fa-sliders"></i> Preferences & Settings
+                </li>
+
+                <li onclick="showSection('security-section')">
+                    <i class="fa-solid fa-lock"></i> Security
+                </li>
+
+                <li>
+                  <a href="{% url 'homepage' %}" style="text-decoration: none; color: inherit;">
+                    <i class="fa-solid fa-house"></i> Back to Home
+                  </a>
+                </li>
+            </ul>
+        </div>

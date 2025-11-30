@@ -8,38 +8,31 @@ def notification_context(request):
     faculty_id = request.session.get("faculty_id")
     student_id = request.session.get("student_id")
 
-    # If no user logged in → skip all queries
     if not faculty_id and not student_id:
         return {"notifications": [], "unread_count": 0}
 
-    # Cache key per user
-    cache_key = f"notif_{faculty_id or student_id}"
-    cached_data = cache.get(cache_key)
+    user_id = faculty_id or student_id
+    cache_key = f"notif_{user_id}"
 
-    if cached_data:
-        return cached_data
+    cached = cache.get(cache_key)
+    if cached:
+        return cached
 
-    # Build base queryset (NO SLICING HERE)
     if faculty_id:
         qs = Notification.objects.filter(faculty_recipient_id=faculty_id)
     else:
         qs = Notification.objects.filter(student_recipient_id=student_id)
 
-    # ORDER + FILTER FIRST (ok)
-    qs = qs.order_by("-created_at")
+    # Use only the needed fields
+    qs = qs.only("title", "message", "created_at", "is_read")
 
-    # UNREAD COUNT (separate query)
+    notifications = qs.order_by("-created_at")[:30]
     unread_count = qs.filter(is_read=False).count()
 
-    # Slice LAST so no filtering happens after slicing
-    notifications = qs[:30]
-
-    result = {
+    data = {
         "notifications": notifications,
         "unread_count": unread_count,
     }
 
-    # Cache for 10 seconds to prevent DB spam
-    cache.set(cache_key, result, 10)
-
-    return result
+    cache.set(cache_key, data, 10)
+    return data

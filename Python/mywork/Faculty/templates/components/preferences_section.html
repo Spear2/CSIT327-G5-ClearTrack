@@ -1,0 +1,34 @@
+{% load static %}
+<div id="preferences-section" class="settings-card main-settings-card hidden">
+    <h3><i class="fa-solid fa-sliders"></i> Preferences & Settings</h3>
+
+    <div class="form-group">
+        <label><i class="fa-solid fa-palette"></i> Theme</label>
+        <select>
+            <option>Light Mode</option>
+            <option>Dark Mode</option>
+            <option>System Default</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label><i class="fa-solid fa-language"></i> Language</label>
+        <select>
+            <option>English</option>
+            <option>Filipino</option>
+            <option value="spanish">Spanish</option>
+            <option value="french">French</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label><i class="fa-solid fa-clock"></i> Time Zone</label>
+        <select>
+            <option>Asia/Manila (PHT)</option>
+            <option>UTC +8</option>
+            <option>Asia/Singapore (SGT)</option>
+        </select>
+    </div>
+
+    <button class="update-btn"><i class="fa-solid fa-floppy-disk"></i> Save Preferences</button>
+</div>
