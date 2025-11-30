@@ -1,41 +1,45 @@
 from UserManagement.models import Notification
 from student_signup_signin.models import Student
 from Faculty.models import Faculty
+from django.core.cache import cache
 
 
 def notification_context(request):
-    user = None
-    notifications = Notification.objects.none()
-    unread_count = 0
-    
-    # faculty logged in
-    if request.session.get("faculty_email"):
-        try:
-            faculty = Faculty.objects.get(email=request.session["faculty_email"])
-            notifications = Notification.objects.filter(
-                faculty_recipient=faculty
-            ).order_by("-created_at")
+    faculty_id = request.session.get("faculty_id")
+    student_id = request.session.get("student_id")
 
-            print("CTX DEBUG →", request.session.get("faculty_email"), notifications)
-            print("DEBUG: notifications =", notifications, type(notifications))
-        except Faculty.DoesNotExist:
-            pass
+    # If no user logged in → skip all queries
+    if not faculty_id and not student_id:
+        return {"notifications": [], "unread_count": 0}
 
-    # student logged in
-    elif request.session.get("student_email"):
-        try:
-            student = Student.objects.get(email_address=request.session["student_email"])
-            notifications = Notification.objects.filter(
-                student_recipient=student
-            ).order_by("-created_at")
-            print("CTX DEBUG →", request.session.get("faculty_email"), notifications)
-            print("DEBUG: notifications =", notifications, type(notifications))
-        except Student.DoesNotExist:
-            pass
+    # Cache key per user
+    cache_key = f"notif_{faculty_id or student_id}"
+    cached_data = cache.get(cache_key)
 
-    unread_count = notifications.filter(is_read=False).count()
+    if cached_data:
+        return cached_data
 
-    return {
+    # Build base queryset (NO SLICING HERE)
+    if faculty_id:
+        qs = Notification.objects.filter(faculty_recipient_id=faculty_id)
+    else:
+        qs = Notification.objects.filter(student_recipient_id=student_id)
+
+    # ORDER + FILTER FIRST (ok)
+    qs = qs.order_by("-created_at")
+
+    # UNREAD COUNT (separate query)
+    unread_count = qs.filter(is_read=False).count()
+
+    # Slice LAST so no filtering happens after slicing
+    notifications = qs[:30]
+
+    result = {
         "notifications": notifications,
         "unread_count": unread_count,
     }
+
+    # Cache for 10 seconds to prevent DB spam
+    cache.set(cache_key, result, 10)
+
+    return result

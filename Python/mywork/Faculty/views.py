@@ -3,19 +3,20 @@ from django.contrib import messages
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 from django.contrib.auth.hashers import make_password, check_password
-from .models import Faculty, Comment, DepartmentSettings
-from django.contrib.auth import authenticate, login
-from studentDashboard.models import ClearanceDocument
-from django.db.models import Q, Case, When, Value, IntegerField
+from django.db.models import Q, Case, When, Value, IntegerField, Count
+from django.http import HttpResponse
 from django.utils import timezone
 from datetime import timedelta
-from supabase import create_client
-from django.http import HttpResponse
-import os
 from django.conf import settings
-from utils.notifications import notify_student
+
+from studentDashboard.models import ClearanceDocument
 from student_signup_signin.models import Student
 from UserManagement.models import Notification
+from Faculty.models import Faculty, Comment, DepartmentSettings
+from utils.notifications import notify_student  # convert this to Celery async if needed
+
+from supabase import create_client
+import os
 
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_BUCKET = os.getenv("SUPABASE_BUCKET")
@@ -53,7 +54,6 @@ def update_status(request, document_id):
 
         # Check if faculty belongs to this department
         if faculty_department == document_department:
-            print("Status is updated")
 
             document.status = new_status
             document.save()
@@ -73,99 +73,119 @@ def update_status(request, document_id):
                     message=f"Your clearance for {document.document_type} has been rejected."
                 )
 
-        else:
-            print("Status won't change (faculty not allowed)")
-
     return redirect('homepage')
 
 
 def homepage(request):
+
+    if not request.session.get('faculty_email') or not request.session.get('faculty_id'):
+        return redirect('faculty_signin')
+    
     faculty = None
     initials = ""
-    requests = []
+    requests_qs = []
     faculty_department = ""
     
-    selected_status = request.GET.get('status','All')
+    selected_status = request.GET.get('status', 'All')
     selected_department = request.GET.get('department', 'All_Department')
     search_query = request.GET.get('search', '')
     selected_date = request.GET.get('date_filter', 'All_Time')
-    count_Pending = 0
-    count_Approved = 0
-    count_Reject = 0
 
-    count_Pending += ClearanceDocument.objects.filter(status='Pending').count()
-    count_Approved += ClearanceDocument.objects.filter(status='Approved').count()
-    count_Reject += ClearanceDocument.objects.filter(status='Rejected').count()
+    # -----------------------------
+    # 1. FAST COUNTS (single query)
+    # -----------------------------
+    counts = ClearanceDocument.objects.aggregate(
+        pending=Count('id', filter=Q(status='Pending')),
+        approved=Count('id', filter=Q(status='Approved')),
+        rejected=Count('id', filter=Q(status='Rejected')),
+    )
 
-    
-    requests = ClearanceDocument.objects.select_related('student')
+    # -----------------------------
+    # 2. Build Base Query
+    # -----------------------------
+    requests_qs = ClearanceDocument.objects.select_related("student")
 
-    if selected_status != 'All':
-        requests = requests.filter(status=selected_status)
-    
-    if selected_department != 'All_Department':
-        requests = requests.filter(department_name=selected_department)
+    if selected_status != "All":
+        requests_qs = requests_qs.filter(status=selected_status)
+
+    if selected_department != "All_Department":
+        requests_qs = requests_qs.filter(department_name=selected_department)
 
     if search_query:
-        requests = requests.filter(
+        requests_qs = requests_qs.filter(
             Q(student__first_name__icontains=search_query) |
             Q(student__last_name__icontains=search_query) |
             Q(student__student_id__icontains=search_query)
         )
-    
 
-    requests = requests.annotate(
+    # -----------------------------
+    # 3. Date Filtering
+    # -----------------------------
+    now = timezone.now()
+
+    if selected_date == "Last_7_Days":
+        requests_qs = requests_qs.filter(time_submitted__gte=now - timedelta(days=7))
+
+    elif selected_date == "Last_30_Days":
+        requests_qs = requests_qs.filter(time_submitted__gte=now - timedelta(days=30))
+
+    elif selected_date == "This_Semester":
+        month = now.month
+        semester_start = timezone.datetime(
+            now.year, 6 if month >= 6 else 11, 1,
+            tzinfo=timezone.get_current_timezone()
+        )
+        requests_qs = requests_qs.filter(time_submitted__gte=semester_start)
+
+    # -----------------------------
+    # 4. Annotate + Order (fast)
+    # -----------------------------
+    requests_qs = requests_qs.annotate(
         status_priority=Case(
             When(status='Pending', then=Value(0)),
             When(status='Approved', then=Value(1)),
             When(status='Rejected', then=Value(2)),
             default=Value(3),
-            output_field=IntegerField()
+            output_field=IntegerField(),
         )
-    ).order_by('status_priority', '-time_submitted')
+    ).order_by("status_priority", "-time_submitted")
 
-    
-    now = timezone.now()
-    if selected_date == 'Last_7_Days':
-        requests = requests.filter(time_submitted__gte=now-timedelta(days=7))
-    elif selected_date == 'Last_30_Days':
-        requests = requests.filter(time_submitted__gte=now-timedelta(days=30))
-    elif selected_date == 'This_Semester':
-        month = now.month
-        if month >= 6:
-            semester_start = timezone.datetime(now.year, 6, 1, tzinfo=timezone.get_current_timezone())
-        else:
-            semester_start = timezone.datetime(now.year, 11, 1, tzinfo=timezone.get_current_timezone())
-        requests = requests.filter(time_submitted__gte=semester_start)
+    # -----------------------------
+    # 5. Faculty Info
+    # -----------------------------
+    faculty = None
+    initials = ""
+    faculty_department = ""
+
     faculty_id = request.session.get("faculty_id")
     if faculty_id:
         try:
             faculty = Faculty.objects.get(id=faculty_id)
-            initials = f"{faculty.first_name[0]}{faculty.last_name[0]}".upper()
-            faculty_department = DEPARTMENT_MAP.get(faculty.department,"").lower()
+            initials = (faculty.first_name[0] + faculty.last_name[0]).upper()
+            faculty_department = DEPARTMENT_MAP.get(faculty.department, "").lower()
         except Faculty.DoesNotExist:
             pass
 
-    for req in requests:
-        if req.file_url:
-            req.filename = req.file_url.split('/')[-1]
-        else:
-            req.filename = "No file uploaded"
-
+    # -----------------------------
+    # 6. Template Context
+    # -----------------------------
     context = {
         "faculty": faculty,
         "initials": initials,
-        "requests": requests,
+        "requests": requests_qs,
         "faculty_department": faculty_department,
+
         "selected_status": selected_status,
         "selected_department": selected_department,
         "selected_date": selected_date,
-        "count_Approved": count_Approved,
-        "count_Reject": count_Reject,
-        "count_Pending": count_Pending,
+
+        # fast counts
+        "count_Approved": counts["approved"],
+        "count_Reject": counts["rejected"],
+        "count_Pending": counts["pending"],
+
         "SUPABASE_URL": settings.SUPABASE_URL,
         "SUPABASE_BUCKET": settings.SUPABASE_BUCKET,
-        
     }
 
     return render(request, "Hompage.html", context)
@@ -174,6 +194,8 @@ def homepage(request):
 
 
 def faculty_settings(request):
+    if not request.session.get('faculty_email') or not request.session.get('faculty_id'):
+        return redirect('faculty_signin')
     faculty_id = request.session.get("faculty_id")
 
     if faculty_id:
@@ -219,6 +241,10 @@ def faculty_settings(request):
     return render(request, "Faculty_Profile.html", context)
 
 def department_settings(request):
+
+    if not request.session.get('faculty_email') or not request.session.get('faculty_id'):
+        return redirect('faculty_signin')
+    
     faculty_id = request.session.get("faculty_id")
     faculty = Faculty.objects.get(id=faculty_id)
     settings, created = DepartmentSettings.objects.get_or_create(department=faculty)
@@ -400,9 +426,22 @@ def download_file(request, bucket_name, path):
     return res
 
 def preview_file(request, bucket_name, path):
-    supabase = create_client(settings.SUPABASE_URL, settings.SUPABASE_KEY)
-    response = supabase.storage.from_(bucket_name).create_signed_url(path, 3600)  # valid for 1 hour
-    signed_url = response['signedURL']
+    """
+    Return a redirect to a Supabase signed URL (valid short time).
+    Only called when faculty clicks 'Preview'.
+    """
+    if not request.session.get('faculty_id'):
+        return redirect('faculty_signin')
+
+    # path: use stored file_path where possible. Here path may be file_path
+    try:
+        res = supabase.storage.from_(bucket_name).create_signed_url(path, 900)  # 15 minutes
+        signed_url = res.get('signedURL') or res.get('signed_url') or res.get('signedUrl')
+        if not signed_url:
+            return HttpResponse("Could not create signed URL.", status=500)
+    except Exception as e:
+        return HttpResponse(f"Error creating signed URL: {str(e)}", status=500)
+
     return redirect(signed_url)
 
 

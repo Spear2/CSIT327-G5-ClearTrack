@@ -185,10 +185,10 @@
 
           <select name="department" onchange="document.getElementById('filterForm').submit();">
             <option value='All_Department' {% if selected_department == 'All_Department'%}selected {%endif%}>All Departments</option>
-            <option value='Librarian' {% if selected_department == 'Librarian'%}selected {%endif%}>Library</option>
+            <option value='Library' {% if selected_department == 'Library'%}selected {%endif%}>Library</option>
             <option value='Registrar' {% if selected_department == 'Registrar'%}selected {%endif%}>Registrar</option>
-            <option value='Finance Office' {% if selected_department == 'Finance Office'%}selected {%endif%}>Finance Office</option>
-            <option value='Guidance Office' {% if selected_department == 'Guidance Office'%}selected {%endif%}>Guidance Office</option>
+            <option value='Accounting' {% if selected_department == 'Accounting'%}selected {%endif%}>Accounting</option>
+            <option value='Academic Adviser' {% if selected_department == 'Academic Adviser'%}selected {%endif%}>Academic Adviser</option>
           </select>
 
           <select name="date_filter" onchange="document.getElementById('filterForm').submit();">
