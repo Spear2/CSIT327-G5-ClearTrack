@@ -1,0 +1,174 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GradeFlow - Student Portal</title>
+    <link rel="stylesheet" href="{% static 'css/helpandsupport.css' %}">
+    <link rel="stylesheet" href="{% static 'css/header.css' %}">
+    <link rel="stylesheet" href="{% static 'css/notifications.css' %}">
+    <link rel="stylesheet" href="{% static 'fontawesome/css/all.min.css' %}">
+</head>
+<body>
+
+    {% include 'components/header.html' %}
+    <!--<section class="card-help&support">
+    <div class="card submission-card">/*-->
+    <main class="container">
+    <h2>💡 Help & Support</h2>
+    <p class="subtitle">Need assistance? Follow the steps below or reach out to our support team.</p>
+    <div class="help-layout">
+
+        <!-- SIDEBAR -->
+        <div class="help-sidebar">
+            <h3><i class="fa-solid fa-bars"></i> Categories</h3>
+            <ul>
+                <li class="active" onclick="showHelpSection('contact-support')">
+                    <i class="fa-solid fa-headset"></i> Contact Support
+                </li>
+                <li onclick="showHelpSection('account')">
+                    <i class="fa-solid fa-user-gear"></i> Account Management
+                </li>
+                <li onclick="showHelpSection('issues-solutions')">
+                    <i class="fa-solid fa-screwdriver-wrench"></i> Troubleshoot
+                </li>
+                <li onclick="showHelpSection('guide')">
+                    <i class="fa-solid fa-route"></i> Step-by-Step Guide
+                </li>
+                <li onclick="showHelpSection('notification')">
+                    <i class="fa-solid fa-bell"></i> Notification
+                </li>
+                <li onclick="showHelpSection('system-updates')">
+                    <i class="fa-solid fa-circle-info"></i> System Notices
+                </li>
+                <li onclick="showHelpSection('feedback')">
+                    <i class="fa-solid fa-circle-info"></i> Feedback / Report Issues
+                </li>
+                <li>
+                    <a href="{% url 'homepage' %}" style="text-decoration: none; color: inherit;">
+                        <i class="fa-solid fa-house"></i> Back to Home
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- CONTENT AREA -->
+        <div class="help-content">
+
+            <!-- CONTACT SUPPORT -->
+            <div id="contact-support" class="help-card">
+                <h3>Contact Support</h3>
+                <ul>
+                    <li><strong>Email</strong>: <a href="mailto:ClearTrack-helpdesk@gmail.com">ClearTrack-helpdesk@gmail.com</a></li>
+                    <li><strong>Phone</strong>: +63 912 345 6789</li>
+                </ul>
+            </div>
+
+            <!-- TROUBLESHOOTING -->
+            <div id="account" class="help-card hidden">
+                <h3>Account & Profile Management</h3>
+                <ul>
+                    <li>
+                        <strong>How to reset your password:</strong>  
+                        Go to <em>Settings → Account → Change Password</em> and follow the steps.
+                    </li>
+                    <li>
+                        <strong>Updating your profile:</strong>  
+                        You can change your name, profile picture, and contact info under <em>Profile Settings</em>.
+                    </li>
+                    <li>
+                        <strong>Account locked?</strong>  
+                        If your account is locked after several failed login attempts, wait 10 minutes or contact support.
+                    </li>
+                </ul>
+            </div>
+
+
+            <!-- TIPS -->
+           <div id="issues-solutions" class="help-card hidden">
+                <h3>Common Issues & Solutions</h3>
+                <ul>
+                    <li>
+                        <strong>Submissions not uploading:</strong>  
+                        Ensure the file is under 10MB and in PDF/DOCX/JPG/PNG format.
+                    </li>
+                    <li>
+                        <strong>Page not loading properly:</strong>  
+                        Clear your browser cache or use Chrome/Firefox for best performance.
+                    </li>
+                    <li>
+                        <strong>Not receiving notifications:</strong>  
+                        Check if notifications are enabled in your browser and in your user settings.
+                    </li>
+                </ul>
+            </div>
+
+
+            <!-- STEP-BY-STEP GUIDE -->
+            <div id="guide" class="help-card hidden">
+                <h3>Clearance Review & Approval</h3>
+                <ol>
+                    <li>Upload your required documents under each department.</li>
+                    <li>Wait for the instructor/admin to review your submission.</li>
+                    <li>You will receive a notification once your item is approved or reject (requires revision)</li>
+                    <li>If revisions are requested, re-upload the corrected file.</li>
+                    <li>Once all departments approve, your clearance status becomes <strong>“Completed”</strong>.</li>
+                </ol>
+            </div>
+
+
+            <div id="notification" class="help-card hidden">
+                <h3>Notification Alerts</h3>
+                <ol>
+                    <li><strong>Submission Updates:</strong>  
+                        You’ll be notified when your submission is approved or requires changes.</li>
+                    <li><strong>System Announcements:</strong>  
+                        Maintenance and update alerts will appear in your notification center.</li>
+                    <li><strong>Deadline Reminders:</strong>  
+                        The system automatically notifies you 24 hours before submission deadlines.</li>
+                </ol>
+            </div>
+
+
+            <!-- SYSTEM UPDATES -->
+            <div id="system-updates" class="help-card hidden">
+                <h3>System Notices & Updates</h3>
+                <ul>
+                    <li>Maintenance: Every Saturday 12:00 AM - 2:00 AM</li>
+                    <li>Supported file types: PDF, DOCX, JPG, PNG</li>
+                    <li>Use latest Chrome, Firefox, or Edge</li>
+                </ul>
+            </div>
+
+            <!-- FEEDBACK -->
+            <div id="feedback" class="help-card hidden">
+                <h3>Feedback / Report Issues</h3>
+                <form method="POST" action="{% url 'submit_feedback' %}">
+                    {% csrf_token %}
+                    <textarea name="feedback" placeholder="Describe issue or suggestion..." required></textarea>
+                    <button type="submit">Submit Feedback</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</main>
+
+<script>
+function showHelpSection(sectionId) {
+    document.querySelectorAll(".help-card").forEach(el => el.classList.add("hidden"));
+    document.getElementById(sectionId).classList.remove("hidden");
+
+    document.querySelectorAll(".help-sidebar ul li").forEach(li => li.classList.remove("active"));
+    event.target.classList.add("active");
+}
+</script>
+
+  <script src="{% static 'js/notification.js' %}"></script>
+  <script src="{% static 'js/userDropdown.js' %}"></script>
+
+
+
+</body>
+</html>
