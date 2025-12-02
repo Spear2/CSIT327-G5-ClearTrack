@@ -139,19 +139,25 @@ header .h2andp p {
   margin-bottom: 15px;
 }
 
-.summary .card {
+.summary {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+}
+.card {
+  background-color: white;
   flex: 1;
-  min-width: 200px;
+  min-width: 180px;
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 15px 18px;
-  border-radius: 12px;
-  background-color: white;
+  gap: 14px;
+  padding: 18px 20px;
+  border-radius: 16px;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
+  
 }
-
 .summary .card:hover {
   transform: translateY(-3px);
   box-shadow: 0 5px 12px rgba(0, 0, 0, 0.12);

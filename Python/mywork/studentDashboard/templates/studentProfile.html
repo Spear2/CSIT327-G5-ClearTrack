@@ -154,7 +154,7 @@
     </header>
 
     <main class="container">
-      <h2>Welcome back, {{ student.first_name }}! 👋</h2>
+      <h2 style="color: black;">Welcome back, {{ student.first_name }}! 👋</h2>
       <p class="subtitle">
         Track your clearance progress and manage your submissions
       </p>
@@ -165,7 +165,7 @@
             <i data-feather="check-circle" stroke="#22c55e"></i>
           </div>
           <div class="numberOf">
-            <h3>{{ completed_count|default:0 }}</h3>
+            <h3 style="color:black">{{ completed_count|default:0 }}</h3>
             <p>Completed</p>
           </div>
         </div>
@@ -175,7 +175,7 @@
             <i data-feather="refresh-cw" stroke="#facc15" class="spin"></i>
           </div>
           <div class="numberOf">
-            <h3>{{ inprogress_count|default:0 }}</h3>
+            <h3 style="color:black">{{ inprogress_count|default:0 }}</h3>
             <p>In Progress</p>
           </div>
         </div>
@@ -185,7 +185,7 @@
             <i data-feather="alert-circle" stroke="#f97316"></i>
           </div>
           <div class="numberOf">
-            <h3>{{ pending_count|default:0 }}</h3>
+            <h3 style="color:black">{{ pending_count|default:0 }}</h3>
             <p>Pending</p>
           </div>
         </div>
@@ -195,7 +195,7 @@
             <i data-feather="file-text" stroke="#2d31fa"></i>
           </div>
           <div class="numberOf">
-            <h3>{{ document_count|default:0 }}</h3>
+            <h3 style="color:black">{{ document_count|default:0 }}</h3>
             <p>Documents</p>
           </div>
         </div>
@@ -217,12 +217,13 @@
       <form method="post" class="profile-section">
         {% csrf_token %}
         <!-- Personal Info Card -->
-        <div class="profile-card">
+        <div class="profile-card" style="margin-top: 20px;">
           <h3>
             <img
               src="{% static 'images/profile.png' %}"
               alt="Profile Icon"
               class="profile-icon"
+              style="width: 30px"
             />
             Personal Information
           </h3>
@@ -261,12 +262,13 @@
         </div>
 
         <!-- Contact Info Card -->
-        <div class="profile-card">
+        <div class="profile-card" style="margin-top: 20px;">
           <h3>
             <img
               src="{% static 'images/email.png' %}"
               alt="Email Icon"
               class="profile-icon"
+              style="width: 30px"
             />
             Contact Information
           </h3>
