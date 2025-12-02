@@ -1,6 +1,6 @@
- <div class="department-settings-card">
-  <h3>⚙️ Department Settings</h3>
-  <p class="subtitle">Configure your department preferences and notification settings</p>
+<div class="department-settings-card">
+  <h3><i class="fa-solid fa-gear"></i> Department Settings</h3>
+  <p class="subtitle"><i class="fa-solid fa-sliders"></i> Configure your department preferences and notification settings</p>
 
   <form method="POST">
     {% csrf_token %}
@@ -8,31 +8,31 @@
     <div class="settings-grid">
       <div class="left-column">
         <div class="form-group">
-          <label for="deptName">Department Name</label>
+          <label for="deptName"><i class="fa-solid fa-building"></i> Department Name</label>
           <input type="text" id="deptName" name="dept_name" value="{{faculty.department|capfirst}} Department" required>
         </div>
 
         <div class="form-group">
-          <label for="email">Contact Email</label>
+          <label for="email"><i class="fa-solid fa-envelope"></i> Contact Email</label>
           <input type="email" id="email" name="dept_email" value="{{faculty.email}}" required>
         </div>
 
         <div class="form-group">
-          <label for="phone">Phone Number</label>
+          <label for="phone"><i class="fa-solid fa-phone"></i> Phone Number</label>
           <input type="text" id="phone" name="dept_phone" value="+1 (555) 123-4567" required>
         </div>
       </div>
 
       <div class="right-column">
         <div class="form-group">
-          <label for="officeHours">Office Hours</label>
+          <label for="officeHours"><i class="fa-regular fa-clock"></i> Office Hours</label>
           <textarea id="officeHours" name="office_hours" rows="3">Monday - Friday: 8:00 AM - 5:00 PM
 Saturday: 9:00 AM - 1:00 PM
 Sunday: Closed</textarea>
         </div>
 
         <div class="form-group">
-          <label for="instructions">Special Instructions</label>
+          <label for="instructions"><i class="fa-solid fa-sticky-note"></i> Special Instructions</label>
           <textarea id="instructions" name="special_instructions" rows="3">Add any special instructions for students...</textarea>
         </div>
       </div>
@@ -40,68 +40,7 @@ Sunday: Closed</textarea>
 
     <hr class="divider">
 
-    <div class="notification-section">
-      <h4>Notification Preferences</h4>
-      <div class="checkbox-group">
-        <label><input type="checkbox" name="notify_new" checked> Email notifications for new submissions</label>
-      </div>
-      <button type="submit" class="save-btn">Save Settings</button>
+      <button type="submit" class="save-btn"><i class="fa-solid fa-floppy-disk"></i> Save Settings</button>
     </div>
   </form>
 </div>
- 
- {% comment %} <div class="department-settings-card">
-    <form method="POST">
-      {% csrf_token %}
-      <!-- Department Info -->
-      <div class="settings-section">
-        <h3>⚙️ Department Settings</h3>
-         <p>Manage department-related preferences here.</p>
-        <div class="settings-grid">
-          <div>
-            <div class="form-group">
-                <label for="deptName">Department Name</label>
-                <input type="text" id="deptName" name="dept_name" value="Library Department" required>
-            </div>
-
-            <div class="form-group">
-                <label for="email">Contact Email</label>
-                <input type="email" id="email" name="dept_email" value="library@university.edu" required>
-            </div>
-
-            <div class="form-group">
-                <label for="phone">Phone Number</label>
-                <input type="text" id="phone" name="dept_phone" value="+1 (555) 123-4567" required>
-            </div>
-          </div>
-
-          <div>
-            <div class="form-group">
-                <label for="officeHours">Office Hours</label>
-                <textarea id="officeHours" name="office_hours" rows="3">Monday - Friday: 8:00 AM - 5:00 PM
-                    Saturday: 9:00 AM - 1:00 PM
-                    Sunday: Closed</textarea>
-            </div>
-
-            <div class="form-group">
-                <label for="instructions">Special Instructions</label>
-                <textarea id="instructions" name="special_instructions" rows="3">Add any special instructions for students...</textarea>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <hr class="divider">
-
-      <!-- Notification Preferences -->
-      <div class="settings-section">
-        <h4>Notification Preferences</h4>
-        <div class="checkbox-group">
-          <label><input type="checkbox" name="notify_new" checked> Email notifications for new submissions</label>
-          <label><input type="checkbox" name="urgent_alerts" checked> Urgent submission alerts</label>
-          <label><input type="checkbox" name="daily_summary"> Daily summary reports</label>
-        </div>
-        <button type="submit" class="save-btn">Save Settings</button>
-      </div>    
-    </form>
-  </div> {% endcomment %}

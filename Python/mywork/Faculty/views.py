@@ -82,7 +82,7 @@ def update_status(request, document_id):
 
 
 def get_clearance_counts():
-    """Efficiently fetches clearance counts."""
+
     return ClearanceDocument.objects.aggregate(
         pending=Count('id', filter=Q(status='Pending')),
         approved=Count('id', filter=Q(status='Approved')),
@@ -91,7 +91,7 @@ def get_clearance_counts():
 
 
 def filter_clearance_requests(qs, status, department, query, date_filter):
-    """Optimized filtering of clearance documents."""
+
 
     filters = Q()
 
@@ -130,7 +130,6 @@ def filter_clearance_requests(qs, status, department, query, date_filter):
 
 
 def annotate_and_order_requests(qs):
-    """Efficient priority sorting."""
     return qs.annotate(
         status_priority=Case(
             When(status='Pending', then=Value(0)),
@@ -143,13 +142,12 @@ def annotate_and_order_requests(qs):
 
 
 def get_faculty_info(request):
-    """Uses a lightweight existence check and select-only fields."""
+
     faculty_id = request.session.get("faculty_id")
     if not faculty_id:
         return None, "", ""
 
     faculty = Faculty.objects.filter(id=faculty_id).only(
-        "first_name", "last_name", "department"
     ).first()
 
     if not faculty:
@@ -462,3 +460,9 @@ def preview_file(request, bucket_name, path):
     return redirect(signed_url)
 
 
+def help_and_support(request):
+    faculty = get_logged_in_faculty(request)
+    if not faculty:
+        return redirect('faculty_signin')
+    return render(request, 'HelpAndSupport.html', {'faculty': faculty})
+    

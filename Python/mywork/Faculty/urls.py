@@ -15,4 +15,5 @@ urlpatterns = [
     path('update_status/<uuid:document_id>/', views.update_status, name='update_status'),
     path('download/<str:bucket_name>/<path:path>/', views.download_file, name='download_file'),
     path('preview/<str:bucket_name>/<path:path>/', views.preview_file, name='preview_file'),
+    path('help_and_support/', views.help_and_support, name='help_and_support'),
 ]

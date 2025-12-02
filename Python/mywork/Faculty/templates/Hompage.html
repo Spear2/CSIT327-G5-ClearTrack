@@ -6,54 +6,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
    <link rel="stylesheet" href="{% static 'faculty_dashboard.css' %}">
-  <link rel="stylesheet" href="{% static 'css/header.css' %}">
-  <link rel="stylesheet" href="{% static 'css/notifications.css' %}">
+   <link rel="stylesheet" href="{% static 'css/header.css' %}">
+   <link rel="stylesheet" href="{% static 'css/notifications.css' %}">
+   <link rel="stylesheet" href="{% static 'fontawesome/css/all.min.css' %}">
 </head>
 <body>
 
-  <!-- Top Navbar -->
-    {% include 'components/header.html' %}
+{% include 'components/header.html' %}
 
-  <!-- Main Content -->
-  <main class="container">
+<main class="container">
 
-    <h2>Faculty Dashboard 🧾</h2>
+    <h2><i class="fa-solid fa-scroll"></i> Faculty Dashboard</h2>
     <p class="subtitle">Review and manage student clearance submissions</p>
 
     <!-- Summary Cards -->
     <section class="summary">
-      <div class="card total">
-        <p class="icons">📄</p>
+      <div class="card total" style="height: 60px;">
+        <p class="icons"><i class="fa-solid fa-file-lines"></i></p>
         <div class="numberOf">
-            {% comment %} <h3>{{ total_submissions }}</h3> {% endcomment %}
             <h3>{{ requests|length}}</h3>
             <p>Total Submissions</p>
         </div>
       </div>
 
-      <div class="card pending">
-        <p class="icons">⏰</p>
+      <div class="card pending" style="height: 60px;">
+        <p class="icons"><i class="fa-solid fa-hourglass-half"></i></p>
         <div class="numberOf">
-            {% comment %} <h3>{{ pending_review }}</h3> {% endcomment %}
             <h3>{{ count_Pending }}</h3>
             <p>Pending Review</p>
         </div>
       </div>
 
-      <div class="card approved">
-        <p class="icons">✅</p>
+      <div class="card approved" style="height: 60px;">
+        <p class="icons"><i class="fa-solid fa-circle-check"></i></p>
         <div class="numberOf">
-            {% comment %} <h3>{{ approved }}</h3> {% endcomment %}
             <h3>{{ count_Approved }}</h3>
             <p>Approved</p>
         </div>
       </div>
 
-      <div class="card rejected">
-        <p class="icons">❌</p>
+      <div class="card rejected" style="height: 60px;">
+        <p class="icons"><i class="fa-solid fa-circle-xmark"></i></p>
         <div class="numberOf">
-            {% comment %} <h3>{{ rejected }}</h3> {% endcomment %}
-            <h3>{{ count_Reject}}</h3>
+            <h3>{{ count_Reject }}</h3>
             <p>Rejected</p>
         </div>
       </div>
@@ -66,12 +61,14 @@
       <button class="tab-btn" onclick="showTab('settings')">Department Settings</button>
     </div>
 
-    <!-- Filter Section -->
-    <!-- TAB CONTENTS -->
+  <!-- TAB CONTENT -->
+
   <div id="submissions" class="tab-content active">
+
     <!-- Filter Section -->
     <section class="filters">
-      <h3>🔍 Filter Submissions</h3>
+      <h3><i class="fa-solid fa-magnifying-glass"></i> Filter Submissions</h3>
+
       <form method="get" id="filterForm">
         <div class="filter-grid">
           <input type="text" name="search" placeholder="Search by name or ID...">
@@ -103,8 +100,9 @@
 
     <!-- Student Submissions Section -->
     <section class="submissions">
-      <h3>📚 Student Submissions</h3>
+      <h3><i class="fa-solid fa-book"></i> Student Submissions</h3>
       <p>Review and approve student clearance submissions.</p>
+
       {% if requests %}
         {% include "StudentSubmissions/Student_Submission.html" %}
       {% else %}
@@ -112,24 +110,22 @@
       {% endif %}
     </section>
   </div>
-  
 
   <!-- Analytics -->
   <section id="analytics" class="tab-content">
-    <h3>📊 Analytics</h3>
+    <h3><i class="fa-solid fa-chart-column"></i> Analytics</h3>
     <p>View statistics and performance reports here.</p>
   </section>
-    <!-- Department Settings -->
+
+  <!-- Settings -->
   <section id="settings" class="tab-content">
-   
     {% include "Department_settings.html" %}
   </section>
 
-  </main>
+</main>
 
-  <script src="{% static 'js/facultyDashboard.js' %}"></script>
-  <script src="{% static 'js/notification.js' %}"></script>
-  <script src="{% static 'js/userDropdown.js' %}"></script>
+<script src="{% static 'js/facultyDashboard.js' %}"></script>
+<script src="{% static 'js/notification.js' %}"></script>
+<script src="{% static 'js/userDropdown.js' %}"></script>
 </body>
-
 </html>

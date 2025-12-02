@@ -1,80 +1,79 @@
 {% load static %}
 <header>
-        <div class="logo">
-            <img src="{% static 'images/gradeFlow_logo.png' %}" class="logo-icon" />
-            <div class="h2andp">
-            <h2>GradeFlow</h2>
+    <div class="logo">
+        <img src="{% static 'images/gradeFlow_logo.png' %}" class="logo-icon" />
+        <div class="h2andp">
+            <h2>ClearTrack</h2>
             <p>Faculty Portal</p>
+        </div>
+    </div>
+    
+    <div style="display: flex; align-items: center; gap: 20px;">
+        <!-- Notifications -->
+        <div class="notif-wrapper" style="position: relative; cursor: pointer;">
+            <span id="notifBell" class="notif-bell">
+                <!-- Using Font Awesome bell instead of image -->
+                <img src="{% static 'images/bell.png' %}" alt="Notifications" style="width:26px; height:26px;">
+
+                {% if unread_count > 0 %}
+                    <span style="
+                        background:red; 
+                        color:white; 
+                        padding:2px 6px; 
+                        border-radius:50%; 
+                        font-size:12px;
+                        position:absolute;
+                        top:-5px;
+                        right:-5px;
+                        ">
+                        {{ unread_count }}
+                    </span>
+                {% endif %}
+            </span>
+
+            <!-- Dropdown -->
+            <div id="notifDropdown" class="notif-dropdown">
+                {% if notifications %}
+                    {% for n in notifications|slice:":8" %}
+                        <a href="{% url 'mark_notification_read' n.id %}" style="text-decoration:none; color:black;">
+                            <div class="notif-item {% if not n.is_read %}unread{% endif %}">
+                                <strong>{{ n.title }}</strong><br>
+                                <small>{{ n.message }}</small><br>
+                                <small style="color:gray;">
+                                    <i class="fa-regular fa-clock"></i> {{ n.created_at|timesince }} ago
+                                </small>
+                            </div>
+                        </a>
+                    {% endfor %}
+                {% else %}
+                    <div class="notif-item">
+                        <i class="fa-regular fa-circle-info"></i> No notifications yet.
+                    </div>
+                {% endif %}
             </div>
         </div>
-        
-      <div style="display: flex; align-items: center; gap: 20px;">
-        <div class="notif-wrapper" style="position: relative; cursor: pointer;">
 
-          <!-- CLICKABLE NOTIFICATION IMAGE -->
-          <span id="notifBell" class="notif-bell">
-            <img src="{% static 'images/bell.png' %}" 
-                alt="Notifications" 
-                style="width: 26px; height: 26px;">
-
-            {% if unread_count > 0 %}
-              <span style="
-                background:red; 
-                color:white; 
-                padding:2px 6px; 
-                border-radius:50%; 
-                font-size:12px;
-                position:absolute;
-                top:-5px;
-                right:-5px;
-                ">
-                {{ unread_count }}
-              </span>
-            {% endif %}
-          </span>
-          <!-- Dropdown -->
-          <div id="notifDropdown" class="notif-dropdown">
-              {% if notifications %}
-                  {% for n in notifications|slice:":8" %}
-                      <a href="{% url 'mark_notification_read' n.id %}" style="text-decoration:none; color:black;">
-                          <div class="notif-item {% if not n.is_read %}unread{% endif %}">
-                              <strong>{{ n.title }}</strong><br>
-                              <small>{{ n.message }}</small><br>
-                              <small style="color:gray;">{{ n.created_at|timesince }} ago</small>
-                          </div>
-                      </a>
-                  {% endfor %}
-              {% else %}
-                  <div class="notif-item">No notifications yet.</div>
-              {% endif %}
-          </div>
-        </div>
-
+        <!-- User Menu -->
         <div class="user-menu">
             <button class="user-circle" id="userBtn">
-            <h4>{{ faculty.first_name|slice:":1"|upper }}{{ faculty.last_name|slice:":1"|upper }}</h4>
+                <h4>{{ faculty.first_name|slice:":1"|upper }}{{ faculty.last_name|slice:":1"|upper }}</h4>
             </button>
 
             <div class="dropdown-menu" id="dropdownMenu">
                 <div class="user-info">
-                    <strong>{{ faculty.first_name }} {{ faculty.last_name }}</strong><br>
-                    <small>{{ faculty.email }}</small>
-                </div>
-                 <hr>
-                <div class="menuOptions">
-                 
-                  <a href={% url 'faculty_profile'%}>Profile Settings</a>
-                  <a href="#">Preferences</a>
-                  <a href="#">FAQ & Help</a>
-                  
+                    <strong>{{ faculty.first_name|capfirst }} {{ faculty.last_name|capfirst }}</strong><br>
+                    <small><i class="fa-solid fa-envelope"></i> {{ faculty.email }}</small>
                 </div>
                 <hr>
                 <div class="menuOptions">
-                  <a href="{% url 'faculty_logout'%}">Sign Out</a>
+                    <a href="{% url 'faculty_profile'%}"><i class="fa-solid fa-user-gear"></i> Profile Settings</a>
+                    <a href="{% url 'help_and_support'%}"><i class="fa-solid fa-circle-question"></i> FAQ & Help</a>
                 </div>
-                
-               
+                <hr>
+                <div class="menuOptions">
+                    <a href="{% url 'faculty_logout'%}"><i class="fa-solid fa-right-from-bracket"></i> Sign Out</a>
+                </div>
             </div>
         </div>
-      </div>
-    </header>
+    </div>
+</header>
