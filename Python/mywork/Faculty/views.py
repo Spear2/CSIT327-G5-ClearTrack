@@ -9,6 +9,7 @@ from django.utils import timezone
 from datetime import timedelta
 from django.conf import settings
 from functools import lru_cache
+from django.urls import reverse
 
 from studentDashboard.models import ClearanceDocument
 from student_signup_signin.models import Student
@@ -220,12 +221,16 @@ def faculty_security(request):
 
         if not check_password(current_password, faculty.password):
             messages.error(request, "Current password is incorrect.")
+            redirect('faculty_security')
         elif new_password != confirm_password:
             messages.error(request, "New password and confirmation do not match.")
+            redirect('faculty_security')
         else:
             faculty.password = make_password(new_password)
             faculty.save()
             messages.success(request, "Password updated successfully!")
+            redirect('faculty_security')
+    
 
     return render(request, "Faculty_Profile.html", {"faculty": faculty, "section": "security"})
 
@@ -283,19 +288,19 @@ def faculty_signin(request):
         # Empty field validation
         if not email or not password:
             messages.error(request, "Please fill in both email and password.")
-            return render(request, "FacultySignIn.html")
+            return redirect("faculty_signin")
 
         # Check if user exists
         try:
             faculty = Faculty.objects.get(email=email)
         except Faculty.DoesNotExist:
             messages.error(request, "Invalid email or password.")
-            return render(request, "FacultySignIn.html")
+            return redirect("faculty_signin")
 
         # Password check
         if not check_password(password, faculty.password):
             messages.error(request, "Invalid email or password.")
-            return render(request, "FacultySignIn.html")
+            return redirect("faculty_signin")
 
         # Session persistence (manually)
         request.session["faculty_id"] = faculty.id
@@ -315,13 +320,13 @@ def forgot_password(request):
 
         if not email:
             messages.error(request, "Please fill in email.");
-            return render(request, "ForgotPassword/FacultyForgotPassword.html")
+            return redirect("forgot_password")
         
         try:
             faculty = Faculty.objects.get(email=email)
         except Faculty.DoesNotExist:
             messages.error(request, "Email does not exist.")
-            return render(request, "ForgotPassword/FacultyForgotPassword.html")
+            return redirect("forgot_password")
 
         request.session["forgot_email"] = faculty.email
         return redirect("new_password")
@@ -363,24 +368,24 @@ def faculty_signup(request):
         # Field validation
         if not all([first_name, last_name, email, password, confirm_password, department]):
             messages.error(request, "All fields are required.")
-            return render(request, "FacultySignUp.html")
+            return redirect("faculty_signup")
 
         # Email format validation
         try:
             validate_email(email)
         except ValidationError:
             messages.error(request, "Enter a valid email address.")
-            return render(request, "FacultySignUp.html")
+            return redirect("faculty_signup")
 
         # Password confirmation
         if password != confirm_password:
             messages.error(request, "Passwords do not match.")
-            return render(request, "FacultySignUp.html")
+            return redirect("faculty_signup")
 
         # Duplicate check
         if Faculty.objects.filter(email=email).exists():
             messages.error(request, "This email is already registered.")
-            return render(request, "FacultySignUp.html")
+            return redirect("faculty_signup")
 
         # Create account
         Faculty.objects.create(
