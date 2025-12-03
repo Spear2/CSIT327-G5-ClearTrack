@@ -7,11 +7,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Faculty Sign Up</title>
   <link rel="stylesheet" href="{% static 'signin_signup.css' %}">
-  <script src="{% static 'signin_signup_js.js' %}"></script>
-  <script>
-    const visibleIcon = "{% static 'images/visible.png' %}";
-    const hiddenIcon = "{% static 'images/hidden.png' %}";
-  </script>
+  <link rel="stylesheet" href="{% static 'css/messages.css' %}">
+  
 </head>
 <body>
   <div class="back">
@@ -24,7 +21,7 @@
   <div class="gradeFlow">
     <img src="{% static 'images/gradeFlow_logo.png' %}" alt="Grade Flow Logo" />
     <div class="gradeFlow_faculty">
-      <h3>Grade Flow</h3>
+      <h3>ClearTrack</h3>
       <p>Faculty Portal</p>
     </div>
   </div>
@@ -94,9 +91,7 @@
         </div>
 
         <button type="submit" class="buttonSignUp">Create faculty Account</button>
-        {% for message in messages %}
-            <p style="color:red">{{ message }}</p>
-        {% endfor %}
+        {% include 'components/messages.html' %}
       </form>
 
       <div class="contact">
@@ -105,5 +100,10 @@
       </div>
     </div>
   </div>
+  <script src="{% static 'signin_signup_js.js' %}"></script>
+  <script>
+    const visibleIcon = "{% static 'images/visible.png' %}";
+    const hiddenIcon = "{% static 'images/hidden.png' %}";
+  </script>
 </body>
 </html>

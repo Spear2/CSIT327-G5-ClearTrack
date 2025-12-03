@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Faculty</title>
    <link rel="stylesheet" href="{% static 'faculty_dashboard.css' %}">
    <link rel="stylesheet" href="{% static 'css/header.css' %}">
    <link rel="stylesheet" href="{% static 'css/notifications.css' %}">
@@ -16,37 +16,37 @@
 
 <main class="container">
 
-    <h2><i class="fa-solid fa-scroll"></i> Faculty Dashboard</h2>
+    <h2><i class="fa-solid fa-scroll scroll-icon"></i> Faculty Dashboard</h2>
     <p class="subtitle">Review and manage student clearance submissions</p>
 
     <!-- Summary Cards -->
     <section class="summary">
-      <div class="card total" style="height: 60px;">
-        <p class="icons"><i class="fa-solid fa-file-lines"></i></p>
+      <div class="card total" style="height: 55px;">
+        <p class="icons"><i class="fa-solid fa-file-lines submissions-icon"></i></p>
         <div class="numberOf">
             <h3>{{ requests|length}}</h3>
             <p>Total Submissions</p>
         </div>
       </div>
 
-      <div class="card pending" style="height: 60px;">
-        <p class="icons"><i class="fa-solid fa-hourglass-half"></i></p>
+      <div class="card pending" style="height: 55px;">
+        <p class="icons"><i class="fa-solid fa-hourglass-half pending-icon"></i></p>
         <div class="numberOf">
             <h3>{{ count_Pending }}</h3>
             <p>Pending Review</p>
         </div>
       </div>
 
-      <div class="card approved" style="height: 60px;">
-        <p class="icons"><i class="fa-solid fa-circle-check"></i></p>
+      <div class="card approved" style="height: 55px;">
+        <p class="icons"><i class="fa-solid fa-circle-check approved-icon"></i></p>
         <div class="numberOf">
             <h3>{{ count_Approved }}</h3>
             <p>Approved</p>
         </div>
       </div>
 
-      <div class="card rejected" style="height: 60px;">
-        <p class="icons"><i class="fa-solid fa-circle-xmark"></i></p>
+      <div class="card rejected" style="height: 55px;">
+        <p class="icons"><i class="fa-solid fa-circle-xmark rejected-icon"></i></p>
         <div class="numberOf">
             <h3>{{ count_Reject }}</h3>
             <p>Rejected</p>
@@ -100,7 +100,7 @@
 
     <!-- Student Submissions Section -->
     <section class="submissions">
-      <h3><i class="fa-solid fa-book"></i> Student Submissions</h3>
+      <h3><i class="fa-solid fa-book book-icon"></i> Student Submissions</h3>
       <p>Review and approve student clearance submissions.</p>
 
       {% if requests %}

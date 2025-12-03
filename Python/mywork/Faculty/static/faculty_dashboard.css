@@ -1,6 +1,6 @@
 body {
   font-family: 'Segoe UI', sans-serif;
-  /* background: #f5f3ff; */
+  background: #f5f3ff;
   margin: 0;
   padding: 0;
 }
@@ -36,7 +36,16 @@ body {
 }
 
 .icons{
+    padding: 10px;
+    border-radius: 50%;
+    background: #f5f0ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-size: 25px;
+    
+    min-width: 36px;
+    min-height: 36px;
 }
 
 .numberOf{
@@ -506,3 +515,28 @@ body {
   background-color: #0056b3;
 }
 
+
+.submissions-icon {
+    color: #2d31fa;
+}
+
+/* Example: Pending Review icon with an orange/yellow */
+.pending-icon {
+    color: #f5a623; /* or a warm color matching your palette */
+}
+
+/* Example: Approved icon with green */
+.approved-icon {
+    color: #28a745; /* green */
+}
+.rejected-icon {
+    color: #dc3545;
+}
+
+.book-icon {
+    color: #1f238a; /* purple */
+}
+
+.scroll-icon {
+    color: #17a2b8; /* teal */
+}

@@ -9,38 +9,38 @@
       <div class="left-column">
         <div class="form-group">
           <label for="deptName"><i class="fa-solid fa-building"></i> Department Name</label>
-          <input type="text" id="deptName" name="dept_name" value="{{faculty.department|capfirst}} Department" required>
+          <input type="text" id="deptName" name="dept_name" value="{{faculty.department|capfirst}} Department" required readonly>
         </div>
 
         <div class="form-group">
           <label for="email"><i class="fa-solid fa-envelope"></i> Contact Email</label>
-          <input type="email" id="email" name="dept_email" value="{{faculty.email}}" required>
+          <input type="email" id="email" name="dept_email" value="{{faculty.email}}" required readonly>
         </div>
 
         <div class="form-group">
           <label for="phone"><i class="fa-solid fa-phone"></i> Phone Number</label>
-          <input type="text" id="phone" name="dept_phone" value="+1 (555) 123-4567" required>
+          <input type="text" id="phone" name="dept_phone" value="+1 (555) 123-4567" required readonly>
         </div>
       </div>
 
       <div class="right-column">
         <div class="form-group">
           <label for="officeHours"><i class="fa-regular fa-clock"></i> Office Hours</label>
-          <textarea id="officeHours" name="office_hours" rows="3">Monday - Friday: 8:00 AM - 5:00 PM
+          <textarea id="officeHours" name="office_hours" rows="3" readonly>Monday - Friday: 8:00 AM - 5:00 PM
 Saturday: 9:00 AM - 1:00 PM
 Sunday: Closed</textarea>
         </div>
 
         <div class="form-group">
           <label for="instructions"><i class="fa-solid fa-sticky-note"></i> Special Instructions</label>
-          <textarea id="instructions" name="special_instructions" rows="3">Add any special instructions for students...</textarea>
+          <textarea id="instructions" name="special_instructions" rows="3" readonly>Add any special instructions for students...</textarea>
         </div>
       </div>
     </div>
 
     <hr class="divider">
 
-      <button type="submit" class="save-btn"><i class="fa-solid fa-floppy-disk"></i> Save Settings</button>
+      <button type="submit" class="save-btn" disabled><i class="fa-solid fa-floppy-disk" ></i> Save Settings</button>
     </div>
   </form>
 </div>

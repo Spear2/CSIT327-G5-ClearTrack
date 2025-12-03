@@ -3,17 +3,18 @@
         <div class="settings-sidebar">
             <h3><i class="fa-solid fa-bars"></i> Settings Menu</h3>
             <ul>
-                <li class="active" onclick="showSection('profile-section')">
+                <li class="active" onclick="showSection('profile-section', this)">
                     <i class="fa-solid fa-id-card"></i> Profile Information
                 </li>
 
-                <li onclick="showSection('preferences-section')">
+                <li onclick="showSection('preferences-section', this)">
                     <i class="fa-solid fa-sliders"></i> Preferences & Settings
                 </li>
 
-                <li onclick="showSection('security-section')">
+                <li onclick="showSection('security-section', this)">
                     <i class="fa-solid fa-lock"></i> Security
                 </li>
+
 
                 <li>
                   <a href="{% url 'homepage' %}" style="text-decoration: none; color: inherit;">
