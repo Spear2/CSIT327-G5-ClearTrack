@@ -1,0 +1,21 @@
+<!-- Analytics Section -->
+{% load static %}
+<div class="department-settings-card">
+    <h3><i class="fa-solid fa-chart-column"></i> Analytics</h3>
+    <p class="tagline">View weekly submission statistics.</p>
+
+    <div class="analytics-grid">
+
+        <!-- Submission Trends -->
+        <div class="analytics-card">
+            <h3>Submission Trends</h3>
+            <p class="subtext">Weekly submission statistics</p>
+            {% if chart_data_json %}
+                <canvas id="submissionTrendsChart"></canvas>
+            {% else %}
+                <div class="placeholder">No data available</div>
+            {% endif %}
+        </div>
+
+    </div>
+</div>

@@ -3,19 +3,18 @@ from django.contrib import messages
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 from django.contrib.auth.hashers import make_password, check_password
-from django.db.models import Q, Case, When, Value, IntegerField, Count
+from django.db.models import Q, Case, When, Value, IntegerField, Count, Avg, ExpressionWrapper, OuterRef, Subquery, F, DurationField
 from django.http import HttpResponse
 from django.utils import timezone
 from datetime import timedelta
 from django.conf import settings
 from functools import lru_cache
-from django.urls import reverse
-
+from django.core.serializers.json import DjangoJSONEncoder
+import json
 from studentDashboard.models import ClearanceDocument
-from student_signup_signin.models import Student
-from UserManagement.models import Notification
 from Faculty.models import Faculty, Comment, DepartmentSettings
 from utils.notifications import notify_student  # convert this to Celery async if needed
+from UserManagement.models import Notification
 
 from supabase import create_client
 import os
@@ -82,13 +81,17 @@ def update_status(request, document_id):
     return redirect('homepage')
 
 
-def get_clearance_counts():
-
-    return ClearanceDocument.objects.aggregate(
+def get_clearance_counts(department_name):
+    qs = ClearanceDocument.objects.all()
+    
+    if department_name:
+        qs = qs.filter(department_name=department_name)
+    return qs.aggregate(
         pending=Count('id', filter=Q(status='Pending')),
         approved=Count('id', filter=Q(status='Approved')),
         rejected=Count('id', filter=Q(status='Rejected')),
     )
+
 
 
 def filter_clearance_requests(qs, status, department, query, date_filter):
@@ -99,8 +102,6 @@ def filter_clearance_requests(qs, status, department, query, date_filter):
     if status != "All":
         filters &= Q(status=status)
 
-    if department != "All_Department":
-        filters &= Q(department_name=department)
 
     if query:
         filters &= (
@@ -167,9 +168,11 @@ def homepage(request):
     faculty, initials, faculty_department = get_faculty_info(request)
 
     status = request.GET.get('status', 'All')
-    department = request.GET.get('department', 'All_Department')
+    department_name = faculty.department  
+
     search = request.GET.get('search', '')
     date_filter = request.GET.get('date_filter', 'All_Time')
+    last_7_days = [(timezone.now() - timedelta(days=i)).date() for i in range(6, -1, -1)]
 
     # OPTIMIZED: fetch only fields used and join student efficiently
     qs = ClearanceDocument.objects.select_related("student").only(
@@ -177,10 +180,28 @@ def homepage(request):
         "student__first_name", "student__last_name", "student__student_id"
     )
 
-    qs = filter_clearance_requests(qs, status, department, search, date_filter)
+    daily_counts = []
+    for day in last_7_days:
+        count = ClearanceDocument.objects.filter(
+            department_name=department_name,
+            time_submitted__date=day
+        ).count()
+        daily_counts.append(count)
+
+    # ✔ Faculty can only see their department's submissions
+    qs = qs.filter(department_name=faculty.department)
+
+    # ✔ Now apply other filters (status, search, date)
+    qs = filter_clearance_requests(qs, status, None, search, date_filter)
+
     qs = annotate_and_order_requests(qs)
 
-    counts = get_clearance_counts()
+    counts = get_clearance_counts(department_name)
+
+    chart_data = {
+        "submission_labels": [day.strftime("%a") for day in last_7_days],  # Mon, Tue, ...
+        "submission_values": daily_counts
+    }
 
     context = {
         "faculty": faculty,
@@ -188,13 +209,13 @@ def homepage(request):
         "requests": qs,
         "faculty_department": faculty_department,
         "selected_status": status,
-        "selected_department": department,
         "selected_date": date_filter,
         "count_Approved": counts["approved"],
         "count_Reject": counts["rejected"],
         "count_Pending": counts["pending"],
         "SUPABASE_URL": settings.SUPABASE_URL,
         "SUPABASE_BUCKET": settings.SUPABASE_BUCKET,
+        "chart_data_json": json.dumps(chart_data, cls=DjangoJSONEncoder),
     }
 
     return render(request, "Hompage.html", context)
@@ -221,15 +242,14 @@ def faculty_security(request):
 
         if not check_password(current_password, faculty.password):
             messages.error(request, "Current password is incorrect.")
-            redirect('faculty_security')
         elif new_password != confirm_password:
             messages.error(request, "New password and confirmation do not match.")
-            redirect('faculty_security')
+   
         else:
             faculty.password = make_password(new_password)
             faculty.save()
             messages.success(request, "Password updated successfully!")
-            redirect('faculty_security')
+           
     
 
     return render(request, "Faculty_Profile.html", {"faculty": faculty, "section": "security"})

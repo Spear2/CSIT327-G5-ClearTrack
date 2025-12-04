@@ -9,123 +9,121 @@
    <link rel="stylesheet" href="{% static 'css/header.css' %}">
    <link rel="stylesheet" href="{% static 'css/notifications.css' %}">
    <link rel="stylesheet" href="{% static 'fontawesome/css/all.min.css' %}">
+   
+   <link rel="stylesheet" href="{% static 'css/analytics.css' %}">
 </head>
-<body>
+  <body>
 
-{% include 'components/header.html' %}
+  {% include 'components/header.html' %}
 
-<main class="container">
+  <main class="container">
 
-    <h2><i class="fa-solid fa-scroll scroll-icon"></i> Faculty Dashboard</h2>
-    <p class="subtitle">Review and manage student clearance submissions</p>
+      <h2><i class="fa-solid fa-scroll scroll-icon"></i> Faculty Dashboard</h2>
+      <p class="subtitle">Review and manage student clearance submissions</p>
 
-    <!-- Summary Cards -->
-    <section class="summary">
-      <div class="card total" style="height: 55px;">
-        <p class="icons"><i class="fa-solid fa-file-lines submissions-icon"></i></p>
-        <div class="numberOf">
-            <h3>{{ requests|length}}</h3>
-            <p>Total Submissions</p>
+      <!-- Summary Cards -->
+      <section class="summary">
+        <div class="card total" style="height: 55px;">
+          <p class="icons"><i class="fa-solid fa-file-lines submissions-icon"></i></p>
+          <div class="numberOf">
+              <h3>{{ requests|length}}</h3>
+              <p>Total Submissions</p>
+          </div>
         </div>
+
+        <div class="card pending" style="height: 55px;">
+          <p class="icons"><i class="fa-solid fa-hourglass-half pending-icon"></i></p>
+          <div class="numberOf">
+              <h3>{{ count_Pending }}</h3>
+              <p>Pending Review</p>
+          </div>
+        </div>
+
+        <div class="card approved" style="height: 55px;">
+          <p class="icons"><i class="fa-solid fa-circle-check approved-icon"></i></p>
+          <div class="numberOf">
+              <h3>{{ count_Approved }}</h3>
+              <p>Approved</p>
+          </div>
+        </div>
+
+        <div class="card rejected" style="height: 55px;">
+          <p class="icons"><i class="fa-solid fa-circle-xmark rejected-icon"></i></p>
+          <div class="numberOf">
+              <h3>{{ count_Reject }}</h3>
+              <p>Rejected</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <button class="tab-btn active" onclick="showTab('submissions')">Student Submissions</button>
+        <button class="tab-btn" onclick="showTab('analytics')">Analytics</button>
+        <button class="tab-btn" onclick="showTab('settings')">Department Settings</button>
+
       </div>
 
-      <div class="card pending" style="height: 55px;">
-        <p class="icons"><i class="fa-solid fa-hourglass-half pending-icon"></i></p>
-        <div class="numberOf">
-            <h3>{{ count_Pending }}</h3>
-            <p>Pending Review</p>
-        </div>
-      </div>
+    <!-- TAB CONTENT -->
 
-      <div class="card approved" style="height: 55px;">
-        <p class="icons"><i class="fa-solid fa-circle-check approved-icon"></i></p>
-        <div class="numberOf">
-            <h3>{{ count_Approved }}</h3>
-            <p>Approved</p>
-        </div>
-      </div>
+    <div id="submissions" class="tab-content active">
 
-      <div class="card rejected" style="height: 55px;">
-        <p class="icons"><i class="fa-solid fa-circle-xmark rejected-icon"></i></p>
-        <div class="numberOf">
-            <h3>{{ count_Reject }}</h3>
-            <p>Rejected</p>
-        </div>
-      </div>
-    </section>
+      <!-- Filter Section -->
+      <section class="filters">
+        <h3><i class="fa-solid fa-magnifying-glass"></i> Filter Submissions</h3>
 
-    <!-- Tabs -->
-    <div class="tabs">
-      <button class="tab-btn active" onclick="showTab('submissions')">Student Submissions</button>
-      <button class="tab-btn" onclick="showTab('analytics')">Analytics</button>
-      <button class="tab-btn" onclick="showTab('settings')">Department Settings</button>
+        <form method="get" id="filterForm">
+          <div class="filter-grid">
+            <input type="text" name="search" placeholder="Search by name or ID...">
+
+            <select name="status" onchange="document.getElementById('filterForm').submit();">
+              <option value="All" {% if selected_status == 'All' %}selected{% endif %}>All statuses</option>
+              <option value="Pending" {% if selected_status == 'Pending' %}selected{% endif %}>Pending</option>
+              <option value="Approved" {% if selected_status == 'Approved' %}selected{% endif %}>Approved</option>
+              <option value="Rejected" {% if selected_status == 'Rejected' %}selected{% endif %}>Rejected</option>
+            </select>
+
+            <select name="date_filter" onchange="document.getElementById('filterForm').submit();">
+              <option value="All_Time" {% if selected_date == 'All_Time' %}selected{% endif %}>All Time</option>
+              <option value="Last_7_Days" {% if selected_date == 'Last_7_Days' %}selected{% endif %}>Last 7 Days</option>
+              <option value="Last_30_Days" {% if selected_date == 'Last_30_Days' %}selected{% endif %}>Last 30 Days</option>
+              <option value="This_Semester" {% if selected_date == 'This_Semester' %}selected{% endif %}>This Semester</option>
+            </select>
+          </div>
+        </form>
+      </section>
+
+      <!-- Student Submissions Section -->
+      <section class="submissions">
+        <h3><i class="fa-solid fa-book book-icon"></i> Student Submissions</h3>
+        <p>Review and approve student clearance submissions.</p>
+
+        {% if requests %}
+          {% include "StudentSubmissions/Student_Submission.html" %}
+        {% else %}
+          <p class="no-submissions">No student submissions yet.</p>
+        {% endif %}
+      </section>
     </div>
 
-  <!-- TAB CONTENT -->
-
-  <div id="submissions" class="tab-content active">
-
-    <!-- Filter Section -->
-    <section class="filters">
-      <h3><i class="fa-solid fa-magnifying-glass"></i> Filter Submissions</h3>
-
-      <form method="get" id="filterForm">
-        <div class="filter-grid">
-          <input type="text" name="search" placeholder="Search by name or ID...">
-
-          <select name="status" onchange="document.getElementById('filterForm').submit();">
-            <option value="All" {% if selected_status == 'All' %}selected{% endif %}>All statuses</option>
-            <option value="Pending" {% if selected_status == 'Pending' %}selected{% endif %}>Pending</option>
-            <option value="Approved" {% if selected_status == 'Approved' %}selected{% endif %}>Approved</option>
-            <option value="Rejected" {% if selected_status == 'Rejected' %}selected{% endif %}>Rejected</option>
-          </select>
-
-          <select name="department" onchange="document.getElementById('filterForm').submit();">
-            <option value='All_Department' {% if selected_department == 'All_Department'%}selected {%endif%}>All Departments</option>
-            <option value='Library' {% if selected_department == 'Library'%}selected {%endif%}>Library</option>
-            <option value='Registrar' {% if selected_department == 'Registrar'%}selected {%endif%}>Registrar</option>
-            <option value='Accounting' {% if selected_department == 'Accounting'%}selected {%endif%}>Accounting</option>
-            <option value='Academic Adviser' {% if selected_department == 'Academic Adviser'%}selected {%endif%}>Academic Adviser</option>
-          </select>
-
-          <select name="date_filter" onchange="document.getElementById('filterForm').submit();">
-            <option value="All_Time" {% if selected_date == 'All_Time' %}selected{% endif %}>All Time</option>
-            <option value="Last_7_Days" {% if selected_date == 'Last_7_Days' %}selected{% endif %}>Last 7 Days</option>
-            <option value="Last_30_Days" {% if selected_date == 'Last_30_Days' %}selected{% endif %}>Last 30 Days</option>
-            <option value="This_Semester" {% if selected_date == 'This_Semester' %}selected{% endif %}>This Semester</option>
-          </select>
-        </div>
-      </form>
+    <!-- Analytics -->
+    <section id="analytics" class="tab-content">
+      {% include "components/analytics.html" %}
     </section>
 
-    <!-- Student Submissions Section -->
-    <section class="submissions">
-      <h3><i class="fa-solid fa-book book-icon"></i> Student Submissions</h3>
-      <p>Review and approve student clearance submissions.</p>
-
-      {% if requests %}
-        {% include "StudentSubmissions/Student_Submission.html" %}
-      {% else %}
-        <p class="no-submissions">No student submissions yet.</p>
-      {% endif %}
+    <!-- Settings -->
+    <section id="settings" class="tab-content">
+      {% include "Department_settings.html" %}
     </section>
-  </div>
 
-  <!-- Analytics -->
-  <section id="analytics" class="tab-content">
-    <h3><i class="fa-solid fa-chart-column"></i> Analytics</h3>
-    <p>View statistics and performance reports here.</p>
-  </section>
-
-  <!-- Settings -->
-  <section id="settings" class="tab-content">
-    {% include "Department_settings.html" %}
-  </section>
-
-</main>
-
-<script src="{% static 'js/facultyDashboard.js' %}"></script>
-<script src="{% static 'js/notification.js' %}"></script>
-<script src="{% static 'js/userDropdown.js' %}"></script>
-</body>
+  </main>
+  <script id="chart-data-json" type="application/json">
+      {{ chart_data_json|safe }}
+  </script>
+  <script src="{% static 'js/facultyDashboard.js' %}"></script>
+  <script src="{% static 'js/notification.js' %}"></script>
+  <script src="{% static 'js/userDropdown.js' %}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="{% static 'js/analytics.js' %}"></script>
+  </body>
 </html>
