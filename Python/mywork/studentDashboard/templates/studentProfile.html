@@ -154,7 +154,7 @@
     </header>
 
     <main class="container">
-      <h2>Welcome back, {{ student.first_name }}! 👋</h2>
+      <h2 style="color: black;">Welcome back, {{ student.first_name }}! 👋</h2>
       <p class="subtitle">
         Track your clearance progress and manage your submissions
       </p>
@@ -216,79 +216,91 @@
 
       <form method="post" class="profile-section">
         {% csrf_token %}
-        <!-- Personal Info Card -->
         <div class="profile-card">
-          <h3>
-            <img
-              src="{% static 'images/profile.png' %}"
-              alt="Profile Icon"
-              class="profile-icon"
-            />
-            Personal Information
-          </h3>
+          <!-- Personal Info Section -->
+          <div class="profile-form-section">
+            <h3>
+              <img
+                src="{% static 'images/profile.png' %}"
+                alt="Profile Icon"
+                class="profile-icon"
+                style="width: 30px"
+              />
+              Personal Information
+            </h3>
 
-          <label>Full Name</label>
-          <input
-            type="text"
-            value="{{ student.first_name }} {{ student.last_name }}"
-            readonly
-            name="full_name"
-          />
+            <div class="form-row">
+              <div>
+                <label>Full Name</label>
+                <input
+                  type="text"
+                  value="{{ student.first_name }} {{ student.last_name }}"
+                  readonly
+                  name="full_name"
+                />
+              </div>
+              <div>
+                <label>Student ID</label>
+                <input
+                  type="text"
+                  value="{{ student.student_id }}"
+                  readonly
+                  name="student_id"
+                />
+              </div>
+            </div>
 
-          <label>Student ID</label>
-          <input
-            type="text"
-            value="{{ student.student_id }}"
-            readonly
-            name="student_id"
-          />
+            <div class="form-row full">
+              <div>
+                <label>Email Address</label>
+                <input
+                  type="email"
+                  value="{{ student.email_address }}"
+                  readonly
+                  name="email"
+                />
+              </div>
+            </div>
+          </div>
 
-          <label>Email Address</label>
-          <input
-            type="email"
-            value="{{ student.email_address }}"
-            readonly
-            name="email"
-          />
+          <!-- Contact Info Section -->
+          <div class="profile-form-section">
+            <h3>
+              <img
+                src="{% static 'images/email.png' %}"
+                alt="Email Icon"
+                class="profile-icon"
+                style="width: 30px"
+              />
+              Contact Information
+            </h3>
 
-          <label>Program</label>
-          <input
-            type="text"
-            value="{{ student.program|default:'Bachelor of Science in Computer Science' }}"
-            readonly
-            name="program"
-          />
-        </div>
+            <div class="form-row">
+              <div>
+                <label>Phone Number</label>
+                <input
+                  type="text"
+                  value="{{ student.phone_number|default:'' }}"
+                  name="phone_number"
+                />
+              </div>
+              <div>
+                <label>Emergency Contact</label>
+                <input
+                  type="text"
+                  value="{{ student.emergency_contact|default:'' }}"
+                  name="emergency_contact"
+                />
+              </div>
+            </div>
 
-        <!-- Contact Info Card -->
-        <div class="profile-card">
-          <h3>
-            <img
-              src="{% static 'images/email.png' %}"
-              alt="Email Icon"
-              class="profile-icon"
-            />
-            Contact Information
-          </h3>
-
-          <label>Phone Number</label>
-          <input
-            type="text"
-            value="{{ student.phone_number|default:'' }}"
-            name="phone_number"
-          />
-
-          <label>Address</label>
-          <textarea rows="2" name="address">
-{{ student.address|default:'' }}</textarea
-          >
-
-          <label>Emergency Contact</label>
-          <input
-            type="text"
-            value="{{ student.emergency_contact|default:'' }}"
-            name="emergency_contact"
-          />
+            <div class="form-row full">
+              <div>
+                <label>Address</label>
+                <textarea rows="3" name="address">{{ student.address|default:'' }}</textarea>
+              </div>
+            </div>
+          </div>
 
           <button type="submit" class="update-btn">Save Changes</button>
         </div>
