@@ -4,11 +4,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>{% if is_resubmit %}Resubmit Clearance{% else %}Submit Clearance{% endif %} - GradeFlow</title>
+<title>{% if is_resubmit %}Resubmit Clearance{% else %}Submit Clearance{% endif %} - ClearTrack</title>
 <link rel="stylesheet" href="{% static 'clearanceRequest.css' %}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <script src="{% static 'dropdownHomePage.js' %}"></script>
 <script src="https://unpkg.com/feather-icons"></script>
+<link rel="stylesheet" href="{% static 'darkmode.css' %}">
+    <script src="{% static 'theme.js' %}"></script>
 </head>
 <body>
 
@@ -17,7 +19,7 @@
     <div class="logo">
         <img src="{% static 'images/gradeFlow_logo.png' %}" class="logo-icon" />
         <div class="h2andp">
-            <h2>GradeFlow</h2>
+            <h2>ClearTrack</h2>
             <p>Student Portal</p>
         </div>
     </div>
@@ -73,7 +75,7 @@
     </div>
 
 </header>
-
+<div class="page-container">
 <main class="container">
 
   <h2>Welcome back, {{ student.first_name }}! 👋</h2>
@@ -126,7 +128,7 @@
 <section class="main-content">
   <div class="card submission-card">
     <div class="card-header">
-      <h1>📤 {% if is_resubmit %}Resubmit Clearance Document{% else %}Submit Clearance Documents{% endif %}</h1>
+      <h3>{% if is_resubmit %}Resubmit Clearance Document{% else %}Submit Clearance Documents{% endif %}</h3>
       <p class="subtitle">Upload your clearance documents to the appropriate department</p>
     </div>
 
@@ -187,6 +189,7 @@
     </form>
   </div>
   </section>
+</div>
 </main>
 <script>
   // Feather icons

@@ -4,12 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GradeFlow – Profile Settings</title>
+    <title>ClearTrack – Profile Settings</title>
     <!-- Main CSS -->
     <link rel="stylesheet" href="{% static 'studentProfileSettings.css' %}">
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <script src="{% static 'dropdownHomePage.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'darkmode.css' %}">
+    <script src="{% static 'theme.js' %}"></script>
 </head>
 <body>
 <!-- HEADER -->
@@ -17,7 +19,7 @@
     <div class="logo">
         <img src="{% static 'images/gradeFlow_logo.png' %}" class="logo-icon" alt="GradeFlow" />
         <div class="h2andp">
-            <h2>GradeFlow</h2>
+            <h2>ClearTrack</h2>
             <p>Student Portal</p>
         </div>
     </div>
@@ -123,10 +125,10 @@
 
             <div class="form-group">
                 <label><i class="fa-solid fa-palette"></i> Theme</label>
-                <select>
-                    <option>Light Mode</option>
-                    <option>Dark Mode</option>
-                    <option>System Default</option>
+                <select id="theme-selector">
+                    <option value="light">Light Mode</option>
+                    <option value="dark">Dark Mode</option>
+                    <option value="system">System Default</option>
                 </select>
             </div>
             <div class="form-group">
@@ -201,6 +203,53 @@
 </main>
 
 <script>
+    // Dropdown
+  const userBtn = document.getElementById('userBtn');
+  const dropdownMenu = document.getElementById('dropdownMenu');
+  userBtn.addEventListener('click', () => dropdownMenu.classList.toggle('active'));
+  window.addEventListener('click', (e) => {
+    if (!userBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
+      dropdownMenu.classList.remove('active');
+    }
+  });
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const body = document.body;
+    const selector = document.getElementById("theme-selector");
+
+    // Apply theme from localStorage or default to light
+    let theme = localStorage.getItem("theme") || "light";
+
+    const applyTheme = (theme) => {
+        if (theme === "dark") body.classList.add("dark-mode");
+        else body.classList.remove("dark-mode");
+
+        // Optional: set dropdown to match
+        if (selector) selector.value = theme;
+    };
+
+    // System preference handling
+    if (theme === "system") {
+        theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+
+    applyTheme(theme);
+
+    // Change theme dynamically
+    if (selector) {
+        selector.addEventListener("change", (e) => {
+            const selectedTheme = e.target.value;
+            localStorage.setItem("theme", selectedTheme);
+            if (selectedTheme === "system") {
+                const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+                applyTheme(systemTheme);
+            } else {
+                applyTheme(selectedTheme);
+            }
+        });
+    }
+});
+
 function showSection(sectionId) {
     document.querySelectorAll(".settings-card.main-settings-card").forEach(el => el.classList.add("hidden"));
     document.getElementById(sectionId).classList.remove("hidden");

@@ -4,11 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GradeFlow - Submission History</title>
+    <title>ClearTrack - Submission History</title>
     <link rel="stylesheet" href="{% static 'submissionHistory.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <script src="{% static 'dropdownHomePage.js' %}"></script>
     <script src="https://unpkg.com/feather-icons"></script>
+    <link rel="stylesheet" href="{% static 'darkmode.css' %}">
+    <script src="{% static 'theme.js' %}"></script>
     
     <style>
         .notif-wrapper {
@@ -81,7 +83,7 @@
     <div class="logo">
         <img src="{% static 'images/gradeFlow_logo.png' %}" class="logo-icon" />
         <div class="h2andp">
-            <h2>GradeFlow</h2>
+            <h2>ClearTrack</h2>
             <p>Student Portal</p>
         </div>
     </div>
@@ -137,7 +139,7 @@
     </div>
 
 </header>
-
+<div class="page-container">
 <main class="container">
     <h2>Welcome back, {{ student.first_name }}! 👋</h2>
     <p class="subtitle">Track your clearance progress and manage your submissions</p>
@@ -210,8 +212,19 @@
             <p>No submissions yet.</p>
         {% endif %}
     </section>
+</div>
 </main>
 <script>
+    // Dropdown
+  const userBtn = document.getElementById('userBtn');
+  const dropdownMenu = document.getElementById('dropdownMenu');
+  userBtn.addEventListener('click', () => dropdownMenu.classList.toggle('active'));
+  window.addEventListener('click', (e) => {
+    if (!userBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
+      dropdownMenu.classList.remove('active');
+    }
+  });
+
     document.addEventListener('DOMContentLoaded', () => { feather.replace(); });
     document.getElementById("notifBell").onclick = function() {
     let dropdown = document.getElementById("notifDropdown");

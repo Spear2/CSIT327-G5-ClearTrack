@@ -4,10 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GradeFlow - Student Portal</title>
+    <title>ClearTrack - Student Portal</title>
     <link rel="stylesheet" href="{% static 'studentHelp&Support.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <script src="{% static 'dropdownHomePage.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'darkmode.css' %}">
+    <script src="{% static 'theme.js' %}"></script>
 </head>
 <body>
 
@@ -15,7 +17,7 @@
     <div class="logo">
         <img src="{% static 'images/gradeFlow_logo.png' %}" class="logo-icon" />
         <div class="h2andp">
-            <h2>GradeFlow</h2>
+            <h2>ClearTrack</h2>
             <p>Student Portal</p>
         </div>
     </div>
@@ -46,7 +48,7 @@
     <!--<section class="card-help&support">
     <div class="card submission-card">/*-->
     <main class="container">
-    <h2>💡 Help & Support</h2>
+    <h2>Help & Support</h2>
     <p class="subtitle">Need assistance? Follow the steps below or reach out to our support team.</p>
     <div class="help-layout">
 
@@ -157,6 +159,16 @@
 </main>
 
 <script>
+    // Dropdown
+  const userBtn = document.getElementById('userBtn');
+  const dropdownMenu = document.getElementById('dropdownMenu');
+  userBtn.addEventListener('click', () => dropdownMenu.classList.toggle('active'));
+  window.addEventListener('click', (e) => {
+    if (!userBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
+      dropdownMenu.classList.remove('active');
+    }
+  });
+
 function showHelpSection(sectionId) {
     document.querySelectorAll(".help-card").forEach(el => el.classList.add("hidden"));
     document.getElementById(sectionId).classList.remove("hidden");
