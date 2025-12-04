@@ -128,7 +128,7 @@
     </p>
 
     {% for dept, clearance in clearances_by_dept.items %}
-        <div class="section-item">
+        <div class="section-item {% if clearance %}status-{% if clearance.status == "Approved" %}approved{% elif clearance.status == "In Progress" %}in-progress{% elif clearance.status == "Pending" %}pending{% elif clearance.status == "Rejected" %}rejected{% endif %}{% endif %}">
             <div class="timestamp">
                 {% if clearance and clearance.time_submitted %}
                     {{ clearance.time_submitted|timesince }} ago
@@ -136,25 +136,39 @@
             </div>
 
             <div class="section-header">
-                <div style="display: flex; align-items: center; gap: 10px;">
+                <div>
                     <div class="icon-box">
                         {% if clearance %}
                             {% if clearance.status == "Approved" %}
-                                <i data-feather="check-circle" stroke="#4caf50"></i>
+                                <i data-feather="check-circle" stroke="#10b981"></i>
                             {% elif clearance.status == "In Progress" %}
-                                <i data-feather="refresh-cw" stroke="#ffca28" class="spin"></i>
+                                <i data-feather="refresh-cw" stroke="#3b82f6" class="spin"></i>
                             {% elif clearance.status == "Pending" %}
-                                <i data-feather="alert-circle" stroke="#f97316"></i>
+                                <i data-feather="alert-circle" stroke="#f59e0b"></i>
                             {% elif clearance.status == "Rejected" %}
-                                <i data-feather="x-circle" stroke="#f44336"></i>
+                                <i data-feather="x-circle" stroke="#ef4444"></i>
                             {% endif %}
                         {% else %}
-                            <i data-feather="alert-circle" stroke="#d1d1d1"></i>
+                            <i data-feather="alert-circle" stroke="#d1d5db"></i>
                         {% endif %}
                     </div>
                     <b>{{ dept }}</b>
                 </div>
 
+                <!-- Status Pill -->
+                {% if clearance %}
+                    {% if clearance.status == "Approved" %}
+                        <span class="status-pill approved">✓ Approved</span>
+                    {% elif clearance.status == "In Progress" %}
+                        <span class="status-pill inprogress">↻ In Progress</span>
+                    {% elif clearance.status == "Pending" %}
+                        <span class="status-pill pending">⚠ Pending</span>
+                    {% elif clearance.status == "Rejected" %}
+                        <span class="status-pill rejected">✕ Rejected</span>
+                    {% endif %}
+                {% else %}
+                    <span class="status-pill not-submitted">○ Not Submitted</span>
+                {% endif %}
             </div>
 
             {% if clearance %}
@@ -167,7 +181,19 @@
                         {{ clearance.additional_notes }}
                     </div>
                 {% endif %}
-
+                {% if clearance.comments.all %}
+                    <div class="descr">
+                        <strong class="text-gray-700">Deparment Comments:</strong>
+                    </div>
+                     
+                            {% for comment in clearance.comments.all %}
+                                <div class="comment-box">
+                                    {{ comment.content }}
+                                </div>
+ 
+                            {% endfor %}
+                   
+                {% endif %}
                 {% if clearance.status == "Rejected" %}
                     <div class="resubmit-container">
                         <button onclick="window.location.href='{% url 'resubmit_clearance' clearance.id%}'" class="resubmit-btn">Resubmit</button>
