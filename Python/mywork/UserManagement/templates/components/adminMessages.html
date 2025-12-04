@@ -1,0 +1,20 @@
+{% if messages %}
+    <div class="messages-container" id="flash-messages">
+        {% for message in messages %}
+            <div class="alert {{ message.tags }}">
+                <span class="alert-icon">
+                {% if message.tags == "success" %}
+                    ✔
+                    {% elif message.tags == "error" %}
+                        ✖
+                    {% elif message.tags == "warning" %}
+                        ⚠
+                    {% else %}
+                        ℹ
+                    {% endif %}
+                </span>
+                <span class="alert-text">{{ message }}</span>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
