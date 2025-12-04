@@ -5,6 +5,66 @@
 <head>
     <title>Admin Login</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css">
+
+    <style>
+        .messages-container {
+            margin-bottom: 10px;
+        }
+
+        .alert {
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            animation: fadeSlideIn 0.3s ease-out;
+        }
+
+        .alert-icon {
+            font-size: 17px;
+        }
+
+        .alert-text {
+            flex: 1;
+        }
+
+        .alert.success {
+            background: #e7f9ee;
+            border-left: 4px solid #2ecc71;
+            color: #1d7f46;
+        }
+
+        .alert.error {
+            background: #fdebea;
+            border-left: 4px solid #e74c3c;
+            color: #a3160c;
+        }
+
+        .alert.warning {
+            background: #fff8e5;
+            border-left: 4px solid #f1c40f;
+            color: #8a6d1f;
+        }
+
+        .alert.info {
+            background: #eaf4ff;
+            border-left: 4px solid #3498db;
+            color: #1b6fa8;
+        }
+
+        @keyframes fadeSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-6px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+    </style>
 </head>
 <body class="bg-gray-100 flex items-center justify-center h-screen">
     <form method="POST" class="bg-white p-6 rounded shadow w-96">
@@ -16,11 +76,9 @@
 
         <label>Password</label>
         <input type="password" name="password" class="w-full border p-2 mb-3" required>
-
+        {% include 'components/adminMessages.html' %}
         <button class="bg-blue-600 text-white p-2 w-full rounded">Login</button>
-        {% for message in messages %}
-            <p style="color:red">{{ message }}</p>
-        {% endfor %}
+        
     </form>
 </body>
 </html>

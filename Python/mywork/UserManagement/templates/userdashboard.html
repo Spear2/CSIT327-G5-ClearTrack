@@ -6,13 +6,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
-
+    
     <style>
         body {
             margin: 0;
-            padding: 20px;
             font-family: Arial, sans-serif;
             background: #eef2f7;
+        }
+        .dashboard-container {
+            margin: 40px auto;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
         h1 {
@@ -35,8 +40,10 @@
             background: white;
             box-shadow: 0 4px 10px rgba(0,0,0,0.08);
             transition: transform 0.2s ease, box-shadow 0.2s ease;
+            height: 100px;
         }
 
+       
         .card:hover {
             transform: translateY(-5px);
             box-shadow: 0 6px 15px rgba(0,0,0,0.15);
@@ -57,9 +64,10 @@
         }
 
         .card p {
-            font-size: 38px;
+            font-size: 30px;
             font-weight: bold;
             color: #222;
+            margin-bottom: 20px;
         }
 
         /* Buttons */
@@ -91,34 +99,200 @@
 
         .btn-red { background: #dc2626; }
         .btn-red:hover { background: #b91c1c; }
+
+        /* HEADER */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 27px;
+            background: #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        header .logo {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        header .logo-icon {
+            width: 40px;
+            height: 35px;
+            border-radius: 8px;
+        }
+
+        header .h2andp {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+
+        header .h2andp h2 {
+            margin: 0;
+            font-size: 20px;
+            font-weight: 600;
+            color: #2d31fa;
+        }
+
+        header .h2andp p {
+            margin: 0;
+            font-size: 13px;
+            color: #666;
+        }
+
+        /* USER MENU */
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+        }
+
+        .user-circle {
+            background: #2d31fa;
+            color: #fff;
+            border-radius: 50%;
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            border: none;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        /* USER DROPDOWN */
+        .dropdown-menu {
+            position: absolute;
+            right: 0;
+            top: 45px;
+            background: #fff;
+            border-radius: 10px;
+            border: 1px solid #dad6d6;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            width: 220px;
+            display: none;
+            flex-direction: column;
+        }
+
+        .dropdown-menu.active {
+            display: flex;
+        }
+
+        .dropdown-menu .user-info {
+            padding: 10px 15px;
+        }
+
+        .dropdown-menu a {
+            text-decoration: none;
+            padding: 10px 15px;
+            color: #333;
+        }
+
+        .dropdown-menu a:hover {
+            background: #293aaa;
+            color: #fff;
+            border-radius: 5px;
+        }
+
+        .menuOptions {
+            display: flex;
+            flex-direction: column;
+        }
+        .notif-dropdown {
+      position: absolute;
+      right: 0;
+      background: white;
+      width: 320px;
+      border-radius: 6px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      display: none;
+      z-index: 999;
+
+      max-height: 350px;   /* NEW — sets height limit */
+      overflow-y: auto;    /* NEW — makes it scroll */
+  }
+    .notif-item {
+        padding: 15px;
+        border-bottom: 1px solid #eee;
+    }
+    .notif-item.unread {
+        background: #f2f8ff;
+        font-weight: bold;
+    }
+
+        .notif-dropdown::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .notif-dropdown::-webkit-scrollbar-thumb {
+        background-color: #c7c7c7;
+        border-radius: 4px;
+    }
+
+    .notif-dropdown::-webkit-scrollbar-thumb:hover {
+        background-color: #b1b1b1;
+    }
     </style>
 </head>
 
 <body>
+    {% include 'components/adminHeader.html' %}
 
+    <div class="dashboard-container">
     <h1>Admin Dashboard</h1>
 
-    <div class="dashboard-grid">
+    
+        <div class="dashboard-grid">
 
         <!-- Total Students -->
-        <div class="card student-card">
-            <h2>Total Students</h2>
-            <p>{{ student_count }}</p>
+            <div class="card student-card">
+                <h2>Total Students</h2>
+                <p>{{ student_count }}</p>
+            </div>
+
+            <!-- Total Faculty -->
+            <div class="card faculty-card">
+                <h2>Total Faculty</h2>
+                <p>{{ faculty_count }}</p>
+            </div>
+
         </div>
 
-        <!-- Total Faculty -->
-        <div class="card faculty-card">
-            <h2>Total Faculty</h2>
-            <p>{{ faculty_count }}</p>
+        <div class="button-group">
+            <a href="{% url 'manage_students' %}" class="btn btn-blue">Manage Students</a>
+            <a href="{% url 'manage_faculty' %}" class="btn btn-green">Manage Faculty</a>
+            <a href="{% url 'admin_logout' %}" class="btn btn-red">Logout</a>
         </div>
-
     </div>
 
-    <div class="button-group">
-        <a href="{% url 'manage_students' %}" class="btn btn-blue">Manage Students</a>
-        <a href="{% url 'manage_faculty' %}" class="btn btn-green">Manage Faculty</a>
-        <a href="{% url 'admin_logout' %}" class="btn btn-red">Logout</a>
-    </div>
 
+    <script>
+
+        document.addEventListener("DOMContentLoaded", () => {
+        const userBtn = document.getElementById("userBtn");
+        const menu = document.getElementById("dropdownMenu");
+
+        if (userBtn) {
+            userBtn.addEventListener("click", () => {
+            menu.style.display = menu.style.display === "none" ? "block" : "none";
+            });
+        }
+        });
+
+        document.getElementById("notifBell").onclick = function() {
+            let dropdown = document.getElementById("notifDropdown");
+            dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+        };
+        document.addEventListener("click", function(e){
+            let dropdown = document.getElementById("notifDropdown");
+            if (!e.target.closest("#notifBell")) {
+                dropdown.style.display = "none";
+            }
+        });
+    </script>
 </body>
 </html>

@@ -11,7 +11,15 @@
                   <p>{{r.student.student_id}} • {{r.student.email_address}}</p>
               </div>
               <div class="badge">
-                  <span class="status {{r.status}}">{{r.status}}</span>
+                  <span class="status {{r.status}}">
+                    {% if r.status == "Pending"%}
+                      <i class="fa-regular fa-clock" style="margin-right: 3px; margin-left: -3px;"></i>
+                    {% elif r.status == "Approved"%}
+                      <i class="fa-regular fa-check-circle" style="margin-right: 3px; margin-left: -3px;"></i>
+                    {% elif r.status == "Rejected"%}
+                      <i class="fa-regular fa-times-circle" style="margin-right: 3px; margin-left: -3px;"></i>
+                    {% endif %}
+                    {{r.status}}</span>
               </div>
           </div>
 
@@ -44,14 +52,14 @@
 
           <!-- File Section -->
           <div class="file-section">
-              <p class="file-name">📄 {{ r.filename}}</p>
+              <p class="file-name"><i class="fa-regular fa-file-lines" style="margin-right: -3px;"></i> {{ r.filename}}</p>
 
               <div class="buttons">
                   
                   {% if r.file_url %}
                     {% with file_path=r.file_url|cut:SUPABASE_URL|cut:"/storage/v1/object/public/" %}
                       <a href="{% url 'download_file' bucket_name=SUPABASE_BUCKET path=file_path %}" class="btn small" style="text-decoration: none; color: inherit;">
-                        ⬇ Download
+                        <i class="fa-solid fa-download" style="margin-right: 5px;"></i> Download
                       </a>
                     {% endwith %}
                       
@@ -59,7 +67,7 @@
                   {% with file_path=r.file_url|cut:SUPABASE_URL|cut:"/storage/v1/object/public/student-uploads/" %}
                       {% if file_path %}
                         <a href="{% url 'preview_file' SUPABASE_BUCKET file_path %}" target="_blank" class="btn small" style="text-decoration: none; color: inherit;">
-                          👁 Preview
+                          <i class="fa-regular fa-eye" style="margin-right: 5px;"></i> Preview
                         </a>
                       {% endif %}
                     {% endwith %}

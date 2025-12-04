@@ -1,0 +1,303 @@
+/* ==========================
+   DARK MODE THEME
+   ========================== */
+
+.dark-mode {
+    background-color: #121212;
+    color: #e2e2e2;
+}
+
+.dark-mode header {
+    background: #1e1e1e;
+    border-bottom: 1px solid #333;
+}
+
+.dark-mode .settings-sidebar {
+    background: #1a1a1a;
+    border-right: 1px solid #333;
+}
+
+.dark-mode .settings-card {
+    background: #1a1a1a;
+    border-color: #333;
+}
+
+.dark-mode input,
+.dark-mode select,
+.dark-mode textarea {
+    background: #222;
+    color: #fff;
+    border-color: #444;
+}
+
+.dark-mode input::placeholder {
+    color: #aaa;
+}
+
+.dark-mode select option {
+    background: #222;
+    color: #fff;
+}
+
+.dark-mode .update-btn {
+    background: #2c6bed;
+    color: white;
+}
+
+.dark-mode .user-menu,
+.dark-mode .dropdown-menu {
+    background: #1f1f1f;
+    border-color: #333;
+}
+
+body.dark-mode header,
+body.dark-mode .card,
+body.dark-mode .submission-card,
+body.dark-mode .tabs button,
+body.dark-mode .form-group input,
+body.dark-mode .form-group select,
+body.dark-mode .form-group textarea,
+body.dark-mode .upload-box,
+body.dark-mode .progress-tracker,
+body.dark-mode .tracker-card,
+body.dark-mode .profile-card,
+body.dark-mode .comment-box,
+body.dark-mode .descr,
+body.dark-mode .timestamp,
+body.dark-mode .faq-content,
+body.dark-mode .faq-sidebar,
+body.dark-mode .help-content,
+body.dark-mode .department-settings-card,
+body.dark-mode .analytics-card,
+body.dark-mode .filters,
+body.dark-mode .student-card,
+body.dark-mode .submissions{
+    background-color: #1f1f1f;
+    color: #f5f5f5;
+    border-color: #333;
+}
+body.dark-mode .help-sidebar  {
+    background-color: #1f1f1f;
+    color: #f5f5f5;
+    border-color: #333;
+}
+
+body.dark-mode .tabs button.active {
+    background-color: #333;
+    color: #fff;
+}
+
+body.dark-mode .alert {
+    background-color: #2a2a2a;
+    color: #f5f5f5;
+}
+
+body.dark-mode a {
+    color: #a0c4ff;
+}
+
+body.dark-mode p,
+body.dark-mode .menuOptions a,
+body.dark-mode .container h2,
+body.dark-mode label,
+body.dark-mode .container h3{
+    color: #fff;
+}
+
+
+body.dark-mode li,
+body.dark-mode .settings-sidebar h3,
+body.dark-mode .help-sidebar h3,
+body.dark-mode .faq-sidebar h3,
+body.dark-mode .faq-content h3,
+body.dark-mode .help-content h3,
+body.dark-mode .container .title,
+body.dark-mode .settings h2,
+body.dark-mode .settings-content h3{
+ color: #26518d;
+}
+
+body.dark-mode .summary .completed { border-left: 5px solid #22c55e; }
+body.dark-mode .summary .inprogress { border-left: 5px solid #facc15; }
+body.dark-mode .summary .pending { border-left: 5px solid #f97316; }
+body.dark-mode .summary .documents { border-left: 5px solid #2d31fa; }
+
+
+/* ==========================
+   FINISH DARK MODE COVERAGE
+   ========================== */
+
+/* Info grid boxes */
+body.dark-mode .info-grid1 div {
+    background: #1f1f1f;
+    color: #e2e2e2;
+    border-color: #333;
+}
+
+/* Labels */
+body.dark-mode .label {
+    color: #ccc !important;
+}
+
+/* Student notes */
+body.dark-mode .note-text {
+    background: #1f1f1f !important;
+    color: #e2e2e2 !important;
+    border-color: #333 !important;
+}
+
+/* File section */
+body.dark-mode .file-section {
+    background: #1f1f1f;
+    color: #e2e2e2;
+    border-color: #333;
+}
+
+
+
+body.dark-mode .file-name {
+    color: #e2e2e2;
+}
+
+/* Card header */
+body.dark-mode .card-header {
+    background: #1e1e1e;
+    border-color: #333;
+    color: #f5f5f5;
+}
+
+/* Student details inside header */
+body.dark-mode .student-details h3,
+body.dark-mode .student-details p {
+    color: #e2e2e2;
+}
+
+/* Status badge */
+body.dark-mode .badge .status {
+    background: #333 !important;
+    color: #fff !important;
+}
+
+/* Comments section */
+body.dark-mode .comments,
+body.dark-mode .comment {
+    background: #1a1a1a;
+    color: #e2e2e2;
+    border-color: #333;
+}
+
+/* Comment header text */
+body.dark-mode .comment-author,
+body.dark-mode .comment-date {
+    color: #bbb;
+}
+
+/* Comment box form */
+body.dark-mode .comment-box textarea {
+    background: #222;
+    color: #fff;
+    border-color: #444;
+}
+
+/* Buttons */
+body.dark-mode .btn.approve {
+    background: #22c55e;
+    color: #fff;
+}
+
+body.dark-mode .btn.reject {
+    background: #ef4444;
+    color: #fff;
+}
+
+body.dark-mode .btn.small {
+    background: #1f1f1f;
+    border: 1px solid #333;
+    color: #cfcfcf;
+}
+
+body.dark-mode .btn.disabled-btn {
+    background: #2b2b2b !important;
+    color: #777 !important;
+    border-color: #333 !important;
+}
+
+body.dark-mode .btn.comment {
+    background: #1f1f1f;
+    border: 1px solid #333;
+    color: #cfcfcf;
+    opacity: 0.9;
+}
+
+body.dark-mode .book-icon{
+    color: #ccc;
+}
+
+
+/* Sidebar */
+body.dark-mode .help-sidebar {
+    background: #1a1a1a;
+    color: #e2e2e2;
+    border-right: 1px solid #333;
+}
+
+body.dark-mode .help-sidebar h3 {
+    color: #f5f5f5;
+}
+
+body.dark-mode .help-sidebar ul li {
+    color: #ccc;
+    cursor: pointer;
+}
+
+body.dark-mode .help-sidebar ul li.active {
+    background: #333;
+    color: #fff;
+}
+
+/* Content cards */
+body.dark-mode .help-card {
+    background: #1f1f1f;
+    border: 1px solid #333;
+    color: #e2e2e2;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+/* Headings inside cards */
+body.dark-mode .help-card h3 {
+    color: #fff;
+}
+
+/* Lists */
+body.dark-mode .help-card ul li,
+body.dark-mode .help-card ol li {
+    color: #ccc;
+}
+
+/* Links */
+body.dark-mode a {
+    color: #a0c4ff;
+}
+
+/* Textareas */
+body.dark-mode textarea {
+    background: #222;
+    color: #fff;
+    border: 1px solid #444;
+}
+
+/* Buttons */
+body.dark-mode button {
+    background: #2c6bed;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+}
+
+/* Container headings */
+body.dark-mode main h2,
+body.dark-mode main p.subtitle {
+    color: #f5f5f5;
+}

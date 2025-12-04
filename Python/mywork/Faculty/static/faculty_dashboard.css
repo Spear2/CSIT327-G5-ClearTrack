@@ -154,41 +154,66 @@ body {
   margin: 3px 0 0;
 }
 
-/* student's status */
+/* Badge container - no distracting background, just spacing */
 .badge {
   margin: 7px 0;
   margin-left: 20px;
-  background: #1947e5;
-  border-radius: 15px;
+  display: inline-block;
+  vertical-align: middle;
+  background: transparent;
+  padding: 0;
+}
+
+/* Status pill base styles */
+.status {
+  display: inline-block;
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  color: white;
+  user-select: none;
+  min-width: 80px;
+  text-align: center;
+  transition: background-color 0.3s ease;
+}
+
+/* Pending status: soft yellow background with blue text accent */
+.status.Pending {
+  background: #fab803; /* your page background */
+  color: #ffffff;      /* your blue tone */
+  font-weight: 700;
+  box-shadow: none;
+}
+
+/* Approved status: bright blue background with white text */
+.status.Approved {
+  background: #22c55e; /* your primary blue */
+  color: white;
   border: none;
 }
 
-.status {
-  display: inline-block;
-  padding: 4px 10px;
-  border-radius: 15px;
-  font-size: 0.8rem;
-  font-weight: 500;
-  
-}
-
-.status.Pending {
-  background-color: #fff8e1;
-  transform: translateX(5px);
-  color: #b38300;
-}
-
-.status.Approved {
-  background-color: #147900;
-  transform: translateX(5px);
-  color: #ffffff;
-}
+/* Rejected status: red background with white text */
 .status.Rejected {
-  background-color: #ff0000;
-  transform: translateX(5px);
-  color: #ffffff;
+  background: #e53e3e; /* a nice clean red */
+  color: white;
+  border: none;
 }
 
+/* On hover, add subtle brightness change */
+.status.Pending:hover {
+  background: #e0ddff;
+}
+
+.status.Approved:hover {
+  background: #2a34b1;
+}
+
+.status.Rejected:hover {
+  background: #b32b2b;
+}
 /* information */
 .info-grid1 {
   display: flex;

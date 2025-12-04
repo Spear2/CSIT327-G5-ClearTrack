@@ -62,7 +62,7 @@ def user_login(request):
 
         if not email or not password:
             messages.error(request, "Please fill in both email and password.")
-            return render(request, "userlogin.html")
+            return redirect("admin_login")
 
         # Find admin by email only
         admin = SystemAdmin.objects.filter(email=email).first()
@@ -74,8 +74,7 @@ def user_login(request):
             
         else:
             messages.error(request, "Email not found.")
-
-        return render(request, "userlogin.html")
+            return redirect("admin_dashboard")
     return render(request, 'userlogin.html')
 
 def user_logout(request):
