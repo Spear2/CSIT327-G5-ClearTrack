@@ -4,9 +4,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GradeFlow - Student Portal</title>
+<title>ClearTrack  - Student Portal</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link rel="stylesheet" href="{% static 'studentDashboard.css' %}">
+<link rel="stylesheet" href="{% static 'darkmode.css' %}">
 <script src="{% static 'dropdownHomePage.js' %}"></script>
 <script src="https://unpkg.com/feather-icons"></script>
 
@@ -17,7 +18,7 @@
     <div class="logo">
         <img src="{% static 'images/gradeFlow_logo.png' %}" class="logo-icon" />
         <div class="h2andp">
-            <h2>GradeFlow</h2>
+            <h2>ClearTrack </h2>
             <p>Student Portal</p>
         </div>
     </div>
@@ -73,7 +74,7 @@
     </div>
 
 </header>
-
+<div class="page-container">
 <main class="container">
     <h2>Welcome back, {{ student.first_name }}! 👋</h2>
     <p class="subtitle">Track your clearance progress and manage your submissions</p>
@@ -209,8 +210,18 @@
 </section>
 
 </main>
-
+</div>
 <script>
+
+    // Dropdown
+  const userBtn = document.getElementById('userBtn');
+  const dropdownMenu = document.getElementById('dropdownMenu');
+  userBtn.addEventListener('click', () => dropdownMenu.classList.toggle('active'));
+  window.addEventListener('click', (e) => {
+    if (!userBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
+      dropdownMenu.classList.remove('active');
+    }
+  });
 document.addEventListener('DOMContentLoaded', function () {
     feather.replace();
 });
@@ -226,6 +237,6 @@ document.addEventListener("click", function(e){
     }
 });
 </script>
-
+<script src="{% static 'theme.js' %}"></script>
 </body>
 </html>
