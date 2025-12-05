@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GradeFlow - FAQs</title>
+    <title>ClearTrack - FAQs</title>
     <link rel="stylesheet" href="{% static 'studentFAQs.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <script src="{% static 'dropdownHomePage.js' %}"></script>
@@ -15,7 +15,7 @@
     <div class="logo">
         <img src="{% static 'images/gradeFlow_logo.png' %}" class="logo-icon" />
         <div class="h2andp">
-            <h2>GradeFlow</h2>
+            <h2>ClearTrack</h2>
             <p>Student Portal</p>
         </div>
     </div>
@@ -216,6 +216,16 @@
 </main>
 
 <script>
+
+    // Dropdown
+  const userBtn = document.getElementById('userBtn');
+  const dropdownMenu = document.getElementById('dropdownMenu');
+  userBtn.addEventListener('click', () => dropdownMenu.classList.toggle('active'));
+  window.addEventListener('click', (e) => {
+    if (!userBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
+      dropdownMenu.classList.remove('active');
+    }
+  });
 function showFAQSection(sectionId) {
     document.querySelectorAll(".faq-card").forEach(el => el.classList.add("hidden"));
     document.getElementById(sectionId).classList.remove("hidden");
